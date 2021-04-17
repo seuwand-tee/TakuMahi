@@ -1,6 +1,15 @@
 # Ignore IDEA files
+#IntelliJ
 .idea
+#Netbeans
 .nb-gradle
+#VS Code
+Project/.project
+Project/.settings
+Project/app/bin
+Project/app/.classpath
+Project/app/.project
+
 
 # Ignore Gradle project-specific cache directory
 .gradle
