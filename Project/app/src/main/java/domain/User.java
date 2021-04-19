@@ -8,9 +8,17 @@ package domain;
  */
 public class User {
 
+    public enum Role {
+        Manager,
+        Senior,
+        Casual
+        // List can be extended as needed.
+    }
+
     private String username;
     private Integer idNumber;
     private boolean adminPerms;
+    private Role role;
     //private String password; <- This would be a hashed password in functioning product. We are not
     //                            implementing password authentication in this prototype.
     private String firstName;
@@ -19,10 +27,11 @@ public class User {
 
     public User(){};
 
-    public User(String username, Integer idNumber, boolean adminPerms, String firstName, String lastName, String emailAddress) {
+    public User(String username, Integer idNumber, boolean adminPerms, Role role, String firstName, String lastName, String emailAddress) {
         this.username = username;
         this.idNumber = idNumber;
         this.adminPerms = adminPerms;
+        this.role = role;
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
@@ -75,4 +84,13 @@ public class User {
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
 }
