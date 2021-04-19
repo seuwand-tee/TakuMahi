@@ -1,0 +1,36 @@
+body {
+    background-color: white;
+  }
+  
+  header {
+    background-color:rgba(255,193,14,255)
+  }
+  
+  
+  span {
+    font-family: 'Arial';
+    font-size: 20px;
+    overflow: hidden;
+    color : #00508f;
+  }
+  /*This is for displaying Blue-Text */
+
+  p {
+    font-family: 'Arial';
+    font-size: 20px;
+  }
+  /*This is for Displaying Black-Text */
+
+  h1 {
+    font-family: 'Arial';
+    font-size: 20px;
+    color: white;
+    overflow: hidden;
+  }
+  /* This is for displaying white text */
+
+  #Banner {
+    width: auto;
+    height: auto;
+    overflow: hidden;
+    }
