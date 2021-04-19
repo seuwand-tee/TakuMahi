@@ -10,5 +10,9 @@ table {
 .calender{
   border: solid;
   font-family: Georgia, "Times New Roman", Times, serif;
-  text-si
+}
+
+/* Code to "highlight" the selected cell */
+.selected {
+  background-color: #ddd !important;
 }
