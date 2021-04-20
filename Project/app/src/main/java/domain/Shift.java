@@ -2,6 +2,9 @@ package domain;
 
 import java.time.ZonedDateTime;
 
+/**
+ * The Shift domain class.
+ */
 public class Shift extends Event {
 
     public enum Type {
@@ -9,6 +12,7 @@ public class Shift extends Event {
         Assistant,
         Senior,
         External
+        // List can be extended as needed.
     }
 
     private String name;

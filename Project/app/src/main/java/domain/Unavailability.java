@@ -2,6 +2,9 @@ package domain;
 
 import java.time.ZonedDateTime;
 
+/**
+ * The Unavailability domain class.
+ */
 public class Unavailability extends Event {
 
     public enum Repeat {
@@ -9,10 +12,11 @@ public class Unavailability extends Event {
         Daily,
         Weekly,
         Monthly
+        // List can be extended as needed
     }
 
     private Repeat repeat;
-    private ZonedDateTime repeatEnd;
+    private ZonedDateTime repeatEnd; // Parse DateTimes from String in Resource.
     private String description;
 
     public Unavailability(){};
