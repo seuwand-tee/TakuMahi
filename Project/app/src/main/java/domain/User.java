@@ -2,9 +2,7 @@ package domain;
 
 /**
  *  The User class is used for all user accounts in the system.
- *  Users are differentiated between Manager and Employee status by the adminPerms
- *  field. Where this being set to 'true' signifies admin permission and subsequently
- *  Manager status.
+ *  The role data-field will be used to allocate a users permissions on the site.
  */
 public class User {
 
@@ -15,22 +13,30 @@ public class User {
         // List can be extended as needed.
     }
 
+    public enum Department {
+        StudentIT,
+        AskIT,
+        GeneralEnquiries
+        // List can be extended as needed
+    }
+
     private String username;
     private Integer idNumber;
-    private boolean adminPerms;
     private Role role;
+    private Department department;
     //private String password; <- This would be a hashed password in functioning product. We are not
     //                            implementing password authentication in this prototype.
     private String firstName;
     private String lastName;
     private String emailAddress;
 
+
+
     public User(){};
 
-    public User(String username, Integer idNumber, boolean adminPerms, Role role, String firstName, String lastName, String emailAddress) {
+    public User(String username, Integer idNumber, Role role, String firstName, String lastName, String emailAddress) {
         this.username = username;
         this.idNumber = idNumber;
-        this.adminPerms = adminPerms;
         this.role = role;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -53,12 +59,20 @@ public class User {
         this.idNumber = idNumber;
     }
 
-    public boolean isAdminPerms() {
-        return adminPerms;
+    public Role getRole() {
+        return role;
     }
 
-    public void setAdminPerms(boolean adminPerms) {
-        this.adminPerms = adminPerms;
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     public String getFirstName() {
@@ -83,14 +97,6 @@ public class User {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
 }

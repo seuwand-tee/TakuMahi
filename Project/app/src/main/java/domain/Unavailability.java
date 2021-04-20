@@ -5,12 +5,14 @@ import java.time.ZonedDateTime;
 public class Unavailability extends Event {
 
     public enum Repeat {
+        No,
         Daily,
         Weekly,
         Monthly
     }
 
     private Repeat repeat;
+    private ZonedDateTime repeatEnd;
     private String description;
 
     public Unavailability(){};
@@ -27,6 +29,14 @@ public class Unavailability extends Event {
 
     public void setRepeat(Repeat repeat) {
         this.repeat = repeat;
+    }
+
+    public ZonedDateTime getRepeatEnd() {
+        return repeatEnd;
+    }
+
+    public void setRepeatEnd(ZonedDateTime repeatEnd) {
+        this.repeatEnd = repeatEnd;
     }
 
     public String getDescription() {
