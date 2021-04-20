@@ -6,13 +6,37 @@ table {
   table-layout: fixed ;
 }
 
-
-.calender{
-  border: solid;
-  font-family: Georgia, "Times New Roman", Times, serif;
+th {
+  border-right: solid;
 }
 
-/* Code to "highlight" the selected cell */
+td{
+  border-right: solid;
+}
+
+/* buttosn for viewing  */
+.view-button{
+  border-left: 2px;
+  border-right: 2px;
+  border-color: white;
+}
+
+/* controls the calender div */
+.calender{
+  font-family: Georgia, "Times New Roman", Times, serif;
+  padding: 0;
+  position: absolute;
+}
+
+/* Code to "highlight" the selected cell.*/
 .selected {
   background-color: #ddd !important;
+}
+
+.hidden-calender{
+  visibility: hidden;
+}
+
+#next-button{
+  margin-right: 5px;
 }
