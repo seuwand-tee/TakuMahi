@@ -7,11 +7,14 @@ import com.google.common.collect.HashMultimap;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 import static java.beans.Beans.isInstanceOf;
 
+/**
+ * This is the DAO class for the project pre database.
+ * The data is stored in Maps while the session is running.
+ */
 public class LocalStorageDAO {
 
     // User access
@@ -26,12 +29,23 @@ public class LocalStorageDAO {
     public static final Multimap<User, Unavailability> unavailabilityByUser = HashMultimap.create();
     public static final Map<Integer, Shift> openShifts = new HashMap<>();
 
+    /**
+     * This adds a User object to the relevant collections, based on ID, Role, and Department.
+     * @param user The User object to be added.
+     */
     public void addUser(User user) {
         usersByID.put(user.getIdNumber(), user);
         usersByRole.put(user.getRole(), user);
         usersByDepartment.put(user.getDepartment(), user);
     }
 
+    /**
+     * This deletes a User from the relevant collections.
+     * First the user's currently assigned shifts are relocated to the OpenShifts collection
+     * and removed from the ShiftsByUser collection. Their Unavailability events are deleted from
+     * the UnavailabilityByUser collection. And then they are removed from all User collections.
+     * @param id The ID value for the User being deleted.
+     */
     public void deleteUserByID(Integer id) {
         User u = usersByID.get(id);
         Collection<Shift> s = shiftsByUser.get(u);
@@ -45,12 +59,22 @@ public class LocalStorageDAO {
         usersByID.remove(id);
     }
 
+    /**
+     * This adds a Shift Event to the OpenShifts collection.
+     * It also adds the shift to event collections grouped by ID and starting date.
+     * @param shift The Shift object to be added.
+     */
     public void addToOpenShifts(Shift shift) {
         openShifts.put(shift.getEventID(), shift);
         eventsByID.put(shift.getEventID(), shift);
         eventsByDate.put(shift.getStart().toLocalDate(), shift);
     }
 
+    /**
+     * This deletes a Shift from the OpenShifts collection.
+     * It also deletes the shift from the event collections.
+     * @param eventID The EventID for the shift.
+     */
     public void deleteFromOpenShifts(Integer eventID) {
         Shift s = openShifts.get(eventID);
         eventsByID.remove(eventID);
@@ -58,41 +82,70 @@ public class LocalStorageDAO {
         openShifts.remove(eventID);
     }
 
-    public void assignShiftToUser(User user, Integer shiftID) {
+    /**
+     * This assigns a Shift from the OpenShifts collection to a specific User.
+     * The shift is added to the ShiftsByID collection and is then removed from the OpenShifts collection.
+     * This process also adds the User as a field in the Event.
+     * @param userID The ID for the user receiving the shift.
+     * @param shiftID The ID for the shift being assigned.
+     */
+    public void assignShiftToUser(Integer userID, Integer shiftID) {
         Shift s = openShifts.get(shiftID);
-        s.setUser(user);
-        shiftsByUser.put(user, s);
+        User u = usersByID.get(userID);
+        s.setUser(u);
+        shiftsByUser.put(u, s);
         openShifts.remove(shiftID);
     }
 
-    public void removeShiftFromUser(User user, Integer eventID) {
+    /**
+     * This removes a assigned shift from a user and re-adds it to the OpenShifts collection.
+     * The user field in the Event is also set to null.
+     * @param userID The ID for the user the shift is being removed from.
+     * @param eventID The ID for the shift being removed.
+     */
+    public void removeShiftFromUser(Integer userID, Integer eventID) {
         Shift s = (Shift) eventsByID.get(eventID);
-        shiftsByUser.remove(user, s);
+        User u = usersByID.get(userID);
+        shiftsByUser.remove(u, s);
         s.setUser(null);
         openShifts.put(eventID, s);
     }
 
-    public void addUnavailabilityToUser(User user, Unavailability unavailability) {
-        unavailability.setUser(user);
-        unavailabilityByUser.put(user, unavailability);
+    /**
+     * This adds a Unavailability for a specified User.
+     * The event is added to the UnavailabilityByUser collection, and the event grouping collections.
+     * @param userID The ID of the User.
+     * @param unavailability The Unavailability being added.
+     */
+    public void addUnavailabilityToUser(Integer userID, Unavailability unavailability) {
+        User u = usersByID.get(userID);
+        unavailability.setUser(u);
+        unavailabilityByUser.put(u, unavailability);
         eventsByID.put(unavailability.getEventID(), unavailability);
         eventsByDate.put(unavailability.getStart().toLocalDate(), unavailability);
     }
 
-    public void deleteUnavailabilityFromUser(User user, Integer eventID) {
+    /**
+     * This deletes a Unavailability from the specified user.
+     * The event is also removed from the event grouping collections.
+     * @param userID The ID of the User.
+     * @param eventID The EventID of the Unavailability.
+     */
+    public void deleteUnavailabilityFromUser(Integer userID, Integer eventID) {
+        User u = usersByID.get(userID);
         Unavailability un = (Unavailability) eventsByID.get(eventID);
-        unavailabilityByUser.remove(user, un);
+        unavailabilityByUser.remove(u, un);
         eventsByDate.remove(un.getStart().toLocalDate(), un);
         eventsByID.remove(eventID);
     }
 
     /**
-     *
-     * @param userID
-     * @param startOfPeriod
-     * @param daysInPeriod
+     * This returns a Collection of events relevant to a given user, over a given period.
+     * @param userID The ID of the user that the events belong to.
+     * @param startOfPeriod The Start Date of the period you are interested in.
+     * @param daysInPeriod The amount of days you want the period to be.
      * @param filter Filter decides which events get returned. 0 is all, 1 is Shift, and 2 is Unavailability.
-     * @return
+     * @return Returns a Collection of type Event. If no events fit criteria the Collection will be empty.
      */
     public Collection<Event> getUserEventsForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
         Collection<Event> events = new ArrayList<>();
@@ -126,6 +179,15 @@ public class LocalStorageDAO {
         return usersEvents;
     }
 
+    /**
+     * This will return the amount of hours a User has been assigned for a given period.
+     * It takes advantage of the getUserEventsForPeriod method. Where it will get all events of type Shift
+     * for a User. It will then calculate the length of each shift in hours and sum this amount.
+     * @param userID The ID of the User.
+     * @param startOfPeriod The Start Date of the period you are interested in.
+     * @param daysInPeriod The amount of days in the period.
+     * @return Returns a Integer value representing the sum of hours assigned.
+     */
     public Integer getUserHoursForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod) {
         Collection<Event> shifts = getUserEventsForPeriod(userID, startOfPeriod, daysInPeriod, 1);
         int sum = 0;
@@ -136,34 +198,65 @@ public class LocalStorageDAO {
         return sum;
     }
 
-    public boolean userExists(String id) {
-        return usersByID.containsKey(id);
+    /**
+     * This returns whether or not a User is in the DAO.
+     * @param userID The ID of the User.
+     * @return Returns true if the user is located, false if not.
+     */
+    public boolean userExists(Integer userID) {
+        return usersByID.containsKey(userID);
     }
 
+    /**
+     * @return Returns all Users in the DAO.
+     */
     public Collection<User> getAllUsers() {
         return usersByID.values();
     }
 
-    public User getUserByID(String id) {
-        return usersByID.get(id);
+    /**
+     * @param userID The ID of the User.
+     * @return Returns the User object with that ID.
+     */
+    public User getUserByID(Integer userID) {
+        return usersByID.get(userID);
     }
 
+    /**
+     * @param role The User Role value.
+     * @return Returns all User objects in the DAO with that Role.
+     */
     public Collection<User> getUsersByRole(User.Role role) {
         return usersByRole.get(role);
     }
 
+    /**
+     * @param department The User Department value.
+     * @return Returns all Users in the DAO with that Department.
+     */
     public Collection<User> getUsersByDepartment(User.Department department) {
         return usersByDepartment.get(department);
     }
 
-    public Collection<Shift> getShiftsByUser(User user) {
-        return shiftsByUser.get(user);
+    /**
+     * @param userID The ID of the User.
+     * @return Returns all shifts assigned to that User.
+     */
+    public Collection<Shift> getShiftsByUser(Integer userID) {
+        return shiftsByUser.get(usersByID.get(userID));
     }
 
-    public Collection<Unavailability> getUnavailabilityByUser(User user) {
-        return unavailabilityByUser.get(user);
+    /**
+     * @param userID The ID of the User.
+     * @return Returns all unavailability events for that User.
+     */
+    public Collection<Unavailability> getUnavailabilityByUser(Integer userID) {
+        return unavailabilityByUser.get(usersByID.get(userID));
     }
 
+    /**
+     * @return Returns all the Open Shifts.
+     */
     public Collection<Shift> getOpenShifts() {
         return openShifts.values();
     }

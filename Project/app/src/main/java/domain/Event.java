@@ -2,13 +2,17 @@ package domain;
 
 import java.time.ZonedDateTime;
 
+/**
+ * The Event abstract class. Used to define Shift and Unavailability.
+ */
 public abstract class Event {
 
-    private static Integer idCount = 0;
+    private static Integer idCount = 0; // Events will receive a unique ID per session, as they are added.
+                                        // This will be handled by the database later.
 
     private Integer eventID;
     private User user;
-    private ZonedDateTime start;
+    private ZonedDateTime start; // Parse DateTimes from String in Resource.
     private ZonedDateTime end;
 
     public Event(){};
