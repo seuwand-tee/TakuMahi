@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: TakuMahi API
+  version: '1.0'
+  x-logo:
+    url: ''
+  description: The API for TakuMahi.
+paths:
+  /staff:
+    summary: Staff List
+    description: A list of all Staff.
+    get:
+      tags:
+        - Staff List
+    post:
+      tags:
+        - Staff List
+    x-last-modified: 1618956884481
+  '/staff/{id}':
+    summary: Staff Member
+    description: An individual staff member in the database.
+    get:
+      tags:
+        - Staff Member
+    delete:
+      tags:
+        - Staff Member
+    x-last-modified: 1618957004765
+  '/staff/shifts/{id}':
+    summary: Staff Shifts
+    description: All shifts assigned to a staff member.
+    get:
+      tags:
+        - Staff Shifts
+    post:
+      tags:
+        - Staff Shifts
+    x-last-modified: 1618957364214
+components:
+  schemas: {}
+  responses: {}
+  parameters: {}
+  examples: {}
+  requestBodies: {}
+  headers: {}
+  securitySchemes: {}
+  links: {}
+  callbacks: {}
+security: []
+tags:
+  - name: Staff List
+    x-last-modified: 1618956754576
+  - name: Staff Member
+    x-last-modified: 1618956771140
+  - name: Staff Shifts
+    x-last-modified: 1618956803977
+  - name: Open Shifts
+    x-last-modified: 1618956820964
+servers:
+  - url: 'http://localhost:8080/api'
+    description: ''
+    variables: {}
+    x-last-modified: 1618956712759
