@@ -18,16 +18,16 @@ import static java.beans.Beans.isInstanceOf;
 public class LocalStorageDAO {
 
     // User access
-    public static final Multimap<User.Department, User> usersByDepartment = HashMultimap.create();
-    public static final Multimap<User.Role, User> usersByRole = HashMultimap.create();
-    public static final Map<Integer, User> usersByID = new HashMap<>();
+    private static final Multimap<User.Department, User> usersByDepartment = HashMultimap.create();
+    private static final Multimap<User.Role, User> usersByRole = HashMultimap.create();
+    private static final Map<Integer, User> usersByID = new HashMap<>();
 
     // Event access
-    public static final Map<Integer, Event> eventsByID = new HashMap<>();
-    public static final Multimap<LocalDate, Event> eventsByDate = HashMultimap.create();
-    public static final Multimap<User, Shift> shiftsByUser = HashMultimap.create();
-    public static final Multimap<User, Unavailability> unavailabilityByUser = HashMultimap.create();
-    public static final Map<Integer, Shift> openShifts = new HashMap<>();
+    private static final Map<Integer, Event> eventsByID = new HashMap<>();
+    private static final Multimap<LocalDate, Event> eventsByDate = HashMultimap.create();
+    private static final Multimap<User, Shift> shiftsByUser = HashMultimap.create();
+    private static final Multimap<User, Unavailability> unavailabilityByUser = HashMultimap.create();
+    private static final Map<Integer, Shift> openShifts = new HashMap<>();
 
     /**
      * This adds a User object to the relevant collections, based on ID, Role, and Department.
