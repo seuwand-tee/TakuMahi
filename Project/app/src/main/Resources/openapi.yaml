@@ -3,12 +3,9 @@ info:
   title: TakuMahi API
   version: '1.0'
   description: The API for TakuMahi.
-  x-logo:
-    url: ''
 servers:
   - url: 'http://localhost:8080/api'
     description: ''
-    x-last-modified: 1618956712759
 paths:
   /staff:
     summary: Staff List
@@ -25,9 +22,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-                externalDocs:
-                  description: ''
-                  url: ''
                 example: ''
               example: ''
           description: Response contains the entire Staff list.
@@ -53,29 +47,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-                externalDocs:
-                  description: ''
-                  url: ''
                 example: ''
               example: ''
-              encoding: ''
           description: Response contains the entire Staff list.
           headers: {}
           links: {}
         '201':
           description: New user added.
-          x-last-modified: 1618993713660
           headers: {}
           content: {}
           links: {}
         '422':
           description: 'User not added, a User with that ID already exists.'
-          x-last-modified: 1618993751972
       operationId: create new user
       summary: Adds a new Staff Member.
       description: Adds a new staff member.
-    x-last-modified: 1618956884481
-  '/staff/{id}':
+  '/staff/{userId}':
     summary: Staff Member
     description: An individual staff member in the database.
     get:
@@ -89,7 +76,6 @@ paths:
             type: string
           in: path
           required: true
-          x-last-modified: 1618994119293
       responses:
         '200':
           content:
@@ -97,7 +83,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: Response contains a single user.
-          x-last-modified: 1618994280039
           headers: {}
           links: {}
       operationId: get user by id
@@ -107,32 +92,28 @@ paths:
       tags:
         - Staff Member
       operationId: delete user
-      summary: delete specified user
+      summary: Deletes a User by their ID.
       description: Deletes a user by their ID.
       parameters:
         - name: userId
           in: path
-          required: false
+          required: true
           deprecated: false
-          x-last-modified: 1618997738244
           description: The ID of the User.
           schema:
             type: string
       responses:
         '204':
           description: Staff Member successfully deleted.
-          x-last-modified: 1618997765799
           headers: {}
           content: {}
           links: {}
         '404':
           description: No staff member with that ID was found.
-          x-last-modified: 1618997788539
           headers: {}
           content: {}
           links: {}
-    x-last-modified: 1618957004765
-  '/staff/shifts/{id}':
+  '/staff/shifts/{userId}':
     summary: Staff Shifts
     description: All shifts assigned to a staff member.
     get:
@@ -142,18 +123,36 @@ paths:
       summary: Get Shifts by User
       description: Gets all shifts for a specified user.
       parameters:
-        - name: id
+        - name: userId
           in: path
           description: The ID of the User
-          required: false
+          required: true
           deprecated: false
           schema:
             type: string
-          x-last-modified: 1618998249137
     post:
+      requestBody:
+        description: Details of Shift.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shift'
+        required: true
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the User.
+          schema:
+            type: string
       tags:
         - Staff Shifts
-    x-last-modified: 1618957364214
+      responses:
+        '201':
+          description: New Shift successfully updated.
+        '422':
+          description: 'Shift not recorded, a shift with that id already exists.'
   /shifts/open:
     summary: Open Shifts
     description: A list of Open Shifts
@@ -163,24 +162,57 @@ paths:
     post:
       tags:
         - Open Shifts
-    x-last-modified: 1618958232749
-  '/shifts/open/{id}':
+  '/shifts/open/{shiftId}':
     summary: Open Shift
     description: A single Open Shift
+    parameters:
+        - name: shiftId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the User.
+          schema:
+            type: string
     get:
       tags:
         - Open Shift
     delete:
       tags:
         - Open Shift
-    x-last-modified: 1618984121031
   '/staff/{role}':
     summary: Staff by Role
-    description: Staff members who fit a specified role.
+    description: Staff Members who fit a specified Role.
     get:
       tags:
         - Staff List by Role
-    x-last-modified: 1618990034835
+      operationId: get users by role
+      summary: Get Users by role
+      description: Gets a list of users in a specified role.
+      parameters:
+        - name: role
+          in: path
+          description: The role requested.
+          schema:
+            type: string
+            enum: [Manager, Senior, Casual]
+          required: true
+          deprecated: false
+      responses:
+        '200':
+          description: Response contains a list of all Users in specified role.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                description: ''
+                example: ''
+              example: ''
+          headers: {}
+          links: {}
+        '404':
+          description: No users in that role were found.
   '/staff/{department}':
     summary: Staff by Department
     description: Staff Members who fit a specified department.
@@ -194,11 +226,11 @@ paths:
         - name: department
           in: path
           description: The department requested.
-          required: false
-          deprecated: false
           schema:
             type: string
-          x-last-modified: 1618998396969
+            enum: [StudentIT, AskIT, GeneralEnquiries]
+          required: true
+          deprecated: false
       responses:
         '200':
           description: Response contains a list of all Users in specified department.
@@ -213,15 +245,11 @@ paths:
                 externalDocs:
                   url: ''
                   description: ''
-              encoding: ''
               example: ''
-          x-last-modified: 1619000215317
           headers: {}
           links: {}
         '404':
           description: No users in that department were found.
-          x-last-modified: 1619000279299
-    x-last-modified: 1618990129394
 components:
   schemas:
     User:
@@ -253,7 +281,34 @@ components:
         email:
           description: The email of the user.
           type: string
-      x-last-modified: 1618992390956
+    Shift:
+      required:
+        - start
+        - end
+        - name
+        - type
+      type: object
+      properties:
+        start:
+          description: The scheduled start of the shift.
+          type: string
+          format: date-time
+        end:
+          description: The scheduled finish of the shift.
+          type: string
+          format: date-time
+        name:
+          description: The name of the shift.
+          type: string
+        description:
+          description: Description of the shift.
+          type: string
+        notes:
+          description: Notes for the shift.
+          type: string
+        Type:
+          description: The last name of the user.
+          type: string
   securitySchemes: {}
   headers: {}
   responses: {}
@@ -261,23 +316,16 @@ components:
 tags:
   - name: Staff List
     description: A list of all Staff Members.
-    x-last-modified: 1618983952384
   - name: Staff Member
     description: ' A single Staff member.'
-    x-last-modified: 1618983940692
   - name: Staff Shifts
     description: List of Shifts for a Staff Member
-    x-last-modified: 1618983926915
   - name: Open Shifts List
     description: List of Open Shifts
-    x-last-modified: 1618983909230
   - name: Open Shift
     description: A single Open Shift
-    x-last-modified: 1618983897996
   - name: Staff List by Role
     description: List of Staff Members by a specified role
-    x-last-modified: 1618989901372
   - name: Staff List by Department
     description: List of Staff Members by a specified department.
-    x-last-modified: 1618989931533
 security: []
