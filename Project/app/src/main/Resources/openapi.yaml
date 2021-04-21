@@ -174,22 +174,6 @@ paths:
     post:
       tags:
         - Open Shifts List
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-                example: ''
-              example: ''
-          description: Response contains the entire Staff list.
-      operationId: get All Staff
-      summary: Gets All Staff Members
-      description: Returns a list of all staff members.
-    post:
       requestBody:
         description: Details of Staff Member
         content:
@@ -197,22 +181,7 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
         required: true
-      tags:
-        - Staff List
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-                example: ''
-              example: ''
-          description: Response contains the entire Staff list.
-          headers: {}
-          links: {}
         '201':
           description: New user added.
           headers: {}
