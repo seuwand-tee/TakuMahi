@@ -2,9 +2,13 @@ openapi: 3.0.3
 info:
   title: TakuMahi API
   version: '1.0'
+  description: The API for TakuMahi.
   x-logo:
     url: ''
-  description: The API for TakuMahi.
+servers:
+  - url: 'http://localhost:8080/api'
+    description: ''
+    x-last-modified: 1618956712759
 paths:
   /staff:
     summary: Staff List
@@ -36,28 +40,66 @@ paths:
       tags:
         - Staff Shifts
     x-last-modified: 1618957364214
+  /shifts/open:
+    summary: Open Shifts
+    description: A list of Open Shifts
+    get:
+      tags:
+        - Open Shifts
+    post:
+      tags:
+        - Open Shifts
+    x-last-modified: 1618958232749
+  '/shifts/open/{id}':
+    summary: Open Shift
+    description: A single Open Shift
+    get:
+      tags:
+        - Open Shift
+    delete:
+      tags:
+        - Open Shift
+    x-last-modified: 1618984121031
+  '/staff/{role}':
+    summary: Staff by Role
+    description: Staff members who fit a specified role.
+    get:
+      tags:
+        - Staff List by Role
+    x-last-modified: 1618990034835
+  '/staff/{department}':
+    summary: Staff by Department
+    description: Staff Members who fit a specified department.
+    get:
+      tags:
+        - Staff List by Department
+    x-last-modified: 1618990129394
 components:
+  securitySchemes: {}
   schemas: {}
+  headers: {}
   responses: {}
   parameters: {}
-  examples: {}
-  requestBodies: {}
-  headers: {}
-  securitySchemes: {}
-  links: {}
-  callbacks: {}
-security: []
 tags:
   - name: Staff List
-    x-last-modified: 1618956754576
+    x-last-modified: 1618983952384
+    description: A list of all Staff Members.
   - name: Staff Member
-    x-last-modified: 1618956771140
+    x-last-modified: 1618983940692
+    description: ' A single Staff member.'
   - name: Staff Shifts
-    x-last-modified: 1618956803977
-  - name: Open Shifts
-    x-last-modified: 1618956820964
-servers:
-  - url: 'http://localhost:8080/api'
-    description: ''
-    variables: {}
-    x-last-modified: 1618956712759
+    x-last-modified: 1618983926915
+    description: List of Shifts for a Staff Member
+  - name: Open Shifts List
+    x-last-modified: 1618983909230
+    description: List of Open Shifts
+  - name: Open Shift
+    description: A single Open Shift
+    x-last-modified: 1618983897996
+  - name: Staff List by Role
+    description: List of Staff Members by a specified role
+    x-last-modified: 1618989901372
+  - name: Staff List by Department
+    description: List of Staff Members by a specified department.
+    x-last-modified: 1618989931533
+security: []
