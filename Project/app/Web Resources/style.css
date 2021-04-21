@@ -100,3 +100,16 @@ select{
     display: inline-block;
     margin: auto;
 }
+table, th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid black;
+  margin: 0 auto;
+  font-size: 25px;
+}
+
+table{
+	border-collapse: collapse;
+    margin:auto; 
+	 width: 100px;
+  }

@@ -8,45 +8,35 @@
      <header class="Banner">
          <div>
          <!--- Will need to upload image to Git <img src="Logo.jpg" alt="Logo"> -->
-            <h1> Taku<span>Mahi |</span> Our<span>Work</span></h1>
+            <h1> Taku<span>Mahi |</span> My<span>Work</span></h1>
         </div>
     </header>
 
         <h1>Delete Staff Account</h1>
-        <form id="createacc">
+        <form id="deleteacc">
             <fieldset>
-                <legend>Account Details</legend>
+                <legend>Delete Account</legend>
                 <label>Staff ID:</label><input type="text" required>
 					 <br>
-                <label>First Name:</label><input type="text" required>
-					 <br>
-                <label>Last Name:</label><input type="text" required>
-					 <br>
-                <label>Staff Email:</label><input type="email"  required>
-					 <br>
-                <label>PIN:</label><input type="password" required>
-					 <br>
-                <label>Phone Number:</label><input type="tel" pattern="[0-9]{3}-[0-9]{4}-[0-9]{3}" required>
-					 <br>
-                <label>Department:</label>
-                <br>
-                <select required>
-                <option value="" selected="selected"></option>
-                <option value="1" >AskOtago</option>
-                <option value="2" >StudentIT</option>
-                <option value="3" >Demonstrator</option>
-		</select>
-                <br>
-                <label>Roles:</label>
-                <br>
-                <select required>
-                <option value="" selected="selected"></option>
-                <option value="1" >Manager</option>
-                <option value="2" >Senior</option>
-                <option value="3" >Junior</option>
-		</select>
-                <br>       
-                <button type="submit">Create Account</button>
+                 <button type="submit">Search Account</button>
+                 <br>
             </fieldset>
         </form>
+            <table>
+            <thead>
+                <tr>
+                    <th>Staff ID:</th>
+                    <th>First Name:</th>
+                    <th>Last Name:</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <body>
+            <tr>
+                <td>8099548</td>
+                <td>Seu Wand</td>
+                <td>Tee</td>
+                <td><button>Delete</button></td>
+            </tr>
+        </tbody>
     </body>
