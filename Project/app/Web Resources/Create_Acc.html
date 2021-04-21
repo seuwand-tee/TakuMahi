@@ -1,0 +1,52 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Create Staff Account</title>
+    <link rel ="stylesheet" href="style.css" >
+    <div>
+     <header class="Banner">
+         <div>
+         <!--- Will need to upload image to Git <img src="Logo.jpg" alt="Logo"> -->
+            <h1> Taku<span>Mahi |</span> Our<span>Work</span></h1>
+        </div>
+    </header>
+
+        <h1>Create Staff Account</h1>
+        <form id="createacc">
+            <fieldset>
+                <legend>Account Details</legend>
+                <label>Staff ID:</label><input type="text" required>
+					 <br>
+                <label>First Name:</label><input type="text" required>
+					 <br>
+                <label>Last Name:</label><input type="text" required>
+					 <br>
+                <label>Staff Email:</label><input type="email"  required>
+					 <br>
+                <label>PIN:</label><input type="password" required>
+					 <br>
+                <label>Phone Number:</label><input type="tel" pattern="[0-9]{3}-[0-9]{4}-[0-9]{3}" required>
+					 <br>
+                <label>Department:</label>
+                <br>
+                <select required>
+                <option value="" selected="selected"></option>
+                <option value="1" >AskOtago</option>
+                <option value="2" >StudentIT</option>
+                <option value="3" >Demonstrator</option>
+		</select>
+                <br>
+                <label>Roles:</label>
+                <br>
+                <select required>
+                <option value="" selected="selected"></option>
+                <option value="1" >Manager</option>
+                <option value="2" >Senior</option>
+                <option value="3" >Junior</option>
+		</select>
+                <br>       
+                <button type="submit">Create Account</button>
+            </fieldset>
+        </form>
+    </body>
