@@ -153,15 +153,76 @@ paths:
           description: New Shift successfully updated.
         '422':
           description: 'Shift not recorded, a shift with that id already exists.'
-  /shifts/open:
-    summary: Open Shifts
+  '/shifts/open':
+    summary: Open Shifts List
     description: A list of Open Shifts
     get:
       tags:
-        - Open Shifts
+        - Open Shifts List
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/Shift'
+                example: ''
+              example: ''
+          description: Response contains the entire Open Shift list.
     post:
       tags:
-        - Open Shifts
+        - Open Shifts List
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                example: ''
+              example: ''
+          description: Response contains the entire Staff list.
+      operationId: get All Staff
+      summary: Gets All Staff Members
+      description: Returns a list of all staff members.
+    post:
+      requestBody:
+        description: Details of Staff Member
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      tags:
+        - Staff List
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                example: ''
+              example: ''
+          description: Response contains the entire Staff list.
+          headers: {}
+          links: {}
+        '201':
+          description: New user added.
+          headers: {}
+          content: {}
+          links: {}
+        '422':
+          description: 'User not added, a User with that ID already exists.'
+      operationId: create new user
+      summary: Adds a new Staff Member.
+      description: Adds a new staff member.
   '/shifts/open/{shiftId}':
     summary: Open Shift
     description: A single Open Shift
@@ -179,7 +240,7 @@ paths:
     delete:
       tags:
         - Open Shift
-  '/staff/{role}':
+  '/staff/role/{role}':
     summary: Staff by Role
     description: Staff Members who fit a specified Role.
     get:
@@ -213,7 +274,7 @@ paths:
           links: {}
         '404':
           description: No users in that role were found.
-  '/staff/{department}':
+  '/staff/department/{department}':
     summary: Staff by Department
     description: Staff Members who fit a specified department.
     get:

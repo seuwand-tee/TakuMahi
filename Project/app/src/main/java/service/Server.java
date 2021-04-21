@@ -1,8 +1,7 @@
 package service;
 
 import dao.LocalStorageDAO;
-import resource.UserListResource;
-import resource.UserResource;
+import resource.*;
 import org.jooby.Jooby;
 import org.jooby.json.Gzon;
 import org.jooby.handlers.Cors;
@@ -23,7 +22,7 @@ public class Server extends Jooby {
 
         use(new UserListResource(dao));
         use(new UserResource(dao));
-
+        use(new UserListByRoleResource(dao));
     }
 
     public static void main(String[] args) throws IOException {
