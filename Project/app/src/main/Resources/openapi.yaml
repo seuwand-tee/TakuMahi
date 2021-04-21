@@ -45,6 +45,23 @@ paths:
       tags:
         - Staff List
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                externalDocs:
+                  description: ''
+                  url: ''
+                example: ''
+              example: ''
+              encoding: ''
+          description: Response contains the entire Staff list.
+          headers: {}
+          links: {}
         '201':
           description: New user added.
           x-last-modified: 1618993713660
@@ -64,31 +81,56 @@ paths:
     get:
       tags:
         - Staff Member
-      operationId: get user by id
-      summary: Gets a User by their ID.
-      description: Gets a single user by their ID.
       parameters:
-        - name: userId
-          in: path
+        - deprecated: false
+          name: userId
           description: The ID of the User.
-          required: true
-          deprecated: false
           schema:
             type: string
+          in: path
+          required: true
           x-last-modified: 1618994119293
       responses:
         '200':
-          description: Response contains a single user.
-          x-last-modified: 1618994280039
-          headers: {}
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+          description: Response contains a single user.
+          x-last-modified: 1618994280039
+          headers: {}
           links: {}
+      operationId: get user by id
+      summary: Gets a User by their ID.
+      description: Gets a single user by their ID.
     delete:
       tags:
         - Staff Member
+      operationId: delete user
+      summary: delete specified user
+      description: Deletes a user by their ID.
+      parameters:
+        - name: userId
+          in: path
+          required: false
+          deprecated: false
+          x-last-modified: 1618997738244
+          description: The ID of the User.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Staff Member successfully deleted.
+          x-last-modified: 1618997765799
+          headers: {}
+          content: {}
+          links: {}
+        '404':
+          description: No staff member with that ID was found.
+          x-last-modified: 1618997788539
+          headers: {}
+          content: {}
+          links: {}
     x-last-modified: 1618957004765
   '/staff/shifts/{id}':
     summary: Staff Shifts
@@ -96,6 +138,18 @@ paths:
     get:
       tags:
         - Staff Shifts
+      operationId: get shifts by user
+      summary: Get Shifts by User
+      description: Gets all shifts for a specified user.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the User
+          required: false
+          deprecated: false
+          schema:
+            type: string
+          x-last-modified: 1618998249137
     post:
       tags:
         - Staff Shifts
@@ -133,6 +187,40 @@ paths:
     get:
       tags:
         - Staff List by Department
+      operationId: get users by department
+      summary: Get Users by Department
+      description: Gets a list of users in a specified department.
+      parameters:
+        - name: department
+          in: path
+          description: The department requested.
+          required: false
+          deprecated: false
+          schema:
+            type: string
+          x-last-modified: 1618998396969
+      responses:
+        '200':
+          description: Response contains a list of all Users in specified department.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                description: ''
+                example: ''
+                externalDocs:
+                  url: ''
+                  description: ''
+              encoding: ''
+              example: ''
+          x-last-modified: 1619000215317
+          headers: {}
+          links: {}
+        '404':
+          description: No users in that department were found.
+          x-last-modified: 1619000279299
     x-last-modified: 1618990129394
 components:
   schemas:
