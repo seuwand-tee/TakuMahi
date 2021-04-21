@@ -16,9 +16,47 @@ paths:
     get:
       tags:
         - Staff List
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                externalDocs:
+                  description: ''
+                  url: ''
+                example: ''
+              example: ''
+          description: Response contains the entire Staff list.
+      operationId: get All Staff
+      summary: Gets All Staff Members
+      description: Returns a list of all staff members.
     post:
+      requestBody:
+        description: Details of Staff Member
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
       tags:
         - Staff List
+      responses:
+        '201':
+          description: New user added.
+          x-last-modified: 1618993713660
+          headers: {}
+          content: {}
+          links: {}
+        '422':
+          description: 'User not added, a User with that ID already exists.'
+          x-last-modified: 1618993751972
+      operationId: create new user
+      summary: Adds a new Staff Member.
+      description: Adds a new staff member.
     x-last-modified: 1618956884481
   '/staff/{id}':
     summary: Staff Member
@@ -26,6 +64,28 @@ paths:
     get:
       tags:
         - Staff Member
+      operationId: get user by id
+      summary: Gets a User by their ID.
+      description: Gets a single user by their ID.
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the User.
+          required: true
+          deprecated: false
+          schema:
+            type: string
+          x-last-modified: 1618994119293
+      responses:
+        '200':
+          description: Response contains a single user.
+          x-last-modified: 1618994280039
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          links: {}
     delete:
       tags:
         - Staff Member
@@ -75,24 +135,54 @@ paths:
         - Staff List by Department
     x-last-modified: 1618990129394
 components:
+  schemas:
+    User:
+      required:
+        - username
+        - idNumber
+        - role
+        - department
+      type: object
+      properties:
+        username:
+          description: The unique username of the user.
+          type: string
+        idNumber:
+          description: The unique ID of the user.
+          type: integer
+        role:
+          description: The role of the user.
+          type: string
+        department:
+          description: The department of the user.
+          type: string
+        firstName:
+          description: The first name of the user.
+          type: string
+        lastName:
+          description: The last name of the user.
+          type: string
+        email:
+          description: The email of the user.
+          type: string
+      x-last-modified: 1618992390956
   securitySchemes: {}
-  schemas: {}
   headers: {}
   responses: {}
   parameters: {}
 tags:
   - name: Staff List
-    x-last-modified: 1618983952384
     description: A list of all Staff Members.
+    x-last-modified: 1618983952384
   - name: Staff Member
-    x-last-modified: 1618983940692
     description: ' A single Staff member.'
+    x-last-modified: 1618983940692
   - name: Staff Shifts
-    x-last-modified: 1618983926915
     description: List of Shifts for a Staff Member
+    x-last-modified: 1618983926915
   - name: Open Shifts List
-    x-last-modified: 1618983909230
     description: List of Open Shifts
+    x-last-modified: 1618983909230
   - name: Open Shift
     description: A single Open Shift
     x-last-modified: 1618983897996
