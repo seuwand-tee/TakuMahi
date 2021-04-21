@@ -21,11 +21,16 @@ td{
   border-color: white;
 }
 
-/* controls the calender div */
-.calender{
+/* controls the calendar div */
+.calendar{
   font-family: Georgia, "Times New Roman", Times, serif;
   padding: 0;
   position: absolute;
+}
+
+.cal-wrapper{
+  border: solid 10px;
+  border-radius: 10px;
 }
 
 /* Code to "highlight" the selected cell.*/
@@ -33,7 +38,7 @@ td{
   background-color: #ddd !important;
 }
 
-.hidden-calender{
+.hidden-calendar{
   visibility: hidden;
 }
 
