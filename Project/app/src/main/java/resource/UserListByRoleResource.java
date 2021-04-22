@@ -21,7 +21,6 @@ public class UserListByRoleResource extends Jooby {
                          */
 			use("/:role", (req, rsp, chain) -> {
                                 String role = req.param("role").value();
-                                System.out.println(role);
 
 				if (role.equals("Manager") || role.equals("Senior") || role.equals("Casual")) {
 					// Role is OK, so pass request on to the next route in the chain
