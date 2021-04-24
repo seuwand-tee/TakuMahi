@@ -261,4 +261,8 @@ public class LocalStorageDAO {
         return openShifts.values();
     }
 
+    public boolean eventExists(Integer eventID) {
+        return eventsByID.containsKey(eventID);
+    }
+
 }
