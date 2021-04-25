@@ -333,6 +333,70 @@ paths:
           links: {}
         '404':
           description: No users in that department were found.
+  '/shifts/open/{eventId}/{userId}':
+    summary: Open Shift with User
+    description: A single Open Shift with User ID
+    post:
+        tags:
+          - Open Shift with User
+        parameters:
+          - name: eventId
+            in: path
+            required: true
+            deprecated: false
+            description: The ID of the event.
+            schema:
+             type: string
+          - name: userId
+            in: path
+            required: true
+            deprecated: false
+            description: The ID of the User.
+            schema:
+              type: string
+        responses:
+          '204':
+            description: Customer successfully updated.
+            headers: {}
+            content: {}
+            links: {}
+          '404':
+            description: Invalid Shift or User ID.
+            headers: {}
+            content: {}
+            links: {}
+        operationId: assign user to shift
+        summary: Assigns a user to a shift.
+        description: Assigns a user to a shift.
+    put:
+        tags:
+          - Open Shift with User
+        parameters:
+          - name: eventId
+            in: path
+            required: true
+            deprecated: false
+            description: The ID of the event.
+            schema:
+             type: string
+          - name: userId
+            in: path
+            required: true
+            deprecated: false
+            description: The ID of the User.
+            schema:
+              type: string
+        responses:
+          '204':
+            description: Customer successfully updated.
+            headers: {}
+            content: {}
+            links: {}
+          '404':
+            description: Invalid Shift or User ID.
+            headers: {}
+            content: {}
+            links: {}
 components:
   schemas:
     User:
@@ -411,4 +475,6 @@ tags:
     description: List of Staff Members by a specified role
   - name: Staff List by Department
     description: List of Staff Members by a specified department.
+  - name: Open Shift with User
+    description: A single Open Shift with User ID
 security: []
