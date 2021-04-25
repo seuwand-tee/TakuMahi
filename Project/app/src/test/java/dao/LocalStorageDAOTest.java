@@ -1,34 +1,38 @@
 package dao;
 
 import domain.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Collection;
 
 public class LocalStorageDAOTest {
 
-    LocalStorageDAO dao;
+    private static LocalStorageDAO dao;
 
-    User userOne;
-    User userTwo;
-    User userThree;
+    private static User userOne;
+    private static User userTwo;
+    private static User userThree;
 
-    Shift shiftOne;
-    Shift shiftTwo;
-    Shift shiftThree;
-    Shift shiftFour;
-    Shift shiftFive;
+    private static Shift shiftOne;
+    private static Shift shiftTwo;
+    private static Shift shiftThree;
+    private static Shift shiftFour;
+    private static Shift shiftFive;
 
-    Unavailability unavailabilityOne;
-    Unavailability unavailabilityTwo;
-    Unavailability unavailabilityThree;
+    private static Unavailability unavailabilityOne;
+    private static Unavailability unavailabilityTwo;
+    private static Unavailability unavailabilityThree;
 
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    public static void declareAll() {
 
         dao = new LocalStorageDAO();
 
@@ -44,7 +48,7 @@ public class LocalStorageDAOTest {
         userTwo = new User();
         userTwo.setUsername("billy20p");
         userTwo.setIdNumber(2);
-        userTwo.setRole(User.Role.Casual);
+        userTwo.setRole(User.Role.Manager);
         userTwo.setDepartment(User.Department.GeneralEnquiries);
         userTwo.setFirstName("Billy");
         userTwo.setLastName("Smith");
@@ -70,8 +74,8 @@ public class LocalStorageDAOTest {
 
         shiftTwo = new Shift();
         shiftTwo.setEventID(2);
-        shiftTwo.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 11, 30), ZoneId.of("Pacific/Auckland")));
-        shiftTwo.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 13, 30), ZoneId.of("Pacific/Auckland")));
+        shiftTwo.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 21, 11, 30), ZoneId.of("Pacific/Auckland")));
+        shiftTwo.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 21, 13, 30), ZoneId.of("Pacific/Auckland")));
         shiftTwo.setName("Midday ISB");
         shiftTwo.setDescription("Hmm yes, this is a shift");
         shiftTwo.setNotes("Remember Staples");
@@ -79,8 +83,8 @@ public class LocalStorageDAOTest {
 
         shiftThree = new Shift();
         shiftThree.setEventID(3);
-        shiftThree.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 3, 30), ZoneId.of("Pacific/Auckland")));
-        shiftThree.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 5, 30), ZoneId.of("Pacific/Auckland")));
+        shiftThree.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 22, 3, 30), ZoneId.of("Pacific/Auckland")));
+        shiftThree.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 22, 5, 30), ZoneId.of("Pacific/Auckland")));
         shiftThree.setName("Afternoon ISB");
         shiftThree.setDescription("Hmm yes, this is a shift");
         shiftThree.setNotes("Remember Staples");
@@ -126,7 +130,12 @@ public class LocalStorageDAOTest {
         unavailabilityThree.setRepeat(Unavailability.Repeat.Monthly);
         unavailabilityThree.setRepeatEnd(ZonedDateTime.of(LocalDateTime.of(2020, 8, 20, 0, 0), ZoneId.of("Pacific/Auckland")));
         unavailabilityThree.setDescription("Ain't nobody got time for dat");
-        
+
+    }
+
+    @BeforeEach
+    public void setUp() {
+
         dao.addUser(userOne);
         dao.addUser(userTwo);
         // leaving userThree
@@ -138,10 +147,17 @@ public class LocalStorageDAOTest {
         dao.assignShiftToUser(1, 1);
         dao.assignShiftToUser(1, 2);
         dao.assignShiftToUser(1, 3);
-        // leaving shiftFour and shiftFive unassigned
+        // leaving shiftFour unassigned
         dao.addUnavailabilityToUser(1, unavailabilityOne);
         dao.addUnavailabilityToUser(2, unavailabilityTwo);
         // leaving unavailabilityThree
+
+    }
+
+    @AfterEach
+    public void tearDown() {
+
+        dao.resetDAO();
 
     }
 
@@ -229,6 +245,185 @@ public class LocalStorageDAOTest {
         assertTrue(dao.getShiftsByUser(2).contains(shiftFour));
 
         assertFalse(dao.getOpenShifts().contains(shiftFour));
+
+    }
+
+    @Test
+    public void removeShiftFromUserTest() {
+
+        assertTrue(dao.getShiftsByUser(1).contains(shiftThree));
+
+        assertFalse(dao.getOpenShifts().contains(shiftThree));
+
+        dao.removeShiftFromUser(1, 3);
+
+        assertFalse(dao.getShiftsByUser(1).contains(shiftThree));
+
+        assertTrue(dao.getOpenShifts().contains(shiftThree));
+
+    }
+
+    @Test
+    public void addUnavailabilityToUserTest() {
+
+        assertFalse(dao.getUnavailabilityByUser(2).contains(unavailabilityThree));
+
+        assertFalse(dao.eventExists(8));
+
+        dao.addUnavailabilityToUser(2, unavailabilityThree);
+
+        assertTrue(dao.getUnavailabilityByUser(2).contains(unavailabilityThree));
+
+        assertTrue(dao.eventExists(8));
+
+    }
+
+    @Test
+    public void deleteUnavailabilityFromUserTest() {
+
+        assertTrue(dao.getUnavailabilityByUser(2).contains(unavailabilityTwo));
+
+        assertTrue(dao.eventExists(7));
+
+        dao.deleteUnavailabilityFromUser(2, 7);
+
+        assertFalse(dao.getUnavailabilityByUser(2).contains(unavailabilityTwo));
+
+        assertFalse(dao.eventExists(7));
+
+    }
+
+    @Test
+    public void getUserEventsForPeriodTest() {
+
+        Collection<Event> events = dao.getUserEventsForPeriod(1, LocalDate.of(2020, 3, 20), 2, 0);
+        Collection<Event> shifts = dao.getUserEventsForPeriod(1, LocalDate.of(2020, 3, 20), 2, 1);
+        Collection<Event> unavailabilitys = dao.getUserEventsForPeriod(1, LocalDate.of(2020, 3, 20), 2, 2);
+
+        assertEquals(3, events.size());
+        assertTrue(events.contains(shiftOne));
+        assertTrue(events.contains(shiftTwo));
+        assertTrue(events.contains(unavailabilityOne));
+
+        assertEquals(2, shifts.size());
+        assertTrue(shifts.contains(shiftOne));
+        assertTrue(shifts.contains(shiftTwo));
+
+        assertEquals(1, unavailabilitys.size());
+        assertTrue(unavailabilitys.contains(unavailabilityOne));
+
+    }
+
+    @Test
+    public void getUserHoursForPeriodTest() {
+
+        int hours = dao.getUserHoursForPeriod(1, LocalDate.of(2020, 3, 20), 2);
+
+        assertEquals(4, hours);
+
+        hours = dao.getUserHoursForPeriod(1, LocalDate.of(2020, 3, 20), 1);
+
+        assertEquals(2, hours);
+
+    }
+
+    @Test
+    public void userExistsTest() {
+
+        assertTrue(dao.userExists(1));
+
+        assertFalse(dao.userExists(3));
+
+    }
+
+    @Test
+    public void getAllUsersTest() {
+
+        Collection<User> users = dao.getAllUsers();
+
+        assertEquals(2, users.size());
+        assertTrue(users.contains(userOne));
+        assertTrue(users.contains(userTwo));
+
+    }
+
+    @Test
+    public void getUserByIDTest() {
+
+        User user = dao.getUserByID(1);
+
+        assertEquals(userOne, user);
+
+    }
+
+    @Test
+    public void getUsersByRoleTest() {
+
+        Collection<User> users = dao.getUsersByRole(User.Role.Casual);
+
+        assertEquals(1, users.size());
+        assertTrue(users.contains(userOne));
+
+        users = dao.getUsersByRole(User.Role.Manager);
+
+        assertEquals(1, users.size());
+        assertTrue(users.contains(userTwo));
+
+    }
+
+    @Test
+    public void getUsersByDepartmentTest() {
+
+        Collection<User> users = dao.getUsersByDepartment(User.Department.StudentIT);
+
+        assertEquals(1, users.size());
+        assertTrue(users.contains(userOne));
+
+        users = dao.getUsersByDepartment(User.Department.GeneralEnquiries);
+
+        assertEquals(1, users.size());
+        assertTrue(users.contains(userTwo));
+
+    }
+
+    @Test
+    public void getShiftsByUserTest() {
+
+        Collection<Shift> shifts = dao.getShiftsByUser(1);
+
+        assertEquals(3, shifts.size());
+        assertTrue(shifts.contains(shiftOne));
+        assertTrue(shifts.contains(shiftTwo));
+        assertTrue(shifts.contains(shiftThree));
+
+    }
+
+    @Test
+    public void getUnavailabilityByUserTest() {
+
+        Collection<Unavailability> unavailabilitys = dao.getUnavailabilityByUser(1);
+
+        assertEquals(1, unavailabilitys.size());
+        assertTrue(unavailabilitys.contains(unavailabilityOne));
+
+    }
+
+    @Test
+    public void getOpenShiftsTest() {
+
+        Collection<Shift> shifts = dao.getOpenShifts();
+
+        assertEquals(1, shifts.size());
+        assertTrue(shifts.contains(shiftFour));
+
+    }
+
+    @Test
+    public void eventExistsTest() {
+
+        assertTrue(dao.eventExists(1));
+
+        assertFalse(dao.eventExists(9));
 
     }
     
