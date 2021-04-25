@@ -18,16 +18,16 @@ import static java.beans.Beans.isInstanceOf;
 public class LocalStorageDAO {
 
     // User access
-    private static final Multimap<User.Department, User> usersByDepartment = HashMultimap.create();
-    private static final Multimap<User.Role, User> usersByRole = HashMultimap.create();
-    private static final Map<Integer, User> usersByID = new HashMap<>();
+    private static Multimap<User.Department, User> usersByDepartment = HashMultimap.create();
+    private static Multimap<User.Role, User> usersByRole = HashMultimap.create();
+    private static Map<Integer, User> usersByID = new HashMap<>();
 
     // Event access
-    private static final Map<Integer, Event> eventsByID = new HashMap<>();
-    private static final Multimap<LocalDate, Event> eventsByDate = HashMultimap.create();
-    private static final Multimap<User, Shift> shiftsByUser = HashMultimap.create();
-    private static final Multimap<User, Unavailability> unavailabilityByUser = HashMultimap.create();
-    private static final Map<Integer, Shift> openShifts = new HashMap<>();
+    private static Map<Integer, Event> eventsByID = new HashMap<>();
+    private static Multimap<LocalDate, Event> eventsByDate = HashMultimap.create();
+    private static Multimap<User, Shift> shiftsByUser = HashMultimap.create();
+    private static Multimap<User, Unavailability> unavailabilityByUser = HashMultimap.create();
+    private static Map<Integer, Shift> openShifts = new HashMap<>();
 
     /**
      * This adds a User object to the relevant collections, based on ID, Role, and Department.
@@ -156,22 +156,28 @@ public class LocalStorageDAO {
         switch (filter){
             case 0:
                 for (Event e : events) {
-                    if (e.getUser().getIdNumber() == userID) {
-                        usersEvents.add(e);
+                    if (e.getUser() != null) {
+                        if (e.getUser().getIdNumber().equals(userID)) {
+                            usersEvents.add(e);
+                        }
                     }
                 }
                 break;
             case 1:
                 for (Event e : events) {
-                    if (e.getUser().getIdNumber() == userID && isInstanceOf(e, Shift.class)) {
-                        usersEvents.add(e);
+                    if (e.getUser() != null) {
+                        if (e.getUser().getIdNumber().equals(userID) && isInstanceOf(e, Shift.class)) {
+                            usersEvents.add(e);
+                        }
                     }
                 }
                 break;
             case 2:
                 for (Event e : events) {
-                    if (e.getUser().getIdNumber() == userID && isInstanceOf(e, Unavailability.class)) {
-                        usersEvents.add(e);
+                    if (e.getUser() != null) {
+                        if (e.getUser().getIdNumber().equals(userID) && isInstanceOf(e, Unavailability.class)) {
+                            usersEvents.add(e);
+                        }
                     }
                 }
                 break;
@@ -259,6 +265,32 @@ public class LocalStorageDAO {
      */
     public Collection<Shift> getOpenShifts() {
         return openShifts.values();
+    }
+
+    /**
+     * @param eventID The EventID to check.
+     * @return Returns whether or not a event exists in the DAO.
+     */
+    public boolean eventExists(Integer eventID) {
+        return eventsByID.containsKey(eventID);
+    }
+
+    /**
+     * WARNING: WILL WIPE ALL DATA.
+     * This method resets all the collections in the DAO.
+     */
+    public void resetDAO() {
+        // User access
+        usersByDepartment = HashMultimap.create();
+        usersByRole = HashMultimap.create();
+        usersByID = new HashMap<>();
+
+        // Event access
+        eventsByID = new HashMap<>();
+        eventsByDate = HashMultimap.create();
+        shiftsByUser = HashMultimap.create();
+        unavailabilityByUser = HashMultimap.create();
+        openShifts = new HashMap<>();
     }
 
 }
