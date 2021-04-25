@@ -260,5 +260,22 @@ public class LocalStorageDAO {
     public Collection<Shift> getOpenShifts() {
         return openShifts.values();
     }
+    
+    /**
+     * This returns whether or not an event is in the DAO.
+     * @param eventID The ID of the User.
+     * @return Returns true if the event is located, false if not.
+     */
+    public boolean eventExists(Integer eventID) {
+        return eventsByID.containsKey(eventID);
+    }
+    
+    /**
+     * @param eventID The ID of the User.
+     * @return Returns the event object with that ID.
+     */
+    public Event getEventByID(Integer eventID) {
+        return eventsByID.get(eventID);
+    }
 
 }

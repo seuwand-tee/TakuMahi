@@ -85,6 +85,11 @@ paths:
           description: Response contains a single user.
           headers: {}
           links: {}
+        '404':
+          description: No staff member with that ID was found.
+          headers: {}
+          content: {}
+          links: {}
       operationId: get user by id
       summary: Gets a User by their ID.
       description: Gets a single user by their ID.
@@ -113,7 +118,7 @@ paths:
           headers: {}
           content: {}
           links: {}
-  '/staff/shifts/{userId}':
+  '/staff/shifts/{eventId}':
     summary: Staff Shifts
     description: All shifts assigned to a staff member.
     get:
@@ -123,13 +128,22 @@ paths:
       summary: Get Shifts by User
       description: Gets all shifts for a specified user.
       parameters:
-        - name: userId
+        - name: eventId
           in: path
-          description: The ID of the User
+          description: The ID of the event
           required: true
           deprecated: false
           schema:
             type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shift'
+          description: Response contains a single Shift.
+          headers: {}
+          links: {}
     post:
       requestBody:
         description: Details of Shift.
@@ -192,23 +206,62 @@ paths:
       operationId: add to open shifts
       summary: Adds a new shift.
       description: Adds a new shift.
-  '/shifts/open/{shiftId}':
+  '/shifts/open/{eventId}':
     summary: Open Shift
     description: A single Open Shift
-    parameters:
-        - name: shiftId
+    get:
+      tags:
+        - Open Shift
+      parameters:
+        - name: eventId
           in: path
           required: true
           deprecated: false
           description: The ID of the User.
           schema:
             type: string
-    get:
-      tags:
-        - Open Shift
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shift'
+          description: Response contains a single shift.
+          headers: {}
+          links: {}
+        '404':
+          description: No shift with that ID was found.
+          headers: {}
+          content: {}
+          links: {}
+      operationId: get shift by id
+      summary: Gets a shift by its ID.
+      description: Gets a single shift by its ID.
     delete:
       tags:
         - Open Shift
+      operationId: delete shift
+      summary: Deletes a shift by its ID.
+      description: Deletes a shift by its ID.
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the Shift.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Shift successfully deleted.
+          headers: {}
+          content: {}
+          links: {}
+        '404':
+          description: No shift with that ID was found.
+          headers: {}
+          content: {}
+          links: {}
   '/staff/role/{role}':
     summary: Staff by Role
     description: Staff Members who fit a specified Role.

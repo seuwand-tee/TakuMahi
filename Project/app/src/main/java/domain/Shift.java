@@ -25,7 +25,6 @@ public class Shift extends Event {
 
     public Shift(Instant start, Instant end, String name, String description, String notes, String type) {
         super(start, end);
-        System.out.println("test2");
         this.name = name;
         this.description = description;
         this.notes = notes;
