@@ -1,5 +1,7 @@
 package domain;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
@@ -17,11 +19,13 @@ public abstract class Event {
 
     public Event(){};
 
-    public Event(ZonedDateTime start, ZonedDateTime end) {
+    public Event(Instant start, Instant end) {
         eventID = idCount;
         idCount++;
-        this.start = start;
-        this.end = end;
+        ZonedDateTime strt = start.atZone(ZoneId.of("Pacific/Auckland"));
+        ZonedDateTime nd = end.atZone(ZoneId.of("Pacific/Auckland"));
+        this.start = strt;
+        this.end = nd;
     }
 
     public Integer getEventID() {

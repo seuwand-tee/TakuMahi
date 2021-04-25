@@ -175,23 +175,23 @@ paths:
       tags:
         - Open Shifts List
       requestBody:
-        description: Details of Staff Member
+        description: Details of Shift
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/Shift'
         required: true
       responses:
         '201':
-          description: New user added.
+          description: New shift added.
           headers: {}
           content: {}
           links: {}
         '422':
-          description: 'User not added, a User with that ID already exists.'
-      operationId: create new user
-      summary: Adds a new Staff Member.
-      description: Adds a new staff member.
+          description: 'Shift not added, a Shift with that name already exists.'
+      operationId: add to open shifts
+      summary: Adds a new shift.
+      description: Adds a new shift.
   '/shifts/open/{shiftId}':
     summary: Open Shift
     description: A single Open Shift
@@ -336,7 +336,7 @@ components:
         notes:
           description: Notes for the shift.
           type: string
-        Type:
+        type:
           description: The last name of the user.
           type: string
   securitySchemes: {}

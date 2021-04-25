@@ -24,6 +24,7 @@ public class Server extends Jooby {
         use(new UserResource(dao));
         use(new UserListByRoleResource(dao));
         use(new UserListByDepartmentResource(dao));
+        use(new OpenShiftListResource(dao));
     }
 
     public static void main(String[] args) throws IOException {

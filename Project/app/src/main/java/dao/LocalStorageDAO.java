@@ -206,7 +206,7 @@ public class LocalStorageDAO {
     public boolean userExists(Integer userID) {
         return usersByID.containsKey(userID);
     }
-
+    
     /**
      * @return Returns all Users in the DAO.
      */
