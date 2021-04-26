@@ -30,6 +30,7 @@ public class Server extends Jooby {
         use(new ShiftListByUserResource(dao));
         use(new UnavailabilityListByUserResource(dao));
         use(new UnavailabilityByUserResource(dao));
+        use(new EventsByUserResource(dao));
     }
 
     public static void main(String[] args) throws IOException {

@@ -500,7 +500,7 @@ paths:
           schema:
             type: string
             format: date-time
-          description: The start date of the period.
+          description: The start date of the period (Format = mm-dd-yyyy).
         - name: daysInPeriod
           in: query
           schema:
