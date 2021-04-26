@@ -7,7 +7,7 @@ servers:
   - url: 'http://localhost:8080/api'
     description: ''
 paths:
-  /staff:
+  '/staff':
     summary: Staff List
     description: A list of all Staff.
     get:
@@ -478,6 +478,99 @@ paths:
           headers: {}
           content: {}
           links: {}
+  '/staff/events/{userId}':
+    summary: Staff Events
+    description: All events associated with a staff member.
+    get:
+      tags:
+        - Events for User
+      operationId: get user events in period
+      summary: Get user events in a period.
+      description: Get a list of user events in a time period.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the User.
+          schema:
+            type: string
+        - name: startOfPeriod
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: The start date of the period.
+        - name: daysInPeriod
+          in: query
+          schema:
+            type: integer
+          description: The number of days in the period.
+        - name: filter
+          in: query
+          schema:
+            type: integer
+          description: Filter on the search. (0 = All Events, 1 = Shifts, 2 = Unavailabilities)
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+                example: ''
+              example: ''
+          description: Response contains a list of all relevant events.
+        '404':
+            description: No events were found with that User ID.
+            headers: {}
+            content: {}
+            links: {}
+  '/staff/hours/{userId}':
+    summary: Staff Hours
+    description: All hours scheduled for a User.
+    get:
+      tags:
+        - Hours for User
+      operationId: get user hours for period
+      summary: Get user hours in a period.
+      description: Gets a number of hours scheduled for a user in specified period.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the User.
+          schema:
+            type: string
+        - name: startOfPeriod
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: The start date of the period.
+        - name: daysInPeriod
+          in: query
+          schema:
+            type: integer
+          description: The number of days in the period.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: integer
+                example: ''
+              example: ''
+          description: Response contains the number of hours scheduled.
+        '404':
+            description: No hours were able to be calculated with that User ID.
+            headers: {}
+            content: {}
+            links: {}
 components:
   schemas:
     User:
@@ -559,6 +652,27 @@ components:
         description:
           description: The description .
           type: string
+    Event:
+      required:
+        - eventId
+        - User
+        - start
+        - end
+      type: object
+      properties:
+        eventId:
+          description: The unique ID of the event.
+          type: integer
+        User:
+          $ref: '#/components/schemas/User'
+        start:
+          description: The scheduled start of the event.
+          type: string
+          format: date-time
+        end:
+          description: The scheduled finish of the event.
+          type: string
+          format: date-time
   securitySchemes: {}
   headers: {}
   responses: {}
@@ -567,21 +681,25 @@ tags:
   - name: Staff List
     description: A list of all Staff Members.
   - name: Staff Member
-    description: ' A single Staff member.'
-  - name: Staff Shifts
-    description: List of Shifts for a Staff Member
-  - name: Open Shifts List
-    description: List of Open Shifts
-  - name: Open Shift
-    description: A single Open Shift
+    description: A single Staff member.
   - name: Staff List by Role
     description: List of Staff Members by a specified role
   - name: Staff List by Department
     description: List of Staff Members by a specified department.
+  - name: Open Shifts List
+    description: List of Open Shifts
+  - name: Open Shift
+    description: A single Open Shift
+  - name: Staff Shifts
+    description: List of Shifts for a Staff Member
   - name: Open Shift with User
     description: A single Open Shift with User ID
   - name: Unavailability List for User
     description: A list of User Unavailabilities
   - name: Unavailability for User
     description: A single User Unavailability
+  - name: Events for User
+    description: A list of Events for a specified User.
+  - name: Hours for User
+    description: Amount of hours scheduled in period by specified User.
 security: []
