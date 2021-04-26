@@ -22,9 +22,9 @@ public class Unavailability extends Event {
 
     public Unavailability(){};
 
-    public Unavailability(Instant start, Instant end, Repeat repeat, String description) {
+    public Unavailability(Instant start, Instant end, String repeat, String description) {
         super(start, end);
-        this.repeat = repeat;
+        this.repeat = Repeat.valueOf(repeat);
         this.description = description;
     }
 

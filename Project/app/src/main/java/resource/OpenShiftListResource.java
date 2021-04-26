@@ -31,7 +31,6 @@ public class OpenShiftListResource extends Jooby {
                          * Adds shift to list
                          */
 			post((req, rsp) -> {
-                                //Shift shift = new Shift();
                                 
                                 //extract instant values from request body to send in constructor (can be used to convert date to any format)
 				String shift = req.body(String.class);

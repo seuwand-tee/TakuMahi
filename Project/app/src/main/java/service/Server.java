@@ -28,6 +28,7 @@ public class Server extends Jooby {
         use(new OpenShiftResource(dao));
         use(new ShiftWithUserResource(dao));
         use(new ShiftsByUserResource(dao));
+        use(new UnavailabilityByUserResource(dao));
     }
 
     public static void main(String[] args) throws IOException {
