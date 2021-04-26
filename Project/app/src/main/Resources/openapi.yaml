@@ -385,6 +385,64 @@ paths:
             headers: {}
             content: {}
             links: {}
+  '/staff/unavailability/{userId}':
+    summary: User Unavailabilities
+    description: All unavailabilities for a specified user.
+    get:
+      tags:
+        - Unavailability for User
+      operationId: get unavailability by user
+      summary: Get Unavailability by User
+      description: Gets all unavailabilities for a specified user
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user
+          required: true
+          deprecated: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/Unavailability'
+                example: ''
+              example: ''
+          description: Response contains a list of all users unavailabities.
+    post:
+      tags:
+        - Unavailability for User
+      operationId: add unavailability from user
+      summary: Add Unavailability to User
+      description: Adds an unavailability to a user.
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user
+          required: true
+          deprecated: false
+          schema:
+            type: string
+      requestBody:
+        description: Details of Unavailability
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unavailability'
+        required: true
+      responses:
+        '201':
+          description: New unavailability added.
+          headers: {}
+          content: {}
+          links: {}
+        '422':
+          description: 'Unavailability not added.'
 components:
   schemas:
     User:
@@ -442,7 +500,29 @@ components:
           description: Notes for the shift.
           type: string
         type:
-          description: The last name of the user.
+          description: The type of shift.
+          type: string
+    Unavailability:
+      required:
+        - start
+        - end
+        - repeat
+        - description
+      type: object
+      properties:
+        start:
+          description: The scheduled start of the unavailability.
+          type: string
+          format: date-time
+        end:
+          description: The scheduled finish of the unavailability.
+          type: string
+          format: date-time
+        repeat:
+          description: How often the unavailability repeats.
+          type: string
+        description:
+          description: The description .
           type: string
   securitySchemes: {}
   headers: {}
@@ -465,4 +545,6 @@ tags:
     description: List of Staff Members by a specified department.
   - name: Open Shift with User
     description: A single Open Shift with User ID
+  - name: Unavailability for User
+    description: A list of User Unavailabilities
 security: []
