@@ -6,6 +6,10 @@ import org.jooby.Jooby;
 import org.jooby.MediaType;
 import org.jooby.Status;
 
+/**
+ *
+ * This is the Resource class for the list of all Shifts for a specified User.
+ */
 public class ShiftListByUserResource extends Jooby {
     
     public ShiftListByUserResource(LocalStorageDAO dao) {

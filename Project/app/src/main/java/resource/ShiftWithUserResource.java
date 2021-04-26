@@ -7,7 +7,10 @@ import domain.User;
 import org.jooby.Jooby;
 import org.jooby.MediaType;
 import org.jooby.Status;
-
+/**
+ *
+ * This is the Resource class for a single shift for a specified User.
+ */
 public class ShiftWithUserResource extends Jooby {
     
     public ShiftWithUserResource(LocalStorageDAO dao) {

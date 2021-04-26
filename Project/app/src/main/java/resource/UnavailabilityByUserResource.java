@@ -8,6 +8,10 @@ import org.jooby.Jooby;
 import org.jooby.MediaType;
 import org.jooby.Status;
 
+/**
+ *
+ * This is the Resource class for a single Unavailability for a specified User.
+ */
 public class UnavailabilityByUserResource extends Jooby {
     
     public UnavailabilityByUserResource(LocalStorageDAO dao) {

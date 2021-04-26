@@ -497,17 +497,23 @@ paths:
             type: string
         - name: startOfPeriod
           in: query
+          required: true
+          deprecated: false
           schema:
             type: string
             format: date-time
           description: The start date of the period (Format = mm-dd-yyyy).
         - name: daysInPeriod
           in: query
+          required: true
+          deprecated: false
           schema:
             type: integer
           description: The number of days in the period.
         - name: filter
           in: query
+          required: true
+          deprecated: false
           schema:
             type: integer
           description: Filter on the search. (0 = All Events, 1 = Shifts, 2 = Unavailabilities)
@@ -547,12 +553,16 @@ paths:
             type: string
         - name: startOfPeriod
           in: query
+          required: true
+          deprecated: false
           schema:
             type: string
             format: date-time
-          description: The start date of the period.
+          description: The start date of the period (Format = mm-dd-yyyy).
         - name: daysInPeriod
           in: query
+          required: true
+          deprecated: false
           schema:
             type: integer
           description: The number of days in the period.

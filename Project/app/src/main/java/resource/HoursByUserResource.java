@@ -2,23 +2,21 @@ package resource;
 
 import dao.LocalStorageDAO;
 import domain.ErrorMessage;
-import domain.Event;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
 import org.jooby.Jooby;
 import org.jooby.MediaType;
 import org.jooby.Status;
 
 /**
  *
- * This is the Resource class for the list of all Events for a specified User in a specified time period.
+ * This is the Resource class for Hours scheduled for a specified user in a specified time period.
  */
-public class EventsByUserResource extends Jooby {
+public class HoursByUserResource extends Jooby {
     
-    public EventsByUserResource(LocalStorageDAO dao) {
+    public HoursByUserResource(LocalStorageDAO dao) {
         
-        path("/api/staff/events", () -> {
+        path("/api/staff/hours", () -> {
                         
                 /**
                 * Route that checks User ID is valid
@@ -36,24 +34,19 @@ public class EventsByUserResource extends Jooby {
 		});
             
             
-                //Gets events in period for specified user
+                //Gets hours in period for specified user
 		get("/:userId", (req, rsp) -> {       
-                    //extracts parameters
+                    //extract parameters
                     Integer userId = Integer.parseInt(req.param("userId").value());
                     String sPeriod = String.valueOf(req.param("startOfPeriod").value());
                     Integer daysInPeriod = Integer.parseInt(req.param("daysInPeriod").value());
-                    Integer filter = Integer.parseInt(req.param("filter").value());
                     //get localDate value
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
                     LocalDate startOfPeriod = LocalDate.parse(sPeriod, formatter);
                     //run dao method
-                    Collection<Event> events = dao.getUserEventsForPeriod(userId, startOfPeriod, daysInPeriod, filter);
-                    //return 404 if empty, otherwise send all events
-                    if (events.isEmpty()){
-                        rsp.status(Status.NOT_FOUND).send(new ErrorMessage("There were no shifts found with that query."));
-                    } else {
-                        rsp.status(Status.OK).send(events);
-                    }
+                    Integer hours = dao.getUserHoursForPeriod(userId, startOfPeriod, daysInPeriod);
+                    //send integer amount of hours
+                    rsp.status(Status.OK).send(hours);
                 });
         }).produces(MediaType.json).consumes(MediaType.json);
     }

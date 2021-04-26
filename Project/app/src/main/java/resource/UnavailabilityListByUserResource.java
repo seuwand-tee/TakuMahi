@@ -1,7 +1,6 @@
 package resource;
 
 import dao.LocalStorageDAO;
-import domain.User;
 import domain.ErrorMessage;
 import domain.Unavailability;
 import java.time.Instant;
@@ -11,7 +10,7 @@ import org.jooby.Status;
 import org.json.JSONObject;
 /**
  *
- * This is the Resource class for the list of all Users.
+ * This is the Resource class for the list of all Unavailabilities for a specified User.
  */
 public class UnavailabilityListByUserResource extends Jooby {
     
@@ -35,7 +34,7 @@ public class UnavailabilityListByUserResource extends Jooby {
 		});
                 
 		/**
-                * Gets list of User unavailabilities
+                * Gets list of User Unavailabilities
                 */
 		get("/:userId", (req) -> {
                     Integer id = Integer.parseInt(req.param("userId").value());
@@ -43,7 +42,7 @@ public class UnavailabilityListByUserResource extends Jooby {
 		});
                         
                 /**
-                * Adds user unavailabilities
+                * Adds user Unavailability
                 */
 		post("/:userId", (req, rsp) -> {
                     //extract id value

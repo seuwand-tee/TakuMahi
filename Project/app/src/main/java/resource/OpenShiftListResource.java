@@ -2,17 +2,14 @@ package resource;
 
 import dao.LocalStorageDAO;
 import domain.Shift;
-import domain.ErrorMessage;
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import org.jooby.Jooby;
 import org.jooby.MediaType;
 import org.jooby.Status;
 import org.json.JSONObject;
 /**
  *
- * This is the Resource class for the list of all Users.
+ * This is the Resource class for the list of all Open Shifts.
  */
 public class OpenShiftListResource extends Jooby {
     
