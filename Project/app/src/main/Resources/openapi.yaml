@@ -118,55 +118,6 @@ paths:
           headers: {}
           content: {}
           links: {}
-  '/staff/shifts/{eventId}':
-    summary: Staff Shifts
-    description: All shifts assigned to a staff member.
-    get:
-      tags:
-        - Staff Shifts
-      operationId: get shifts by user
-      summary: Get Shifts by User
-      description: Gets all shifts for a specified user.
-      parameters:
-        - name: eventId
-          in: path
-          description: The ID of the event
-          required: true
-          deprecated: false
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Shift'
-          description: Response contains a single Shift.
-          headers: {}
-          links: {}
-    post:
-      requestBody:
-        description: Details of Shift.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Shift'
-        required: true
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          deprecated: false
-          description: The ID of the User.
-          schema:
-            type: string
-      tags:
-        - Staff Shifts
-      responses:
-        '201':
-          description: New Shift successfully updated.
-        '422':
-          description: 'Shift not recorded, a shift with that id already exists.'
   '/shifts/open':
     summary: Open Shifts List
     description: A list of Open Shifts
@@ -394,6 +345,43 @@ paths:
             links: {}
           '404':
             description: Invalid Shift or User ID.
+            headers: {}
+            content: {}
+            links: {}
+        operationId: Remove user from shift
+        summary: Removes a user from a shift.
+        description: Removes a user from a shift.
+  '/staff/shifts/{userId}':
+    summary: Staff Shifts
+    description: All shifts assigned to a staff member.
+    get:
+      tags:
+        - Staff Shifts
+      operationId: get shifts by user
+      summary: Get Shifts by User
+      description: Gets all shifts for a specified user.
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user
+          required: true
+          deprecated: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: array
+                items:
+                  $ref: '#/components/schemas/Shift'
+                example: ''
+              example: ''
+          description: Response contains a list of all users shifts.
+        '404':
+            description: No shifts were found with that User ID.
             headers: {}
             content: {}
             links: {}

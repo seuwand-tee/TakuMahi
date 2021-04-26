@@ -8,9 +8,9 @@ import org.jooby.Jooby;
 import org.jooby.MediaType;
 import org.jooby.Status;
 
-public class OpenShiftWithUserResource extends Jooby {
+public class ShiftWithUserResource extends Jooby {
     
-    public OpenShiftWithUserResource(LocalStorageDAO dao) {
+    public ShiftWithUserResource(LocalStorageDAO dao) {
         
         path("/api/shifts/open", () -> {
                         
