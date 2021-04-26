@@ -1,0 +1,197 @@
+body {
+    background-color: white;
+    font-family: Arial;
+  }
+  
+  header {
+    background-color:rgba(255,193,14,255);
+    background-origin: padding-box;
+    background-clip: border-box;
+    background-size:auto;
+    background-position-x: 0px;
+    background-position-y: 0px;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: 370px;
+    
+  }
+  
+  #footer {
+    background-color : #00508f;
+    height: 100px;
+      position:fixed;
+      left:0px;
+      bottom:0px;
+      height:30px;
+      width:100%;
+   
+  }
+  
+  
+  /*This is for displaying Blue-Text */
+  span {
+    font-size: 20px;
+    overflow: hidden;
+    color : #00508f;
+  }
+  
+  /*This is for Displaying Black-Text */
+  p {
+    font-size: 20px;
+  }
+  
+  /* This is for displaying white text */
+  h1 {
+    font-size: 30px;
+    color: white;
+    overflow: hidden;
+    display: inline;
+    position: absolute;
+  
+  }
+  
+  .Container{
+    padding: 12px;
+    position: relative;
+  }
+  
+  .Banner {
+    position: relative;
+    }
+  
+  #difference{
+    margin: auto;
+  }
+  
+  /*Login Form*/
+  .Login_Form {border:2px solid black;
+    margin-left: 15%;
+    margin-right: 15%;
+    
+  }
+  
+  input[type=text], input[type=password] {
+        width: 100%;
+        display: inline-block;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+  #Login_button {
+    background-color:rgba(255,193,14,255);
+    color : #00508f;
+    margin: 10px;
+  }
+  
+  #Login_button:hover {
+    opacity: 0.7;
+  }
+  
+  input[type=checkbox]{
+    display: inline;
+    padding: 10px;
+    
+  }
+  
+  #Forgot_password{
+    display: inline;
+    padding: 10px;
+  
+  }
+  
+  #Account{
+    display: inline;
+    padding: 10px;
+  
+  }
+
+
+/*Login Form*/
+#Login_Form {
+    border:2px solid black;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+input{
+    width: 100%;
+    display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+button {
+    background-color:rgba(255,193,14,255);
+    color : #00508f;
+    margin: 10px;
+}
+
+button:hover {
+    opacity: 0.7;
+}
+
+input[type=checkbox]{
+    display: inline;
+    padding: 10px;
+
+}
+
+#Forgot_password{
+    display: inline;
+    padding: 10px;
+
+}
+
+/*General Purpose*/
+fieldset{
+    margin: auto;
+    width: 50%;
+}
+select.select
+{
+    color:#333;
+    font-size:100%;
+    padding:10px;
+    width: 100%;
+    display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+select{
+    padding:10px;
+    width: 100%;
+    display: inline-block;
+    margin: auto;
+}
+
+/*Nav Bar*/
+.dropbtn {
+    border: none;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #00508f;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: rgba(255,193,14,255);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown:hover .dropdown-content {display: block;}
