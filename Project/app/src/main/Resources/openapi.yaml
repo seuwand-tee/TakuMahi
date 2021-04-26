@@ -387,10 +387,10 @@ paths:
             links: {}
   '/staff/unavailability/{userId}':
     summary: User Unavailabilities
-    description: All unavailabilities for a specified user.
+    description: A list of unavailabilities for a specified user.
     get:
       tags:
-        - Unavailability for User
+        - Unavailability List for User
       operationId: get unavailability by user
       summary: Get Unavailability by User
       description: Gets all unavailabilities for a specified user
@@ -416,7 +416,7 @@ paths:
           description: Response contains a list of all users unavailabities.
     post:
       tags:
-        - Unavailability for User
+        - Unavailability List for User
       operationId: add unavailability from user
       summary: Add Unavailability to User
       description: Adds an unavailability to a user.
@@ -443,6 +443,41 @@ paths:
           links: {}
         '422':
           description: 'Unavailability not added.'
+  '/staff/unavailability/{userId}/{eventId}':
+    summary: User Unavailability
+    description: A single user unavailability
+    delete:
+      tags: 
+        - Unavailability for User
+      operationId: delete unavailability from user
+      summary: Delete Unavailability from User.
+      description: Deletes a specified Unavailability from a specified User.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the User.
+          schema:
+            type: string
+        - name: eventId
+          in: path
+          required: true
+          deprecated: false
+          description: The ID of the event.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Staff Member successfully deleted.
+          headers: {}
+          content: {}
+          links: {}
+        '404':
+          description: No staff member with that ID was found.
+          headers: {}
+          content: {}
+          links: {}
 components:
   schemas:
     User:
@@ -545,6 +580,8 @@ tags:
     description: List of Staff Members by a specified department.
   - name: Open Shift with User
     description: A single Open Shift with User ID
-  - name: Unavailability for User
+  - name: Unavailability List for User
     description: A list of User Unavailabilities
+  - name: Unavailability for User
+    description: A single User Unavailability
 security: []

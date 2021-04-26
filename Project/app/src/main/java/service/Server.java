@@ -27,7 +27,8 @@ public class Server extends Jooby {
         use(new OpenShiftListResource(dao));
         use(new OpenShiftResource(dao));
         use(new ShiftWithUserResource(dao));
-        use(new ShiftsByUserResource(dao));
+        use(new ShiftListByUserResource(dao));
+        use(new UnavailabilityListByUserResource(dao));
         use(new UnavailabilityByUserResource(dao));
     }
 

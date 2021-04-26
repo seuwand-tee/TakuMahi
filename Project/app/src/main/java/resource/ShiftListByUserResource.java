@@ -6,9 +6,9 @@ import org.jooby.Jooby;
 import org.jooby.MediaType;
 import org.jooby.Status;
 
-public class ShiftsByUserResource extends Jooby {
+public class ShiftListByUserResource extends Jooby {
     
-    public ShiftsByUserResource(LocalStorageDAO dao) {
+    public ShiftListByUserResource(LocalStorageDAO dao) {
         
         path("/api/staff/shifts", () -> {
 
