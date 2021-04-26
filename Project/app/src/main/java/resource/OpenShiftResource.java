@@ -16,7 +16,7 @@ public class OpenShiftResource extends Jooby {
         path("/api/shifts/open", () -> {
 
 			/**
-                         * Route that checks User ID is valid
+                         * Route that checks shift ID is valid
                          */
 			use("/:eventId", (req, rsp, chain) -> {
 				Integer id = Integer.parseInt(req.param("eventId").value());
