@@ -27,3 +27,9 @@ preventing some annoying bugs and keeping thigns consistent</i></p>
 how elements appeared and I would consider it a must read if making any web pages.
 adress: https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model
 </p>
+
+
+<h3> Copying the calander from view calander html page </h3>
+<p> To do this you will need to scroll through the html And find the view you want to copy.
+ You should also take the relavant js and whatever css you need. Also you need the bootstrap 
+ links as above.</p>
