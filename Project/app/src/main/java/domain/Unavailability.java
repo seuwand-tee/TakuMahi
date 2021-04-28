@@ -1,5 +1,6 @@
 package domain;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 
 /**
@@ -21,9 +22,9 @@ public class Unavailability extends Event {
 
     public Unavailability(){};
 
-    public Unavailability(ZonedDateTime start, ZonedDateTime end, Repeat repeat, String description) {
+    public Unavailability(Instant start, Instant end, String repeat, String description) {
         super(start, end);
-        this.repeat = repeat;
+        this.repeat = Repeat.valueOf(repeat);
         this.description = description;
     }
 

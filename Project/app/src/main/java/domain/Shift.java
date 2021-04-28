@@ -1,5 +1,6 @@
 package domain;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 
 /**
@@ -22,12 +23,12 @@ public class Shift extends Event {
 
     public Shift(){};
 
-    public Shift(ZonedDateTime start, ZonedDateTime end, String name, String description, String notes, Type type) {
+    public Shift(Instant start, Instant end, String name, String description, String notes, String type) {
         super(start, end);
         this.name = name;
         this.description = description;
         this.notes = notes;
-        this.type = type;
+        this.type = Type.valueOf(type);
     }
 
     public String getName() {
