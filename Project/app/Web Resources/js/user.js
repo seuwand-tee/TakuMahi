@@ -1,28 +1,21 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 "use strict";
 
-class SaleItem {
+class User {
 
-    constructor(product, quantity) {
+    constructorUser(username, idNumber, role, firstName, lastName, emailAddress) {
         // only set the fields if we have a valid product
-        if (product) {
-            this.product = product;
-            this.quantity_purchased = quantity;
-            this.sale_price = product.list_price;
+        if (username) {
+            this.username = username;
+            this.idNumber = idNumber;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.emailAddress = emailAddress;
         }
-    }
-
-    getItemTotal() {
-        return this.sale_price * this.quantity_purchased;
     }
 
 }
 
-class ShoppingCart {
+/** class Unavailability {
 
     constructor() {
         this.items = new Array();
@@ -55,9 +48,8 @@ class ShoppingCart {
     }
 
 }
-
-// create a new module, and load the other pluggable modules
-var module = angular.module('ShoppingApp', ['ngResource', 'ngStorage']);
+**/// create a new module, and load the other pluggable modules
+var module = angular.module('TakuMahi', ['ngResource', 'ngStorage']);
 
 module.factory('productAPI', function ($resource) {
     return $resource('/api/products/:id');
