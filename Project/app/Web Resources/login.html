@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<link rel ="stylesheet" href="style.css" >
-
+<link rel ="stylesheet" href="css/style.css" >
+    <script src="js/angular.js"></script>
+    <script src="js/angular-resource.js"></script>
+    <script src="js/ngStorage.js"></script>
+    <script src="js/user.js"></script>
 <body>
     <header>
         <div class="Banner"> 
@@ -9,15 +12,7 @@
                 
         </div>
     </header>
-
-    <div class="dropdown">
-        <button class="dropbtn" > <Button><img src="Logo.jpg"></button>
-        <div class="dropdown-content">
-            <a href="#home"><i class="Nav_Home"></i> Home</a>
-            <a href="#calendar"><i class="Nav_Calendar"></i> Calendar</a>
-            <a href="#caccount"><i class="Nav_CAccount"></i> Create An Account</a>
-        </div>
-      </div>
+<div ng-include="'menu.html'" ></div>
 
 
     <form class="Login_Form">
