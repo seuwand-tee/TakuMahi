@@ -36,6 +36,8 @@ public class Server extends Jooby {
 
     public static void main(String[] args) throws IOException {
         new Server().start();
+
+        //INFO202 AssetModule handles pages
     }
 
 }
