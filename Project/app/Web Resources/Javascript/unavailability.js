@@ -1,6 +1,22 @@
-var table = $("calendar-week")
 var currentDate = new Date();
 var days = [];
+
+class Event {
+    constructor(start, end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    incrementEnd() {
+        var date = new Date(this.end);
+        date.setHours(date.getHours() + 1);
+        this.end = date;
+    }
+
+    getEventString() {
+        return this.start.toString() + " until " + this.end.toString();
+    }
+};
 
 setDates();
 
@@ -57,19 +73,37 @@ $("#set-button").on("click", function (){
     var cells = [...tds];
     cells.forEach(function (cell) {
        if ($(cell).hasClass("selected")) {
-           highlightedCells.push($(cell))
+           highlightedCells.push($(cell).attr("id"));
        }
     });
 
+    highlightedCells.sort();
     var ds = [];
 
+    var prevCell;
     highlightedCells.forEach(function (id) {
-        var strID = id.attr("id");
-        if (strID.charAt(0) == 0) {
-            ds.push("monday @ " + strID.substr(1,2));
+        if (++prevCell != id) {
+            prevCell = id;
+            var strID = id;
+            var idDateTime = new Date(days[strID.charAt(0)])
+            idDateTime.setHours(strID.substr(1, 2));
+            idDateTime.setMinutes(0);
+            idDateTime.setSeconds(0);
+
+            var start = new Date(idDateTime);
+            idDateTime.setHours(idDateTime.getHours() + 1);
+            var end = new Date(idDateTime);
+
+            ds.push(new Event(start,end));
+        } else {
+            var lastCell = ds.pop()
+            lastCell.incrementEnd()
+            ds.push(lastCell);
         }
     });
 
-    alert(ds);
-});
+    var strings = []
+    ds.forEach(cell => strings.push(cell.getEventString()));
 
+    alert(strings);
+});

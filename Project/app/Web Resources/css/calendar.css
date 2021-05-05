@@ -42,8 +42,12 @@ td{
   visibility: hidden;
 }
 
+#previous-button{
+  margin: 10px;
+}
+
 #next-button{
-  margin-right: 5px;
+  margin: 10px;
 }
 
 #set-button{
