@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-app="TakuMahi">
+    <head>
+        <title>Record of Hours</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel ="stylesheet" href="css/style.css" >
+        <script src="js/angular.js"></script>
+        <script src="js/angular-resource.js"></script>
+        <script src="js/ngStorage.js"></script>
+        <script src="js/user.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="Banner"> 
+                <img src="tessellation.png" alt="Logo">
+                <h1> Taku<span>Mahi |</span> My<span>Work</span></h1>              
+            </div>
+        </header>
+        <form class ="Login_Form">
+            <div class ="Container">
+                <label for "User ID"><b>User ID</b></label> <br>
+                <input type="text" placeholder="User ID" name="User ID" required> <br>
+                <label for "Start of Period"><b>Start of Period</b></label> <br>
+                <input type="text" placeholder="Start of Period" name="Start of Period" required> <br>
+                <label for "Days in Period"><b>Days in Period</b></label> <br>
+                <input type="text" placeholder="Days in Period" name="Days in Period" required> <br>
+                <button id="Hours_button" type ="submit">Find Hours</button>
+        </form>
+    </body>
+</html>
