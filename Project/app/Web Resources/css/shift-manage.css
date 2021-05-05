@@ -1,0 +1,43 @@
+body{
+  background-color: white;
+}
+
+table {
+  table-layout: fixed ;
+}
+
+th {
+  border-right: solid;
+}
+
+td{
+  border-right: solid;
+}
+
+/* buttosn for viewing  */
+.view-button{
+  border-left: 2px;
+  border-right: 2px;
+  border-color: white;
+}
+
+/* controls the calendar div */
+.calendar{
+  font-family: Georgia, "Times New Roman", Times, serif;
+  padding: 0;
+  position: absolute;
+}
+
+.cal-wrapper{
+  border: solid 10px;
+  border-radius: 10px;
+}
+
+/* Code to "highlight" the selected cell.*/
+.selected {
+  background-color: #ddd !important;
+}
+
+#next-button{
+  margin-right: 5px;
+}
