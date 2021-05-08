@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html ng-app="TakuMahi">
     <head>
-        <title>Record of Hours</title>
+        <title>View Department Shifts</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel ="stylesheet" href="css/style.css" >
+        <link rel ="stylesheet" href="css/view-shifts.css" >
         <script src="js/angular.js"></script>
         <script src="js/angular-resource.js"></script>
         <script src="js/ngStorage.js"></script>
@@ -16,18 +17,17 @@
                 <h1> Taku<span>Mahi |</span> My<span>Work</span></h1>              
             </div>
         </header>
-        <div ng-include="'menu.html'" ></div>
         <p></p>
-        <form class ="Login_Form">
+        <form class ="Filter_Form">
             <div class ="Container">
-                <label for "User ID"><b>User ID</b></label> <br>
-                <input type="text" placeholder="User ID" name="User ID" required> <br>
-                <label for "Start of Period"><b>Start of Period</b></label> <br>
-                <input type="date" required> <br>
-                <label for "End of Period"><b>End of Period</b></label> <br>
-                <input type="date" required> <br>
-                <center><button id="Hours_button" type ="submit">Find Hours</button>
-                    <p>{{result}}</p></center>
+                <div class="filterdropdown">
+                    <button class="filterdropbtn">Department</button>
+                    <div class="filterdropdown-content">
+                        <a href="#">StudentIT</a>
+                        <a href="#">AskIT</a>
+                        <a href="#">GeneralEnquiries</a>
+                    </div>
+                </div>
             </div>
         </form>
     </body>
