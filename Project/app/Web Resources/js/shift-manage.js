@@ -29,7 +29,13 @@ function populate(){
   usrdata.forEach((element, index) => {
     $('#calendar-day' + index  + ' th:contains("User")').text(usrdata[index].firstName);
   });
-}
+
+  //TODO: Update unavaliblities and shifts.
+  usrdata.forEach((element, index) => {
+    fetch('http://localhost:8080/api/staff/shifts/' + usrdata[index].idNumber);
+    fetch('http://localhost:8080/api/staff/unavaliblity/' + usrdata[index].idNumber);
+  });
+};
 
 /* pull in the data.*/
 fetch('http://localhost:8080/api/staff')

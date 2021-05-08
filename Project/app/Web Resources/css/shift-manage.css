@@ -45,3 +45,11 @@ td{
   visibility: hidden;
   position: absolute;
 }
+
+.shift{
+  background-color: #ff3333 !important;
+}
+
+.unavaliblity{
+  background-color: #FFA500 !important;
+}
