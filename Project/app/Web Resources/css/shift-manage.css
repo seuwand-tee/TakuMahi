@@ -40,3 +40,8 @@ td{
 .button-right{
   margin-right: 5px;
 }
+
+.invisible{
+  visibility: hidden;
+  position: absolute;
+}
