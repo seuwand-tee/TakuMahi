@@ -61,7 +61,6 @@ public class Server extends Jooby {
         shift1.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 10, 0), ZoneId.of("Pacific/Auckland")));
         shift1.setDescription("Clean the gutter");
         shift1.setName("Gutter cleaning");
-        shift1.setUser(user1);
 
         Shift shift2 = new Shift();
         shift2.setEventID(2);
@@ -69,7 +68,6 @@ public class Server extends Jooby {
         shift2.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 14, 5, 0), ZoneId.of("Pacific/Auckland")));
         shift2.setDescription("Loitering");
         shift2.setName("Being a criminal");
-        shift2.setUser(user2);
 
         Shift shift3 = new Shift();
         shift3.setEventID(3);
@@ -77,7 +75,6 @@ public class Server extends Jooby {
         shift3.setDescription("Helping elderly use tech");
         shift3.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 11, 0), ZoneId.of("Pacific/Auckland")));
         shift3.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 12, 0), ZoneId.of("Pacific/Auckland")));
-        shift3.setUser(user3);
 
         //Test unavailability
         Unavailability unavailability1 = new Unavailability();
@@ -119,12 +116,19 @@ public class Server extends Jooby {
         shift5.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 15, 0), ZoneId.of("Pacific/Auckland")));
         shift5.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 18, 0), ZoneId.of("Pacific/Auckland")));
 
+        dao.addToOpenShifts(shift1);
+        dao.addToOpenShifts(shift2);
+        dao.addToOpenShifts(shift3);
         dao.addToOpenShifts(shift4);
         dao.addToOpenShifts(shift5);
 
         dao.addUser(user1);
         dao.addUser(user2);
         dao.addUser(user3);
+
+        dao.assignShiftToUser(user1.getIdNumber(), shift1.getEventID());
+        dao.assignShiftToUser(user2.getIdNumber(), shift2.getEventID());
+        dao.assignShiftToUser(user3.getIdNumber(), shift3.getEventID());
     }
 
     public static void main(String[] args) throws IOException {
