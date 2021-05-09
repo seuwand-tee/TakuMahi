@@ -20,6 +20,47 @@ class Event {
 
 setDates();
 
+var initialRequest = new XMLHttpRequest();
+var pMonth = days[0].getMonth()+1;
+if (pMonth.toString().length < 2) {
+    pMonth = "0" + pMonth
+}
+var pDate = days[0].getDate();
+if (pDate.toString().length < 2) {
+    pDate = "0" + pDate
+}
+var pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
+console.log(pStart)
+initialRequest.open('GET', 'http://localhost:8080/api/staff/events/1?startOfPeriod='+pStart+'&daysInPeriod=7&filter=2', true);
+
+initialRequest.onload = function () {
+
+    var data = JSON.parse(this.response);
+
+    if (initialRequest.status >= 200 && initialRequest.status < 400) {
+        console.log(data)
+
+        data.forEach((unavail) => {
+            var s = unavail.start.dateTime
+            var e = unavail.end.dateTime
+            var start = new Date(s.date.year, s.date.month, s.date.day, s.time.hour, s.time.minute, s.time.second)
+            var end = new Date(e.date.year, e.date.month, e.date.day, e.time.hour, e.time.minute, e.time.second)
+
+            var cellID = start.getDay().toString()
+            var hours = start.getHours().toString()
+            if (hours.length < 2) {
+                hours = "0" + hours
+            }
+            cellID += hours
+            console.log(cellID)
+
+            $("#"+cellID).addClass("selected")
+        })
+    }
+
+}
+initialRequest.send()
+
 function setDates() {
     var offSet = currentDate.getDay() - 1;
     days = [];
@@ -107,3 +148,4 @@ $("#set-button").on("click", function (){
 
     alert(strings);
 });
+
