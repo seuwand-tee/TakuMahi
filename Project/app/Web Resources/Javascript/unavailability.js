@@ -2,10 +2,13 @@ var userID = "1";
 var currentDate = new Date();
 var days = [];
 var loadedCells = [];
+let currentEvents = new Map();
+let cellMappings = new Map();
 
 class Event {
     constructor(start, end) {
         this.eventID = null;
+        this.cellID = [];
         this.start = start;
         this.end = end;
         this.repeat = "No";
@@ -18,6 +21,18 @@ class Event {
         this.end = date;
     }
 
+    delete() {
+        loadedCells = loadedCells.filter(cell => !(this.cellID.includes(cell)));
+        console.log("what Im looking at: " + loadedCells);
+        this.cellID.forEach((cell) => {
+            cellMappings.delete(cell);
+        })
+        currentEvents.delete(this.eventID);
+        var request = new XMLHttpRequest();
+        request.open('DELETE', 'http://localhost:8080/api/staff/unavailability/' + userID + '/' + this.eventID, true);
+        request.send();
+    }
+
     getEventString() {
         return this.start.toString() + " until " + this.end.toString();
     }
@@ -28,7 +43,9 @@ setDates();
 populateTable();
 
 function populateTable() {
-
+    cellMappings.clear();
+    currentEvents.clear();
+    loadedCells = [];
     var tds = document.getElementsByClassName("calendar container-fluid")[0].getElementsByTagName("td");
     var cells = [...tds];
     cells.forEach((cell) => {
@@ -73,6 +90,9 @@ function populateTable() {
                 }
                 cellID += hours
 
+                var e = new Event(start,end);
+                e.eventID = unavail.eventID;
+
                 var span = end.getHours() - start.getHours()
                 //console.log(span)
                 for (var i = 1; i <= span; i++) {
@@ -83,14 +103,21 @@ function populateTable() {
                     } else if ((""+c).length === 2) {
                         c = "0"+c
                     }
+                    c = c + "";
 
-                    cells.push(c+"")
+                    cellMappings.set(c, e.eventID);
+                    cells.push(c)
+                    e.cellID.push(c)
                 }
+
+                currentEvents.set(e.eventID, e);
 
             })
 
+            console.log(currentEvents);
+            console.log(cellMappings);
             cells.forEach((cell) => {
-                console.log(cell);
+                //console.log(cell);
                 $("#" + cell).addClass("selected");
                 loadedCells.push(cell);
             })
@@ -104,7 +131,7 @@ function addUnavailability(event) {
 
     var body = JSON.stringify(event);
     var request = new XMLHttpRequest();
-    request.open('POST', 'http://localhost:8080/api/staff/unavailability/' + userID, true);
+    request.open('POST', 'http://localhost:8080/api/staff/unavailability/' + userID, false);
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.send(body);
 
@@ -154,9 +181,14 @@ $(".calendar td").on("mouseout", function(){
 $(".calendar td").on("click", function(){
     if ($(this).hasClass("selected")) {
         $(this).removeClass("selected");
-
+        if (cellMappings.has($(this).attr("id"))) {
+            var eventID = cellMappings.get($(this).attr("id"));
+            var event = currentEvents.get(eventID);
+            event.delete();
+        }
     } else {
         $(this).addClass("selected");
+        console.log("Highlighted: " + $(this).attr("id"))
     }
 });
 
@@ -164,6 +196,7 @@ $("#set-button").on("click", function (){
     var highlightedCells = [];
     var tds = document.getElementsByClassName("calendar container-fluid")[0].getElementsByTagName("td");
     var cells = [...tds];
+    console.log(loadedCells);
     cells.forEach(function (cell) {
        if ($(cell).hasClass("selected") && !(loadedCells.includes($(cell).attr("id")))) {
            highlightedCells.push($(cell).attr("id"));
@@ -175,6 +208,7 @@ $("#set-button").on("click", function (){
 
     var prevCell;
     highlightedCells.forEach(function (id) {
+        console.log("Looking at: " + id)
         if (++prevCell != id) {
             prevCell = id;
             var strID = id;
@@ -198,12 +232,15 @@ $("#set-button").on("click", function (){
 
 
     var strings = []
+    var count = 1;
     ds.forEach((cell) => {
         strings.push(cell.getEventString())
         addUnavailability(cell);
-        console.log(cell);
+        //console.log(cell);
+        count++;
     });
 
-    alert(strings);
+    populateTable();
+
 });
 

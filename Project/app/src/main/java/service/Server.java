@@ -52,7 +52,6 @@ public class Server extends Jooby {
 
         Unavailability unavailabilityOne;
         unavailabilityOne = new Unavailability();
-        unavailabilityOne.setEventID(6);
         unavailabilityOne.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 16, 0), ZoneId.of("Pacific/Auckland")));
         unavailabilityOne.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 20, 0), ZoneId.of("Pacific/Auckland")));
         unavailabilityOne.setRepeat(Unavailability.Repeat.Weekly);
@@ -61,7 +60,6 @@ public class Server extends Jooby {
 
         Unavailability unavailabilityTwo;
         unavailabilityTwo = new Unavailability();
-        unavailabilityTwo.setEventID(7);
         unavailabilityTwo.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 16, 7, 0), ZoneId.of("Pacific/Auckland")));
         unavailabilityTwo.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 16, 11, 0), ZoneId.of("Pacific/Auckland")));
         unavailabilityTwo.setRepeat(Unavailability.Repeat.No);
