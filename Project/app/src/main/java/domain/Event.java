@@ -17,7 +17,10 @@ public abstract class Event {
     private ZonedDateTime start; // Parse DateTimes from String in Resource.
     private ZonedDateTime end;
 
-    public Event(){};
+    public Event(){
+        eventID = idCount;
+        idCount++;
+    };
 
     public Event(Instant start, Instant end) {
         eventID = idCount;

@@ -15,8 +15,10 @@ public class Server extends Jooby {
         LocalStorageDAO dao = new LocalStorageDAO();
 
         port(8080);
-        
-        use("*", new CorsHandler(new Cors().withMethods("*")));
+
+        Cors cor = new Cors().withMethods("*");
+        cor.allowOrigin("*");
+        use("*", new CorsHandler(cor));
         
         use(new Gzon());
 
@@ -32,10 +34,13 @@ public class Server extends Jooby {
         use(new UnavailabilityByUserResource(dao));
         use(new EventsByUserResource(dao));
         use(new HoursByUserResource(dao));
+
     }
 
     public static void main(String[] args) throws IOException {
         new Server().start();
+
+        //INFO202 AssetModule handles pages
     }
 
 }

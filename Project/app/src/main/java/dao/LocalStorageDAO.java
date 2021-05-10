@@ -6,6 +6,9 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.HashMultimap;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -28,6 +31,35 @@ public class LocalStorageDAO {
     private static Multimap<User, Shift> shiftsByUser = HashMultimap.create();
     private static Multimap<User, Unavailability> unavailabilityByUser = HashMultimap.create();
     private static Map<Integer, Shift> openShifts = new HashMap<>();
+
+    public LocalStorageDAO() {
+        User userOne;
+        userOne = new User();
+        userOne.setUsername("jimmy10p");
+        userOne.setIdNumber(1);
+        userOne.setRole(User.Role.Casual);
+        userOne.setDepartment(User.Department.StudentIT);
+        userOne.setFirstName("Jimmy");
+        userOne.setLastName("Bob");
+        userOne.setEmailAddress("jim.bob@otago.ac.nz");
+
+        Unavailability unavailabilityOne;
+        unavailabilityOne = new Unavailability();
+        unavailabilityOne.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 16, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityOne.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 20, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityOne.setRepeatEnd(ZonedDateTime.of(LocalDateTime.of(2020, 5, 20, 0, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityOne.setDescription("Ain't nobody got time for dat");
+
+        Unavailability unavailabilityTwo;
+        unavailabilityTwo = new Unavailability();
+        unavailabilityTwo.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 16, 7, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityTwo.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 16, 11, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityTwo.setDescription("Ain't nobody got time for dat");
+
+        addUser(userOne);
+        addUnavailabilityToUser(1, unavailabilityOne);
+        addUnavailabilityToUser(1, unavailabilityTwo);
+    }
 
     /**
      * This adds a User object to the relevant collections, based on ID, Role, and Department.
