@@ -1,17 +1,12 @@
 package service;
 
 import dao.LocalStorageDAO;
-import domain.Unavailability;
-import domain.User;
 import resource.*;
 import org.jooby.Jooby;
 import org.jooby.json.Gzon;
 import org.jooby.handlers.Cors;
 import org.jooby.handlers.CorsHandler;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 public class Server extends Jooby {
 
@@ -39,35 +34,6 @@ public class Server extends Jooby {
         use(new UnavailabilityByUserResource(dao));
         use(new EventsByUserResource(dao));
         use(new HoursByUserResource(dao));
-
-        User userOne;
-        userOne = new User();
-        userOne.setUsername("jimmy10p");
-        userOne.setIdNumber(1);
-        userOne.setRole(User.Role.Casual);
-        userOne.setDepartment(User.Department.StudentIT);
-        userOne.setFirstName("Jimmy");
-        userOne.setLastName("Bob");
-        userOne.setEmailAddress("jim.bob@otago.ac.nz");
-
-        Unavailability unavailabilityOne;
-        unavailabilityOne = new Unavailability();
-        unavailabilityOne.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 16, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityOne.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 20, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityOne.setRepeat(Unavailability.Repeat.Weekly);
-        unavailabilityOne.setRepeatEnd(ZonedDateTime.of(LocalDateTime.of(2020, 5, 20, 0, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityOne.setDescription("Ain't nobody got time for dat");
-
-        Unavailability unavailabilityTwo;
-        unavailabilityTwo = new Unavailability();
-        unavailabilityTwo.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 16, 7, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityTwo.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 16, 11, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityTwo.setRepeat(Unavailability.Repeat.No);
-        unavailabilityTwo.setDescription("Ain't nobody got time for dat");
-
-        dao.addUser(userOne);
-        dao.addUnavailabilityToUser(1, unavailabilityOne);
-        dao.addUnavailabilityToUser(1, unavailabilityTwo);
 
     }
 

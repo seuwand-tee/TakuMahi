@@ -224,11 +224,8 @@ $("#set-button").on("click", function (){
         }
     });
 
-
-    let count = 1;
     ds.forEach((cell) => {
         addUnavailability(cell);
-        count++;
     });
 
     populateTable();
