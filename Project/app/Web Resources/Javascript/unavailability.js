@@ -1,7 +1,7 @@
-var userID = "1";
-var currentDate = new Date();
-var days = [];
-var loadedCells = [];
+let userID = "1";
+let currentDate = new Date();
+let days = [];
+let loadedCells = [];
 let currentEvents = new Map();
 let cellMappings = new Map();
 
@@ -11,12 +11,12 @@ class Event {
         this.cellID = [];
         this.start = start;
         this.end = end;
-        this.repeat = "No";
+        this.repeat = "No";                          // Not used at the moment.
         this.description = "An Unavailability";
     }
 
     incrementEnd() {
-        var date = new Date(this.end);
+        let date = new Date(this.end);
         date.setHours(date.getHours() + 1);
         this.end = date;
     }
@@ -28,15 +28,15 @@ class Event {
             cellMappings.delete(cell);
         })
         currentEvents.delete(this.eventID);
-        var request = new XMLHttpRequest();
+        let request = new XMLHttpRequest();
         request.open('DELETE', 'http://localhost:8080/api/staff/unavailability/' + userID + '/' + this.eventID, true);
         request.send();
     }
 
-    getEventString() {
-        return this.start.toString() + " until " + this.end.toString();
-    }
-};
+    // getEventString() {
+    //     return this.start.toString() + " until " + this.end.toString();
+    // }
+}
 
 setDates();
 
@@ -46,57 +46,57 @@ function populateTable() {
     cellMappings.clear();
     currentEvents.clear();
     loadedCells = [];
-    var tds = document.getElementsByClassName("calendar container-fluid")[0].getElementsByTagName("td");
-    var cells = [...tds];
+    let tds = document.getElementsByClassName("calendar container-fluid")[0].getElementsByTagName("td");
+    let cells = [...tds];
     cells.forEach((cell) => {
         $(cell).removeClass("selected");
     })
 
-    var initialRequest = new XMLHttpRequest();
-    var pMonth = days[0].getMonth() + 1;
+    let initialRequest = new XMLHttpRequest();
+    let pMonth = days[0].getMonth() + 1;
     if (pMonth.toString().length < 2) {
         pMonth = "0" + pMonth
     }
-    var pDate = days[0].getDate();
+    let pDate = days[0].getDate();
     if (pDate.toString().length < 2) {
         pDate = "0" + pDate
     }
-    var pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
+    let pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
     //console.log(pStart)
     initialRequest.open('GET', 'http://localhost:8080/api/staff/events/' + userID + '?startOfPeriod=' + pStart + '&daysInPeriod=7&filter=2', true);
 
     initialRequest.onload = function () {
 
-        var data = JSON.parse(this.response);
+        let data = JSON.parse(this.response);
 
         if (initialRequest.status >= 200 && initialRequest.status < 400) {
             console.log(data)
-            var cells = []
+            let cells = []
             data.forEach((unavail) => {
-                var s = unavail.start.dateTime
-                var e = unavail.end.dateTime
-                var start = new Date(s.date.year, s.date.month - 1, s.date.day, s.time.hour, s.time.minute, s.time.second)
-                var end = new Date(e.date.year, e.date.month - 1, e.date.day, e.time.hour, e.time.minute, e.time.second)
+                let s = unavail.start.dateTime
+                let e = unavail.end.dateTime
+                let start = new Date(s.date.year, s.date.month - 1, s.date.day, s.time.hour, s.time.minute, s.time.second)
+                let end = new Date(e.date.year, e.date.month - 1, e.date.day, e.time.hour, e.time.minute, e.time.second)
 
-                var cellID = start.getDay().toString()
-                if (cellID == 0) {
+                let cellID = start.getDay().toString()
+                if (cellID === "0") {
                     cellID = "6";
                 } else {
                     cellID = cellID - 1;
                 }
-                var hours = start.getHours().toString()
+                let hours = start.getHours().toString()
                 if (hours.length < 2) {
                     hours = "0" + hours;
                 }
                 cellID += hours
 
-                var e = new Event(start,end);
-                e.eventID = unavail.eventID;
+                let event = new Event(start,end);
+                event.eventID = unavail.eventID;
 
-                var span = end.getHours() - start.getHours()
+                let span = end.getHours() - start.getHours()
                 //console.log(span)
-                for (var i = 1; i <= span; i++) {
-                    var c = cellID++;
+                for (let i = 1; i <= span; i++) {
+                    let c = cellID++;
 
                     if ((""+c).length === 1) {
                         c = "00"+c;
@@ -105,12 +105,12 @@ function populateTable() {
                     }
                     c = c + "";
 
-                    cellMappings.set(c, e.eventID);
+                    cellMappings.set(c, event.eventID);
                     cells.push(c)
-                    e.cellID.push(c)
+                    event.cellID.push(c)
                 }
 
-                currentEvents.set(e.eventID, e);
+                currentEvents.set(event.eventID, event);
 
             })
 
@@ -129,8 +129,8 @@ function populateTable() {
 
 function addUnavailability(event) {
 
-    var body = JSON.stringify(event);
-    var request = new XMLHttpRequest();
+    let body = JSON.stringify(event);
+    let request = new XMLHttpRequest();
     request.open('POST', 'http://localhost:8080/api/staff/unavailability/' + userID, false);
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.send(body);
@@ -138,10 +138,10 @@ function addUnavailability(event) {
 }
 
 function setDates() {
-    var offSet = currentDate.getDay() - 1;
+    const offSet = currentDate.getDay() - 1;
     days = [];
 
-    for (var i = 0; i < 7; i++) {
+    for (let i = 0; i < 7; i++) {
         days[i] = new Date(currentDate);
         days[i].setDate((currentDate.getDate() - offSet + i));
     }
@@ -171,19 +171,14 @@ $("#previous-button").on("click", function(){
 /* selects the cell that the mouse is in. */
 $(".calendar td").on("mouseover", function(){
     //$(this).addClass("selected");
-});
-
-/* deselects the cell the mouse is in. */
-$(".calendar td").on("mouseout", function(){
+}).on("mouseout", function(){
     //$(this).removeClass("selected");
-});
-
-$(".calendar td").on("click", function(){
+}).on("click", function(){
     if ($(this).hasClass("selected")) {
         $(this).removeClass("selected");
         if (cellMappings.has($(this).attr("id"))) {
-            var eventID = cellMappings.get($(this).attr("id"));
-            var event = currentEvents.get(eventID);
+            let eventID = cellMappings.get($(this).attr("id"));
+            let event = currentEvents.get(eventID);
             event.delete();
         }
     } else {
@@ -193,9 +188,9 @@ $(".calendar td").on("click", function(){
 });
 
 $("#set-button").on("click", function (){
-    var highlightedCells = [];
-    var tds = document.getElementsByClassName("calendar container-fluid")[0].getElementsByTagName("td");
-    var cells = [...tds];
+    let highlightedCells = [];
+    let tds = document.getElementsByClassName("calendar container-fluid")[0].getElementsByTagName("td");
+    let cells = [...tds];
     console.log(loadedCells);
     cells.forEach(function (cell) {
        if ($(cell).hasClass("selected") && !(loadedCells.includes($(cell).attr("id")))) {
@@ -204,39 +199,35 @@ $("#set-button").on("click", function (){
     });
 
     highlightedCells.sort();
-    var ds = [];
+    let ds = [];
 
-    var prevCell;
+    let prevCell;
     highlightedCells.forEach(function (id) {
         console.log("Looking at: " + id)
         if (++prevCell != id) {
             prevCell = id;
-            var strID = id;
-            var idDateTime = new Date(days[strID.charAt(0)])
+            let strID = id;
+            let idDateTime = new Date(days[strID.charAt(0)])
             idDateTime.setHours(strID.substr(1, 2));
             idDateTime.setMinutes(0);
             idDateTime.setSeconds(0);
 
-            var start = new Date(idDateTime);
+            let start = new Date(idDateTime);
             idDateTime.setHours(idDateTime.getHours() + 1);
-            var end = new Date(idDateTime);
+            let end = new Date(idDateTime);
 
             ds.push(new Event(start,end));
         } else {
-            var lastCell = ds.pop()
+            let lastCell = ds.pop()
             lastCell.incrementEnd()
             ds.push(lastCell);
         }
     });
 
 
-
-    var strings = []
-    var count = 1;
+    let count = 1;
     ds.forEach((cell) => {
-        strings.push(cell.getEventString())
         addUnavailability(cell);
-        //console.log(cell);
         count++;
     });
 
