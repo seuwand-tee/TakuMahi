@@ -62,8 +62,8 @@ public class Server extends Jooby {
         Unavailability unavailabilityTwo;
         unavailabilityTwo = new Unavailability();
         unavailabilityTwo.setEventID(7);
-        unavailabilityTwo.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 15, 7, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityTwo.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 15, 11, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityTwo.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 16, 7, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityTwo.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 16, 11, 0), ZoneId.of("Pacific/Auckland")));
         unavailabilityTwo.setRepeat(Unavailability.Repeat.No);
         unavailabilityTwo.setDescription("Ain't nobody got time for dat");
 

@@ -1,10 +1,15 @@
+var userID = "1";
 var currentDate = new Date();
 var days = [];
+var loadedCells = [];
 
 class Event {
     constructor(start, end) {
+        this.eventID = null;
         this.start = start;
         this.end = end;
+        this.repeat = "No";
+        this.description = "An Unavailability";
     }
 
     incrementEnd() {
@@ -20,46 +25,90 @@ class Event {
 
 setDates();
 
-var initialRequest = new XMLHttpRequest();
-var pMonth = days[0].getMonth()+1;
-if (pMonth.toString().length < 2) {
-    pMonth = "0" + pMonth
-}
-var pDate = days[0].getDate();
-if (pDate.toString().length < 2) {
-    pDate = "0" + pDate
-}
-var pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
-console.log(pStart)
-initialRequest.open('GET', 'http://localhost:8080/api/staff/events/1?startOfPeriod='+pStart+'&daysInPeriod=7&filter=2', true);
+populateTable();
 
-initialRequest.onload = function () {
+function populateTable() {
 
-    var data = JSON.parse(this.response);
+    var tds = document.getElementsByClassName("calendar container-fluid")[0].getElementsByTagName("td");
+    var cells = [...tds];
+    cells.forEach((cell) => {
+        $(cell).removeClass("selected");
+    })
 
-    if (initialRequest.status >= 200 && initialRequest.status < 400) {
-        console.log(data)
-
-        data.forEach((unavail) => {
-            var s = unavail.start.dateTime
-            var e = unavail.end.dateTime
-            var start = new Date(s.date.year, s.date.month, s.date.day, s.time.hour, s.time.minute, s.time.second)
-            var end = new Date(e.date.year, e.date.month, e.date.day, e.time.hour, e.time.minute, e.time.second)
-
-            var cellID = start.getDay().toString()
-            var hours = start.getHours().toString()
-            if (hours.length < 2) {
-                hours = "0" + hours
-            }
-            cellID += hours
-            console.log(cellID)
-
-            $("#"+cellID).addClass("selected")
-        })
+    var initialRequest = new XMLHttpRequest();
+    var pMonth = days[0].getMonth() + 1;
+    if (pMonth.toString().length < 2) {
+        pMonth = "0" + pMonth
     }
+    var pDate = days[0].getDate();
+    if (pDate.toString().length < 2) {
+        pDate = "0" + pDate
+    }
+    var pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
+    //console.log(pStart)
+    initialRequest.open('GET', 'http://localhost:8080/api/staff/events/' + userID + '?startOfPeriod=' + pStart + '&daysInPeriod=7&filter=2', true);
+
+    initialRequest.onload = function () {
+
+        var data = JSON.parse(this.response);
+
+        if (initialRequest.status >= 200 && initialRequest.status < 400) {
+            console.log(data)
+            var cells = []
+            data.forEach((unavail) => {
+                var s = unavail.start.dateTime
+                var e = unavail.end.dateTime
+                var start = new Date(s.date.year, s.date.month - 1, s.date.day, s.time.hour, s.time.minute, s.time.second)
+                var end = new Date(e.date.year, e.date.month - 1, e.date.day, e.time.hour, e.time.minute, e.time.second)
+
+                var cellID = start.getDay().toString()
+                if (cellID == 0) {
+                    cellID = "6";
+                } else {
+                    cellID = cellID - 1;
+                }
+                var hours = start.getHours().toString()
+                if (hours.length < 2) {
+                    hours = "0" + hours;
+                }
+                cellID += hours
+
+                var span = end.getHours() - start.getHours()
+                //console.log(span)
+                for (var i = 1; i <= span; i++) {
+                    var c = cellID++;
+
+                    if ((""+c).length === 1) {
+                        c = "00"+c;
+                    } else if ((""+c).length === 2) {
+                        c = "0"+c
+                    }
+
+                    cells.push(c+"")
+                }
+
+            })
+
+            cells.forEach((cell) => {
+                console.log(cell);
+                $("#" + cell).addClass("selected");
+                loadedCells.push(cell);
+            })
+        }
+
+    }
+    initialRequest.send()
+}
+
+function addUnavailability(event) {
+
+    var body = JSON.stringify(event);
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://localhost:8080/api/staff/unavailability/' + userID, true);
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.send(body);
 
 }
-initialRequest.send()
 
 function setDates() {
     var offSet = currentDate.getDay() - 1;
@@ -82,12 +131,14 @@ function setDates() {
 $("#next-button").on("click", function(){
     currentDate.setDate(currentDate.getDate() + 7);
     setDates();
+    populateTable()
 });
 
 /* what happens when previous button is clicked */
 $("#previous-button").on("click", function(){
     currentDate.setDate(currentDate.getDate() - 7);
     setDates();
+    populateTable()
 });
 
 /* selects the cell that the mouse is in. */
@@ -103,6 +154,7 @@ $(".calendar td").on("mouseout", function(){
 $(".calendar td").on("click", function(){
     if ($(this).hasClass("selected")) {
         $(this).removeClass("selected");
+
     } else {
         $(this).addClass("selected");
     }
@@ -113,7 +165,7 @@ $("#set-button").on("click", function (){
     var tds = document.getElementsByClassName("calendar container-fluid")[0].getElementsByTagName("td");
     var cells = [...tds];
     cells.forEach(function (cell) {
-       if ($(cell).hasClass("selected")) {
+       if ($(cell).hasClass("selected") && !(loadedCells.includes($(cell).attr("id")))) {
            highlightedCells.push($(cell).attr("id"));
        }
     });
@@ -143,8 +195,14 @@ $("#set-button").on("click", function (){
         }
     });
 
+
+
     var strings = []
-    ds.forEach(cell => strings.push(cell.getEventString()));
+    ds.forEach((cell) => {
+        strings.push(cell.getEventString())
+        addUnavailability(cell);
+        console.log(cell);
+    });
 
     alert(strings);
 });
