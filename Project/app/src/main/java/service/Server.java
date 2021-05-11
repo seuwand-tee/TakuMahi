@@ -21,6 +21,8 @@ public class Server extends Jooby {
         port(8080);
         
         Cors cor = new Cors().withMethods("*");
+        //cor.withHeaders("Access-Control-Allow-Origin: *");
+        //cor.withMethods("*");
         cor.allowOrigin("*");
         use("*", new CorsHandler(cor));
         //use("*", new CorsHandler(new Cors().withMethods("*")));
