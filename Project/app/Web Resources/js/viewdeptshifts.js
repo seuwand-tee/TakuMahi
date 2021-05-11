@@ -54,175 +54,131 @@ class ShiftList {
 var initRequest = new XMLHttpRequest();
 var request = new XMLHttpRequest();
 var departments = ["All Departments", "StudentIT", "AskIT", "GeneralEnquiries"];
+var usrList = new UserList();
+var shftList = new Array();
+var userId;
 
+//initial request - all staff
 initRequest.open('GET', 'http://localhost:8080/api/staff', true);
 initRequest.onload = function () {
     var users = JSON.parse(this.response);
     console.log(users);
     for(let i=0; i<users.length; i++){
-        let idNumber = users[i].idNumber;
+        userId = users[i].idNumber;
         let firstName = users[i].firstName;
         let lastName = users[i].lastName;
-        let usr = new User(idNumber, firstName, lastName);
-        UserList.addUser(usr);
-    }
-    for(let i=0; i<UserList.length; i++){
-        var userId = UserList[i].idNumber;
-        request.open('GET', 'http://localhost:8080/api/staff/shifts/'+userId, true);
-        request.onload = function () {
-            var shifts = JSON.parse(this.response);
-            for(let j = 0; j<shifts.length; j++){
-               let name = shifts[j].name;
-                let shiftId = shifts[j].eventId;
-                let type = shifts[j].type;
-                let staff = userId;
-                let start = shifts[j].start;
-                let end = shifts[j].end;
-                let shift = new Shift(name, shiftId, type, staff, start, end);
-                ShiftList.addShift(shift); 
-            }
-        }
+        let usr = new User(userId, firstName, lastName);
+        usrList.addUser(usr);
+        console.log(usr);
     }
 }
+
+//request for shifts from staff member
+request.open('GET', 'http://localhost:8080/api/staff/shifts/0', true);
+request.onload = function () {
+    var shifts = JSON.parse(this.response);
+    console.log(shifts.length);
+    for(let j = 0; j<shifts.length; j++){
+        let name = shifts[j].name;
+        let shiftId = shifts[j].eventId;
+        let type = shifts[j].type;
+        let staff = 0;
+        let start = shifts[j].start;
+        let end = shifts[j].end;
+        let shift = new Shift(name, shiftId, type, staff, start, end);
+        console.log(shift);
+        shftList[j] = shift;
+    }
+};
+
+document.getElementById("test").innerHTML = "<a href='*'>"+departments[0]+"</a><a href='*'>"+departments[1]+"</a><a href='*'>"+departments[2]+"</a><a href='*'>"+departments[3]+"</a>";
 initRequest.send();
-setUp();
+request.send();
+fillTable();
 
-function setUp() {
-    document.getElementById("test").innerHTML = "<a href='*'>"+departments[0]+"</a><a href='*'>"+departments[1]+"</a><a href='*'>"+departments[2]+"</a><a href='*'>"+departments[3]+"</a>";
+//function setUp(){
+    //initRequest.send();
+    //request.send();
+//}
+
+function fillTable(){
+    var myTableDiv = document.getElementById("with_results");
+    var table = document.createElement('TABLE');
+    var tableBody = document.createElement('TBODY');
+
+    table.border = '1';
+    table.appendChild(tableBody);
+    
+    //headings
+    var heading = new Array();
+    heading[0] = "Name";
+    heading[1] = "ShiftID";
+    heading[2] = "Type";
+    heading[3] = "User";
+    heading[4] = "Start";
+    heading[5] = "End";
+    
+    //fill table columns
+    var tr = document.createElement('TR');
+    tableBody.appendChild(tr);
+    for (var i = 0; i < heading.length; i++) {
+        var th = document.createElement('TH');
+        th.width = '75';
+        th.appendChild(document.createTextNode(heading[i]));
+        tr.appendChild(th);
+    }
+    console.log(shftList.length);
+    
+    //fill table rows
+    for (var i = 0; i < 1; i++) {
+        var tr = document.createElement('TR');
+        for (var j = 0; j < 6; j++) {
+            console.log(shftList);
+            var td = document.createElement('TD');
+            td.appendChild(document.createTextNode(shftList[i][j]));
+            tr.appendChild(td);
+        }
+        tableBody.appendChild(tr);
+    }  
+    myTableDiv.appendChild(table);
 }
 
-//var module = angular.module('TakuMahiApp', ['ngResource', 'ngStorage']);
+//for (let i=0; i<usrList.length; i++){
+//        var userId = usrList[i].idNumber;
+//        request.send(userId);
+//    }
+
+
 //
-//module.config(function ($sessionStorageProvider, $httpProvider) {
-//    // get the auth token from the session storage
-//    let authToken = $sessionStorageProvider.get('authToken');
-//    $httpProvider.defaults.headers.common.Authorization = 'Basic ' + authToken;
-//});
-//
-//module.factory('deptDAO', function ($resource) {
-//return $resource('/api/staff/department/:department');
-//});
-//
-//module.factory('userDAO', function ($resource) {
-//return $resource('/api/staff');
-//});
-//
-//module.factory('shiftDAO', function ($resource) {
-//return $resource('/api/staff/shifts');
-//});
-//
-//module.factory('shiftList', function () {
-//    let shiftList = new ShiftList();
-//    return shiftList;
-//});
-//
-//module.factory('userList', function () {
-//    let shiftList = new ShiftList();
-//    return shiftList;
-//});
-//
-//module.controller('ShiftController', function (shiftList, userList, deptDAO, userDAO, shiftDAO) {
-//    
-//    // click handler for the department filter buttons
-//    this.selectDepartment = function (selectedDept) {
-//        //original setup
-//        console.log("test23");
-//        this.users = userDAO.query();
-//        this.departments = ["All Departments", "StudentIT", "AskIT", "GeneralEnquiries"];
-//        for(let i=0; i<users.length; i++){
-//            let idNumber = users[i].idNumber;
-//            let firstName = users[i].firstName;
-//            let lastName = users[i].lastName;
-//            let usr = new User(idNumber, firstName, lastName);
-//            userList.addUser(usr);
-//        }
-//        for(let i=0; i<userList.length; i++){
-//            this.shifts = shiftDAO.query({"userId": userList[i].idNumber});
+//    for(let i=0; i<usrList.length; i++){
+//        var userId = usrList[i].idNumber;
+//        request.open('GET', 'http://localhost:8080/api/staff/shifts/'+userId, true);
+//        request.onload = function () {
+//            var shifts = JSON.parse(this.response);
+//            console.log(shifts);
 //            for(let j = 0; j<shifts.length; j++){
-//                let name = shifts[j].name;
+//               let name = shifts[j].name;
 //                let shiftId = shifts[j].eventId;
 //                let type = shifts[j].type;
-//                let staff = userList[i].idNumber;
+//                let staff = userId;
 //                let start = shifts[j].start;
 //                let end = shifts[j].end;
 //                let shift = new Shift(name, shiftId, type, staff, start, end);
-//                shiftList.addShift(shift);
+//                console.log(shift);
+//                ShiftList.addShift(shift); 
 //            }
 //        }
-//        this.shifts = shiftList.getShifts();
-//        
-//        if (selectedDept === "All Departments") {
-//            this.users = userDAO.query();
-//            for(let i=0; i<users.length; i++){
-//                let idNumber = users[i].idNumber;
-//                let firstName = users[i].firstName;
-//                let lastName = users[i].lastName;
-//                let usr = new User(idNumber, firstName, lastName);
-//                userList.addUser(usr);
-//            }
-//            for(let i=0; i<userList.length; i++){
-//                this.shifts = shiftDAO.query({"userId": userList[i].idNumber});
-//                for(let j = 0; j<shifts.length; j++){
-//                    let name = shifts[j].name;
-//                    let shiftId = shifts[j].eventId;
-//                    let type = shifts[j].type;
-//                    let staff = userList[i].idNumber;
-//                    let start = shifts[j].start;
-//                    let end = shifts[j].end;
-//                    let shift = new Shift(name, shiftId, type, staff, start, end);
-//                    shiftList.addShift(shift);
-//                }
-//            }
-//            this.shifts = shiftList.getShifts();
-//        } else {
-//            this.users = deptDAO.query({"department": selectedDept});
-//            for(let i=0; i<users.length; i++){
-//                let idNumber = users[i].idNumber;
-//                let firstName = users[i].firstName;
-//                let lastName = users[i].lastName;
-//                let usr = new User(idNumber, firstName, lastName);
-//                userList.addUser(usr);
-//            }
-//            for(let i=0; i<userList.length; i++){
-//                this.shifts = shiftDAO.query({"userId": userList[i].idNumber});
-//                for(let j = 0; j<shifts.length; j++){
-//                    let name = shifts[j].name;
-//                    let shiftId = shifts[j].eventId;
-//                    let type = shifts[j].type;
-//                    let staff = userList[i].idNumber;
-//                    let start = shifts[j].start;
-//                    let end = shifts[j].end;
-//                    let shift = new Shift(name, shiftId, type, staff, start, end);
-//                    shiftList.addShift(shift);
-//                }
-//            }
-//            this.shifts = shiftList.getShifts();
-//        }
-//    };
-    
-//    this.fillTable = function (users) {
-//        for(let i=0; i<users.length; i++){
-//            let idNumber = users[i].idNumber;
-//            let firstName = users[i].firstName;
-//            let lastName = users[i].lastName;
-//            let usr = new User(idNumber, firstName, lastName);
-//            userList.addUser(usr);
-//        }
-//        for(let i=0; i<userList.length; i++){
-//            this.shifts = shiftDAO.query({"userId": userList[i].idNumber});
-//            for(let j = 0; j<shifts.length; j++){
-//                let name = shifts[j].name;
-//                let shiftId = shifts[j].eventId;
-//                let type = shifts[j].type;
-//                let staff = userList[i].idNumber;
-//                let start = shifts[j].start;
-//                let end = shifts[j].end;
-//                let shift = new Shift(name, shiftId, type, staff, start, end);
-//                shiftList.addShift(shift);
-//            }
-//        }
-//    };
-    
-//});
-
-
+//        request.send();
+//    }
+//}
+//initRequest.send();
+//
+//setUp = function() {
+//    console.log("test");
+//    //document.getElementById("test").innerHTML = "<a href='*'>"+departments[0]+"</a><a href='*'>"+departments[1]+"</a><a href='*'>"+departments[2]+"</a><a href='*'>"+departments[3]+"</a>";
+//    initRequest.send();
+//    for (let i=0; i<usrList.length; i++){
+//        var userId = usrList[i].idNumber;
+//        request.send(userId);
+//    }
+//}

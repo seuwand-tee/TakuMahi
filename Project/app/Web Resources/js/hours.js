@@ -1,8 +1,15 @@
 "use strict";
+var userId;
+var startOfPeriod;
+var daysInPeriod
 
-var module = angular.js('TakuMahiApp', ['ngResource', 'ngStorage']);
+function getHours() {
+    var frm = document.getElementById("form");
+    var text = "";
+    var i;
+    userId = frm.elements[0].value;
+    startOfPeriod = frm.elements[1].value;
+    document.getElementById("result").innerHTML = startOfPeriod;
+}
 
-module.factory('hoursDAO', function ($resource) {
-return $resource('/api/staff/hours/:userId');
-});
 
