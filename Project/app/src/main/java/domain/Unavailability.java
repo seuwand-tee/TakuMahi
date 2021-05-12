@@ -20,7 +20,9 @@ public class Unavailability extends Event {
     private ZonedDateTime repeatEnd; // Parse DateTimes from String in Resource.
     private String description;
 
-    public Unavailability(){};
+    public Unavailability(){
+        super();
+    };
 
     public Unavailability(Instant start, Instant end, String repeat, String description) {
         super(start, end);

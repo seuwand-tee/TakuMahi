@@ -25,6 +25,8 @@ dependencies {
     implementation 'com.google.guava:guava:29.0-jre'
     //json object dependency
     implementation 'org.json:json:20171018'
+    //SQL connection
+    implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
 
     def joobyVer =  '1.6.8'
     implementation group: 'org.jooby', name: 'jooby-netty', version: joobyVer
@@ -42,3 +44,5 @@ test {
 }
 
 mainClassName = 'service.Server'
+
+
