@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import org.jooby.Jooby;
 import org.jooby.MediaType;
 import org.jooby.Status;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -45,6 +47,10 @@ public class HoursByUserResource extends Jooby {
                     LocalDate startOfPeriod = LocalDate.parse(sPeriod, formatter);
                     //run dao method
                     Integer hours = dao.getUserHoursForPeriod(userId, startOfPeriod, daysInPeriod);
+                    //Create JSON Object to send
+                    JSONArray json = new JSONArray();
+                    //String hrs = hours.toString();
+                    json.put(hours);
                     //send integer amount of hours
                     rsp.status(Status.OK).send(hours);
                 });

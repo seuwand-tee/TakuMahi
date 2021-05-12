@@ -6,6 +6,7 @@ function getHours() {
     var startOfPeriod;
     var daysInPeriod;
     var result = "";
+    var data;
     //extract values from form
     var frm = document.getElementById("form");
     userId = frm.elements[0].value;
@@ -32,15 +33,16 @@ function getHours() {
     //request
     let initRequest = new XMLHttpRequest();
     initRequest.open('GET', 'http://localhost:8080/api/staff/hours/' + userId + '?startOfPeriod=' + startOfPeriod + '&daysInPeriod=' + daysInPeriod, true);
-    initRequest.onLoad = function () {
-        //if (initRequest.status >= 200 && initRequest.status < 400) {
-            result = this.response;   
-        //}    
+    initRequest.onload = function () {
+        data = JSON.parse(initRequest.response);
+        if (initRequest.status >= 200 && initRequest.status < 400) {
+            result = JSON.parse(initRequest.response);
+        }
+        if (result == "") {
+            result = "no";
+        }
+        document.getElementById("result").innerHTML = "User " + userId + " has " + result + " scheduled hours in the period.";
     }
-    initRequest.send()
-    console.log((initRequest.response).toString());
-    
-    document.getElementById("result").innerHTML = result;
+    initRequest.send();
 }
-
 
