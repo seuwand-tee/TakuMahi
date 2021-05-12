@@ -22,19 +22,19 @@ class UserList {
     }
 }
 
-class Shift {
-    
-    constructor(name, shiftId, type, user, start, end) {
-        if(shiftId){
-            this.name = name;
-            this.shiftId = shiftId;
-            this.type = type;
-            this.user = user;
-            this.start = start;
-            this.end = end;
-        }
-    }
-}
+//class Shift {
+//    
+//    constructor(name, shiftId, type, user, start, end) {
+//        if(shiftId){
+//            this.name = name;
+//            this.shiftId = shiftId;
+//            this.type = type;
+//            this.user = user;
+//            this.start = start;
+//            this.end = end;
+//        }
+//    }
+//}
 
 class ShiftList {
     
@@ -54,47 +54,32 @@ class ShiftList {
 var initRequest = new XMLHttpRequest();
 var request = new XMLHttpRequest();
 var departments = ["All Departments", "StudentIT", "AskIT", "GeneralEnquiries"];
-var usrList = new UserList();
 var shftList = new Array();
 var userId;
 
 //initial request - all staff
 initRequest.open('GET', 'http://localhost:8080/api/staff', true);
 initRequest.onload = function () {
-    var users = JSON.parse(this.response);
-    console.log(users);
-    for(let i=0; i<users.length; i++){
-        userId = users[i].idNumber;
-        let firstName = users[i].firstName;
-        let lastName = users[i].lastName;
-        let usr = new User(userId, firstName, lastName);
-        usrList.addUser(usr);
-        console.log(usr);
+    var data = JSON.parse(initRequest.response);
+    console.log(data.length);
+    for(let i=0; i<data.length; i++){
+        let userId = data[i].idNumber;
+        console.log(userId);
+        request.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, true);
+        request.onload = function () {
+            var shifts = JSON.parse(request.response);
+            shifts.forEach((shift)=> {
+                console.log(shift);
+                shftList.push(shift);
+            });
+        }
+        request.send();
     }
 }
 
-//request for shifts from staff member
-request.open('GET', 'http://localhost:8080/api/staff/shifts/0', true);
-request.onload = function () {
-    var shifts = JSON.parse(this.response);
-    console.log(shifts.length);
-    for(let j = 0; j<shifts.length; j++){
-        let name = shifts[j].name;
-        let shiftId = shifts[j].eventId;
-        let type = shifts[j].type;
-        let staff = 0;
-        let start = shifts[j].start;
-        let end = shifts[j].end;
-        let shift = new Shift(name, shiftId, type, staff, start, end);
-        console.log(shift);
-        shftList[j] = shift;
-    }
-};
-
 document.getElementById("test").innerHTML = "<a href='*'>"+departments[0]+"</a><a href='*'>"+departments[1]+"</a><a href='*'>"+departments[2]+"</a><a href='*'>"+departments[3]+"</a>";
 initRequest.send();
-request.send();
-fillTable();
+//fillTable();
 
 //function setUp(){
     //initRequest.send();
@@ -142,43 +127,3 @@ function fillTable(){
     }  
     myTableDiv.appendChild(table);
 }
-
-//for (let i=0; i<usrList.length; i++){
-//        var userId = usrList[i].idNumber;
-//        request.send(userId);
-//    }
-
-
-//
-//    for(let i=0; i<usrList.length; i++){
-//        var userId = usrList[i].idNumber;
-//        request.open('GET', 'http://localhost:8080/api/staff/shifts/'+userId, true);
-//        request.onload = function () {
-//            var shifts = JSON.parse(this.response);
-//            console.log(shifts);
-//            for(let j = 0; j<shifts.length; j++){
-//               let name = shifts[j].name;
-//                let shiftId = shifts[j].eventId;
-//                let type = shifts[j].type;
-//                let staff = userId;
-//                let start = shifts[j].start;
-//                let end = shifts[j].end;
-//                let shift = new Shift(name, shiftId, type, staff, start, end);
-//                console.log(shift);
-//                ShiftList.addShift(shift); 
-//            }
-//        }
-//        request.send();
-//    }
-//}
-//initRequest.send();
-//
-//setUp = function() {
-//    console.log("test");
-//    //document.getElementById("test").innerHTML = "<a href='*'>"+departments[0]+"</a><a href='*'>"+departments[1]+"</a><a href='*'>"+departments[2]+"</a><a href='*'>"+departments[3]+"</a>";
-//    initRequest.send();
-//    for (let i=0; i<usrList.length; i++){
-//        var userId = usrList[i].idNumber;
-//        request.send(userId);
-//    }
-//}
