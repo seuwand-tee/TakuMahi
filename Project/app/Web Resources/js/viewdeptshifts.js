@@ -1,43 +1,6 @@
 "use strict";
 
-class User {
-    
-    constructor(idNumber, firstName, lastName) {
-        if(idNumber){
-            this.idNumber = idNumber;
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
-    }
-}
-
-class UserList {
-    
-    constructor() {
-        this.userList = new Array();
-    }
-    
-    addUser(user) {
-        this.userList.push(user);
-    }
-}
-
-class ShiftList {
-    
-    constructor() {
-        this.shiftList = new Array();
-    }
-    
-    getShifts() {
-        return this.shiftList;
-    }
-    
-    addShift(shift) {
-        this.shiftList.push(shift);
-    }
-}
-
-var departments = ["All Departments", "StudentIT", "AskIT", "GeneralEnquiries"];
+//Lists for storing queries
 var shftList = new Array();
 var allList = new Array();
 var studItList = new Array();
@@ -46,6 +9,12 @@ var askItList = new Array();
 var askItCalled = false;
 var genEnqList = new Array();
 var genEnqCalled = false;
+var managerList = new Array();
+var managerCalled = false;
+var seniorList = new Array();
+var seniorCalled = false;
+var casualList = new Array();
+var casualCalled = false;
 var userId;
 
 //initial request - all staff
@@ -67,7 +36,7 @@ initRequest.onload = function () {
     }
 };
 
-//StudentIT Requests
+//StudentIT Request
 var studItInitRequest = new XMLHttpRequest();
 var studItRequest = new XMLHttpRequest();
 studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', false);
@@ -107,7 +76,7 @@ askItInitRequest.onload = function () {
     askItCalled = true;
 };
 
-//GeneralEnquiries
+//GeneralEnquiries Reques
 var genEnqInitRequest = new XMLHttpRequest();
 var genEnqRequest = new XMLHttpRequest();
 genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', false);
@@ -122,9 +91,69 @@ genEnqInitRequest.onload = function () {
                 shftList.push(shifts[j]);
             }
         };
-        GenEnqRequest.send();
+        genEnqRequest.send();
     }
     genEnqCalled = true;
+};
+
+//Manager Request
+var managerInitRequest = new XMLHttpRequest();
+var managerRequest = new XMLHttpRequest();
+managerInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Manager', false);
+managerInitRequest.onload = function () {
+    var data = JSON.parse(managerInitRequest.response);
+    for(let i=0; i<data.length; i++){
+        let userId = data[i].idNumber;
+        managerRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        managerRequest.onload = function () {
+            var shifts = JSON.parse(managerRequest.response);
+            for(let j=0; j<shifts.length; j++) {
+                shftList.push(shifts[j]);
+            }
+        };
+        managerRequest.send();
+    }
+    managerCalled = true;
+};
+
+//Senior Request
+var seniorInitRequest = new XMLHttpRequest();
+var seniorRequest = new XMLHttpRequest();
+seniorInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Senior', false);
+seniorInitRequest.onload = function () {
+    var data = JSON.parse(seniorInitRequest.response);
+    for(let i=0; i<data.length; i++){
+        let userId = data[i].idNumber;
+        seniorRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        seniorRequest.onload = function () {
+            var shifts = JSON.parse(seniorRequest.response);
+            for(let j=0; j<shifts.length; j++) {
+                shftList.push(shifts[j]);
+            }
+        };
+        seniorRequest.send();
+    }
+    seniorCalled = true;
+};
+
+//Casual Request
+var casualInitRequest = new XMLHttpRequest();
+var casualRequest = new XMLHttpRequest();
+casualInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Casual', false);
+casualInitRequest.onload = function () {
+    var data = JSON.parse(casualInitRequest.response);
+    for(let i=0; i<data.length; i++){
+        let userId = data[i].idNumber;
+        casualRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        casualRequest.onload = function () {
+            var shifts = JSON.parse(casualRequest.response);
+            for(let j=0; j<shifts.length; j++) {
+                shftList.push(shifts[j]);
+            }
+        };
+        casualRequest.send();
+    }
+    casualCalled = true;
 };
 
 //initial setup
@@ -157,7 +186,21 @@ function fillTable(){
 $("#allDeptBtn").on("click", function(){
     $("#tbody").empty();
     shftList = [];
-    shftList = allList.slice();
+    let role = document.getElementById('selectedRole').innerHTML;
+    switch(role) {
+        case "All Roles":
+            shftList = allList.slice();
+            break;
+        case "Manager":
+            shftList = managerList.slice();
+            break;
+        case "Senior":
+            shftList = seniorList.slice();
+            break;
+        case "Casual":
+            shftList = casualList.slice();
+            break;
+    }
     fillTable();
     document.getElementById("selectedOption").innerHTML = "All Departments";
 });
@@ -171,6 +214,20 @@ $("#studItBtn").on("click", function(){
         studItList = shftList.slice();
     } else if (studItCalled) {
         shftList = studItList.slice();
+    }
+    let role = document.getElementById('selectedRole').innerHTML;
+    switch(role) {
+        case "All Roles":
+            break;
+        case "Manager":
+            shftList = shftList.filter(a => managerList.some(b => a.eventID === b.eventID));
+            break;
+        case "Senior":
+            shftList = shftList.filter(a => seniorList.some(b => a.eventID === b.eventID));
+            break;
+        case "Casual":
+            shftList = shftList.filter(a => casualList.some(b => a.eventID === b.eventID));
+            break;
     }
     fillTable();
     document.getElementById("selectedOption").innerHTML = "Student IT";
@@ -186,6 +243,20 @@ $("#askItBtn").on("click", function(){
     } else if (askItCalled) {
         shftList = askItList.slice();
     }
+    let role = document.getElementById('selectedRole').innerHTML;
+    switch(role) {
+        case "All Roles":
+            break;
+        case "Manager":
+            shftList = shftList.filter(a => managerList.some(b => a.eventID === b.eventID));
+            break;
+        case "Senior":
+            shftList = shftList.filter(a => seniorList.some(b => a.eventID === b.eventID));
+            break;
+        case "Casual":
+            shftList = shftList.filter(a => casualList.some(b => a.eventID === b.eventID));
+            break;
+    }
     fillTable();
     document.getElementById("selectedOption").innerHTML = "Ask IT";
 });
@@ -197,9 +268,132 @@ $("#genEnqBtn").on("click", function(){
     if (genEnqCalled == false) {
         genEnqInitRequest.send();
         genEnqList = shftList.slice();
-    } else if (studItCalled) {
+    } else if (genEnqCalled) {
         shftList = genEnqList.slice();
+    }
+    let role = document.getElementById('selectedRole').innerHTML;
+    switch(role) {
+        case "All Roles":
+            break;
+        case "Manager":
+            shftList = shftList.filter(a => managerList.some(b => a.eventID === b.eventID));
+            break;
+        case "Senior":
+            shftList = shftList.filter(a => seniorList.some(b => a.eventID === b.eventID));
+            break;
+        case "Casual":
+            shftList = shftList.filter(a => casualList.some(b => a.eventID === b.eventID));
+            break;
     }
     fillTable();
     document.getElementById("selectedOption").innerHTML = "General Enquiries";
+});
+
+//when All Roles Clicked
+$("#allRoleBtn").on("click", function(){
+    $("#tbody").empty();
+    shftList = [];
+    let dept = document.getElementById('selectedOption').innerHTML;
+    switch(dept) {
+        case "All Departments":
+            shftList = allList.slice();
+            break;
+        case "Student IT":
+            shftList = studItList.slice();
+            break;
+        case "Ask IT":
+            shftList = askItList.slice();
+            break;
+        case "General Enquiries":
+            shftList = genEnqList.slice();
+            break;
+    }  
+    fillTable();
+    document.getElementById("selectedRole").innerHTML = "All Roles";
+});
+
+//when Manager Clicked
+$("#managerBtn").on("click", function(){
+    $("#tbody").empty();
+    shftList = [];
+    if (managerCalled == false) {
+        managerInitRequest.send();
+        managerList = shftList.slice();
+    } else if (managerCalled) {
+        shftList = managerList.slice();
+    }
+    let dept = document.getElementById('selectedOption').innerHTML;
+    switch(dept) {
+        case "All Departments":
+            break;
+        case "Student IT":
+            console.log(shftList);
+            shftList = shftList.filter(a => studItList.some(b => a.eventID === b.eventID));
+            console.log(shftList);
+            break;
+        case "Ask IT":
+            shftList = shftList.filter(a => askItList.some(b => a.eventID === b.eventID));
+            break;
+        case "General Enquiries":
+            shftList = shftList.filter(a => genEnqList.some(b => a.eventID === b.eventID));
+            break;
+    }  
+    fillTable();
+    document.getElementById("selectedRole").innerHTML = "Manager";
+});
+
+//when Senior Clicked
+$("#seniorBtn").on("click", function(){
+    $("#tbody").empty();
+    shftList = [];
+    if (seniorCalled == false) {
+        seniorInitRequest.send();
+        seniorList = shftList.slice();
+    } else if (genEnqCalled) {
+        shftList = seniorList.slice();
+    }
+    let dept = document.getElementById('selectedOption').innerHTML;
+    switch(dept) {
+        case "All Departments":
+            break;
+        case "Student IT":
+            shftList = shftList.filter(a => studItList.some(b => a.eventID === b.eventID));
+            break;
+        case "Ask IT":
+            shftList = shftList.filter(a => askItList.some(b => a.eventID === b.eventID));
+            break;
+        case "General Enquiries":
+            shftList = shftList.filter(a => genEnqList.some(b => a.eventID === b.eventID));
+            break;
+    }
+    fillTable();
+    document.getElementById("selectedRole").innerHTML = "Senior";
+});
+
+//when Casual Clicked
+$("#casualBtn").on("click", function(){
+    $("#tbody").empty();
+    shftList = [];
+    if (casualCalled == false) {
+        casualInitRequest.send();
+        casualList = shftList.slice();
+    } else if (casualCalled) {
+        shftList = casualList.slice();
+    }
+    let dept = document.getElementById('selectedOption').innerHTML;
+    switch(dept) {
+        case "All Departments":
+            break;
+        case "Student IT":
+            shftList = shftList.filter(a => studItList.some(b => a.eventID === b.eventID));
+            break;
+        case "Ask IT":
+            shftList = shftList.filter(a => askItList.some(b => a.eventID === b.eventID));
+            break;
+        case "General Enquiries":
+            shftList = shftList.filter(a => genEnqList.some(b => a.eventID === b.eventID));
+            break;
+    }
+    fillTable();
+    document.getElementById("selectedRole").innerHTML = "Casual";
 });
