@@ -14,6 +14,23 @@ td{
   border-right: solid;
 }
 
+
+
+
+#Mobile { 
+  visibility: collapse; 
+}
+
+@media screen and (max-width: 600px){
+  #Mobile{
+    visibility:visible;
+  }
+
+  #Desktop{
+    visibility: collapse; 
+  }
+}
+
 /* buttosn for viewing  */
 .view-button{
   border-left: 2px;
