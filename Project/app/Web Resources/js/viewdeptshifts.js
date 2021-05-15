@@ -39,6 +39,13 @@ class ShiftList {
 
 var departments = ["All Departments", "StudentIT", "AskIT", "GeneralEnquiries"];
 var shftList = new Array();
+var allList = new Array();
+var studItList = new Array();
+var studItCalled = false;
+var askItList = new Array();
+var askItCalled = false;
+var genEnqList = new Array();
+var genEnqCalled = false;
 var userId;
 
 //initial request - all staff
@@ -60,25 +67,6 @@ initRequest.onload = function () {
     }
 };
 
-//All Departments Requests
-var allDeptInitRequest = new XMLHttpRequest();
-var allDeptRequest = new XMLHttpRequest();
-allDeptInitRequest.open('GET', 'http://localhost:8080/api/staff', false);
-allDeptInitRequest.onload = function () {
-    var data = JSON.parse(allDeptInitRequest.response);
-    for(let i=0; i<data.length; i++){
-        let userId = data[i].idNumber;
-        allDeptRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
-        allDeptRequest.onload = function () {
-            var shifts = JSON.parse(allDeptRequest.response);
-            for(let j=0; j<shifts.length; j++) {
-                shftList.push(shifts[j]);
-            }
-        };
-        allDeptRequest.send();
-    }
-};
-
 //StudentIT Requests
 var studItInitRequest = new XMLHttpRequest();
 var studItRequest = new XMLHttpRequest();
@@ -96,6 +84,7 @@ studItInitRequest.onload = function () {
         };
         studItRequest.send();
     }
+    studItCalled = true;
 };
 
 //AskIT Request
@@ -115,6 +104,7 @@ askItInitRequest.onload = function () {
         };
         askItRequest.send();
     }
+    askItCalled = true;
 };
 
 //GeneralEnquiries
@@ -134,16 +124,17 @@ genEnqInitRequest.onload = function () {
         };
         GenEnqRequest.send();
     }
+    genEnqCalled = true;
 };
 
 //initial setup
 initRequest.send();
+allList = shftList.slice();
 fillTable();
 
 //fills table with shifts in the shftList array
 function fillTable(){
     const table = document.getElementById("tbody");
-    console.log("Shift List length: " + shftList.length);
     for(let y=0; y<shftList.length; y++){
         let row = table.insertRow();
         let name = row.insertCell(0);
@@ -166,30 +157,49 @@ function fillTable(){
 $("#allDeptBtn").on("click", function(){
     $("#tbody").empty();
     shftList = [];
-    allDeptInitRequest.send();
+    shftList = allList.slice();
     fillTable();
+    document.getElementById("selectedOption").innerHTML = "All Departments";
 });
 
 //when StudentIT Clicked
 $("#studItBtn").on("click", function(){
     $("#tbody").empty();
     shftList = [];
-    studItInitRequest.send();
+    if (studItCalled == false) {
+        studItInitRequest.send();
+        studItList = shftList.slice();
+    } else if (studItCalled) {
+        shftList = studItList.slice();
+    }
     fillTable();
+    document.getElementById("selectedOption").innerHTML = "Student IT";
 });
 
 //when AskIT Clicked
 $("#askItBtn").on("click", function(){
     $("#tbody").empty();
     shftList = [];
-    askItInitRequest.send();
+    if (askItCalled == false) {
+        askItInitRequest.send();
+        askItList = shftList.slice();
+    } else if (askItCalled) {
+        shftList = askItList.slice();
+    }
     fillTable();
+    document.getElementById("selectedOption").innerHTML = "Ask IT";
 });
 
 //when GeneralEnquiries Clicked
 $("#genEnqBtn").on("click", function(){
     $("#tbody").empty();
     shftList = [];
-    genEnqInitRequest.send();
+    if (genEnqCalled == false) {
+        genEnqInitRequest.send();
+        genEnqList = shftList.slice();
+    } else if (studItCalled) {
+        shftList = genEnqList.slice();
+    }
     fillTable();
+    document.getElementById("selectedOption").innerHTML = "General Enquiries";
 });
