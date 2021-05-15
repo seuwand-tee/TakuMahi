@@ -37,35 +37,106 @@ class ShiftList {
     }
 }
 
-var initRequest = new XMLHttpRequest();
-var request = new XMLHttpRequest();
 var departments = ["All Departments", "StudentIT", "AskIT", "GeneralEnquiries"];
 var shftList = new Array();
 var userId;
 
 //initial request - all staff
+var initRequest = new XMLHttpRequest();
+var request = new XMLHttpRequest();
 initRequest.open('GET', 'http://localhost:8080/api/staff', false);
 initRequest.onload = function () {
     var data = JSON.parse(initRequest.response);
     for(let i=0; i<data.length; i++){
         let userId = data[i].idNumber;
-        console.log("ID:" + userId);
         request.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
         request.onload = function () {
             var shifts = JSON.parse(request.response);
-            console.log("Data Length:" + shifts.length);
             for(let j=0; j<shifts.length; j++) {
-                console.log(shifts[j]);
                 shftList.push(shifts[j]);
             }
         };
         request.send();
-        console.log("Run " + i);
+    }
+};
+
+//All Departments Requests
+var allDeptInitRequest = new XMLHttpRequest();
+var allDeptRequest = new XMLHttpRequest();
+allDeptInitRequest.open('GET', 'http://localhost:8080/api/staff', false);
+allDeptInitRequest.onload = function () {
+    var data = JSON.parse(allDeptInitRequest.response);
+    for(let i=0; i<data.length; i++){
+        let userId = data[i].idNumber;
+        allDeptRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        allDeptRequest.onload = function () {
+            var shifts = JSON.parse(allDeptRequest.response);
+            for(let j=0; j<shifts.length; j++) {
+                shftList.push(shifts[j]);
+            }
+        };
+        allDeptRequest.send();
+    }
+};
+
+//StudentIT Requests
+var studItInitRequest = new XMLHttpRequest();
+var studItRequest = new XMLHttpRequest();
+studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', false);
+studItInitRequest.onload = function () {
+    var data = JSON.parse(studItInitRequest.response);
+    for(let i=0; i<data.length; i++){
+        let userId = data[i].idNumber;
+        studItRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        studItRequest.onload = function () {
+            var shifts = JSON.parse(studItRequest.response);
+            for(let j=0; j<shifts.length; j++) {
+                shftList.push(shifts[j]);
+            }
+        };
+        studItRequest.send();
+    }
+};
+
+//AskIT Request
+var askItInitRequest = new XMLHttpRequest();
+var askItRequest = new XMLHttpRequest();
+askItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/AskIT', false);
+askItInitRequest.onload = function () {
+    var data = JSON.parse(askItInitRequest.response);
+    for(let i=0; i<data.length; i++){
+        let userId = data[i].idNumber;
+        askItRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        askItRequest.onload = function () {
+            var shifts = JSON.parse(askItRequest.response);
+            for(let j=0; j<shifts.length; j++) {
+                shftList.push(shifts[j]);
+            }
+        };
+        askItRequest.send();
+    }
+};
+
+//GeneralEnquiries
+var genEnqInitRequest = new XMLHttpRequest();
+var genEnqRequest = new XMLHttpRequest();
+genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', false);
+genEnqInitRequest.onload = function () {
+    var data = JSON.parse(genEnqInitRequest.response);
+    for(let i=0; i<data.length; i++){
+        let userId = data[i].idNumber;
+        genEnqRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        genEnqRequest.onload = function () {
+            var shifts = JSON.parse(genEnqRequest.response);
+            for(let j=0; j<shifts.length; j++) {
+                shftList.push(shifts[j]);
+            }
+        };
+        GenEnqRequest.send();
     }
 };
 
 //initial setup
-document.getElementById("buttons").innerHTML = "<button id=\"allDeptBtn\" type=\"button\">"+departments[0]+"</button><button id=\"studItBtn\" type=\"button\">"+departments[1]+"</button><button id=\"askItBtn\" type=\"button\">"+departments[2]+"</button><button id=\"genEnqBtn\" type=\"button\">"+departments[3]+"</button>";
 initRequest.send();
 fillTable();
 
@@ -93,20 +164,32 @@ function fillTable(){
 
 //when All Departments Clicked
 $("#allDeptBtn").on("click", function(){
-    console.log("worked");
+    $("#tbody").empty();
+    shftList = [];
+    allDeptInitRequest.send();
+    fillTable();
 });
 
 //when StudentIT Clicked
 $("#studItBtn").on("click", function(){
-    console.log("worked");
+    $("#tbody").empty();
+    shftList = [];
+    studItInitRequest.send();
+    fillTable();
 });
 
 //when AskIT Clicked
 $("#askItBtn").on("click", function(){
-    console.log("worked");
+    $("#tbody").empty();
+    shftList = [];
+    askItInitRequest.send();
+    fillTable();
 });
 
 //when GeneralEnquiries Clicked
 $("#genEnqBtn").on("click", function(){
-    console.log("worked");
+    $("#tbody").empty();
+    shftList = [];
+    genEnqInitRequest.send();
+    fillTable();
 });
