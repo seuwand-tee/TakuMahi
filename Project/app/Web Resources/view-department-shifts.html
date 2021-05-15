@@ -22,15 +22,18 @@
         <form class ="Filter_Form">
             <div class ="Container">
                 <div class="filterdropdown">
-                    <button class="filterdropbtn" >Department</button>
-                    <div class="filterdropdown-content" id="test">
+                    <button class="filterdropbtn" type='button'>Department</button>
+                    <div class="filterdropdown-content" id="buttons">
+<!--                        <button id="allDeptBtn" type="button" class="filterdropdown-content button">All Departments</button>
+                        <button id="studItBtn" type="button" class="filterdropdown-content button">Student IT</button>
+                        <button id="askItBtn" type="button" class="filterdropdown-content button">Ask IT</button>
+                        <button id="genEnqBtn" type="button" class="filterdropdown-content button">General Enquiries</button>-->
                     </div>
                 </div>
             </div>
         </form>
-        <div id = "with_results">
-            <input type="button" id="create" onclick="fillTable()">
-<!--            <table style="width:100%">
+        <div>
+            <table style="width:100%">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -41,16 +44,8 @@
                         <th>End</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>{{shift.name}}</td>
-                        <td>{{shift.shiftId}}</td>
-                        <td>{{shift.type}}</td>
-                        <td>{{shift.user}}</td>
-                        <td>{{shift.start}}</td>
-                        <td>{{shift.end}}</td>
-                </tbody>
-            </table>-->
+                <tbody id="tbody"></tbody>
+            </table>
         </div>
       <script src="js/viewdeptshifts.js"></script>
         

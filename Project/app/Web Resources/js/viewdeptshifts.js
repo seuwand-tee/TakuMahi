@@ -22,20 +22,6 @@ class UserList {
     }
 }
 
-//class Shift {
-//    
-//    constructor(name, shiftId, type, user, start, end) {
-//        if(shiftId){
-//            this.name = name;
-//            this.shiftId = shiftId;
-//            this.type = type;
-//            this.user = user;
-//            this.start = start;
-//            this.end = end;
-//        }
-//    }
-//}
-
 class ShiftList {
     
     constructor() {
@@ -58,72 +44,69 @@ var shftList = new Array();
 var userId;
 
 //initial request - all staff
-initRequest.open('GET', 'http://localhost:8080/api/staff', true);
+initRequest.open('GET', 'http://localhost:8080/api/staff', false);
 initRequest.onload = function () {
     var data = JSON.parse(initRequest.response);
-    console.log(data.length);
     for(let i=0; i<data.length; i++){
         let userId = data[i].idNumber;
-        console.log(userId);
-        request.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, true);
+        console.log("ID:" + userId);
+        request.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
         request.onload = function () {
             var shifts = JSON.parse(request.response);
-            shifts.forEach((shift)=> {
-                console.log(shift);
-                shftList.push(shift);
-            });
-        }
+            console.log("Data Length:" + shifts.length);
+            for(let j=0; j<shifts.length; j++) {
+                console.log(shifts[j]);
+                shftList.push(shifts[j]);
+            }
+        };
         request.send();
+        console.log("Run " + i);
     }
-}
+};
 
-document.getElementById("test").innerHTML = "<a href='*'>"+departments[0]+"</a><a href='*'>"+departments[1]+"</a><a href='*'>"+departments[2]+"</a><a href='*'>"+departments[3]+"</a>";
+//initial setup
+document.getElementById("buttons").innerHTML = "<button id=\"allDeptBtn\" type=\"button\">"+departments[0]+"</button><button id=\"studItBtn\" type=\"button\">"+departments[1]+"</button><button id=\"askItBtn\" type=\"button\">"+departments[2]+"</button><button id=\"genEnqBtn\" type=\"button\">"+departments[3]+"</button>";
 initRequest.send();
-//fillTable();
+fillTable();
 
-//function setUp(){
-    //initRequest.send();
-    //request.send();
-//}
-
+//fills table with shifts in the shftList array
 function fillTable(){
-    var myTableDiv = document.getElementById("with_results");
-    var table = document.createElement('TABLE');
-    var tableBody = document.createElement('TBODY');
-
-    table.border = '1';
-    table.appendChild(tableBody);
-    
-    //headings
-    var heading = new Array();
-    heading[0] = "Name";
-    heading[1] = "ShiftID";
-    heading[2] = "Type";
-    heading[3] = "User";
-    heading[4] = "Start";
-    heading[5] = "End";
-    
-    //fill table columns
-    var tr = document.createElement('TR');
-    tableBody.appendChild(tr);
-    for (var i = 0; i < heading.length; i++) {
-        var th = document.createElement('TH');
-        th.width = '75';
-        th.appendChild(document.createTextNode(heading[i]));
-        tr.appendChild(th);
+    const table = document.getElementById("tbody");
+    console.log("Shift List length: " + shftList.length);
+    for(let y=0; y<shftList.length; y++){
+        let row = table.insertRow();
+        let name = row.insertCell(0);
+        let id = row.insertCell(1);
+        let type = row.insertCell(2);
+        let user = row.insertCell(3);
+        let start = row.insertCell(4);
+        let end = row.insertCell(5);
+        let shift = shftList[y];
+        name.innerHTML = shift.name;
+        id.innerHTML = shift.eventID;
+        type.innerHTML = shift.type;
+        user.innerHTML = shift.user.firstName + " " + shift.user.lastName;
+        start.innerHTML = shift.start.dateTime.date.day + "/" + shift.start.dateTime.date.month + "/" + shift.start.dateTime.date.year + " " + shift.start.dateTime.time.hour + ":" + shift.start.dateTime.time.minute;
+        end.innerHTML = shift.end.dateTime.date.day + "/" + shift.end.dateTime.date.month + "/" + shift.end.dateTime.date.year + " " + shift.end.dateTime.time.hour + ":" + shift.end.dateTime.time.minute;
     }
-    console.log(shftList.length);
-    
-    //fill table rows
-    for (var i = 0; i < 1; i++) {
-        var tr = document.createElement('TR');
-        for (var j = 0; j < 6; j++) {
-            console.log(shftList);
-            var td = document.createElement('TD');
-            td.appendChild(document.createTextNode(shftList[i][j]));
-            tr.appendChild(td);
-        }
-        tableBody.appendChild(tr);
-    }  
-    myTableDiv.appendChild(table);
 }
+
+//when All Departments Clicked
+$("#allDeptBtn").on("click", function(){
+    console.log("worked");
+});
+
+//when StudentIT Clicked
+$("#studItBtn").on("click", function(){
+    console.log("worked");
+});
+
+//when AskIT Clicked
+$("#askItBtn").on("click", function(){
+    console.log("worked");
+});
+
+//when GeneralEnquiries Clicked
+$("#genEnqBtn").on("click", function(){
+    console.log("worked");
+});
