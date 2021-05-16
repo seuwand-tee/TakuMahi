@@ -1,15 +1,14 @@
-/* store querris from http://localhost:8080/api/staff. */
-var usrdata;
-
 /* Current date on page.Starts on the current date. */
 var dateToday = new Date();
 
 /* sets the date for today */
 updateDate(dateToday);
 
+/* render the fields */
+show_users();
+
 /* update Date. */
 function updateDate(date){
-  console.log(date);
   var dd = String(date.getDate()).padStart(2, '0');
   var mm = String(date.getMonth() + 1).padStart(2, '0');
   var yyyy = date.getFullYear();
@@ -17,43 +16,57 @@ function updateDate(date){
 }
 
 /* Creates a schedule for each user pulled and fills in the data */
-function populate(){
-  console.log(usrdata[0]);
+async function show_users(){
+
+  let usrdata = await getusrdata();
+  let shiftdata = getshiftdata(usrdata, 0);
+  console.log(shiftdata);
+  let unavaliblitydata = getunavaliblitydata(usrdata, 0);
+  console.log(unavaliblitydata);
 
   // Duplicate the weekly view and create a new one for each element.
   usrdata.forEach((element, index) => {
     $("#calendar-day").clone().attr("id", "calendar-day" + index).removeClass("invisible").appendTo("body");
-  });
-
-  // Set the name of each new day view
-  usrdata.forEach((element, index) => {
     $('#calendar-day' + index  + ' th:contains("User")').text(usrdata[index].firstName);
   });
+}
 
-  //TODO: Update unavaliblities and shifts.
+async function getusrdata(){
+  let url = 'http://localhost:8080/api/staff';
+  try {
+    let res = await fetch(url);
+    return await res.json();
+  } catch(error){
+    console.log("Error: " + error);
+  }
+}
+
+function getshiftdata(usrdata){
+  let result = []
   usrdata.forEach((element, index) => {
-    fetch('http://localhost:8080/api/staff/shifts/' + usrdata[index].idNumber);
-    fetch('http://localhost:8080/api/staff/unavaliblity/' + usrdata[index].idNumber);
-  });
-};
+    fetch('http://localhost:8080/api/staff/shifts/' + usrdata[index].idNumber)
+    .then(response => response.json())
+    .then(data => result.push(data));
+  console.log(result);
+})
+}
 
-/* pull in the data.*/
-fetch('http://localhost:8080/api/staff')
+
+function getunavaliblitydata(usrdata) {
+  let url = 'http://localhost:8080/api/staff/unavailability/' + usrdata[index].idNumber;
   .then(response => response.json())
-  .then(data => {
-    usrdata = data;
-    populate();
-    /* Activate listeners */
-    /* selects the cell that the mouse is in. */
-    $(".calendar td").on("mouseover", function(){
-      $(this).addClass("selected");
-    });
-    /* deselects the cell the mouse is in. */
-    $(".calendar td").on("mouseout", function(){
-      $(this).removeClass("selected");
-    });
+  .then(data => result.push(data));
+  console.log(result);
+  })
+}
 
-  });
+$(".calendar td").on("mouseover", function(){
+  $(this).addClass("selected");
+});
+  /* deselects the cell the mouse is in. */
+$(".calendar td").on("mouseout", function(){
+  $(this).removeClass("selected");
+});
 
 /* what happens when next button is clicked */
 $("#next-button").on("click", function(){
@@ -75,6 +88,5 @@ $("#previous-button").on("click", function(){
   const tomorrow = new Date(dateToday);
   tomorrow.setDate(tomorrow.getDate() -1 );
   dateToday = tomorrow;
-  updateDate(dateToday);
   updateDate(dateToday);
 });

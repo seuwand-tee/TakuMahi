@@ -20,7 +20,9 @@ public class Server extends Jooby {
 
         port(8080);
 
-        use("*", new CorsHandler(new Cors().withMethods("*")));
+        Cors cor = new Cors().withMethods("*");
+        cor.allowOrigin("*");
+        use("*", new CorsHandler(cor));
 
         use(new Gzon());
 
