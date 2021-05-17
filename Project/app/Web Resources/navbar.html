@@ -1,12 +1,51 @@
 <!DOCTYPE html>
-        <div id="dropdown">
-        <button class="dropbtn" > <Button><img src="Logo.jpg"></button>
-        <div class="dropdown-content">
-            <a href="."><i class="Nav_Home"></i> Home</a>
-            <a href="calendar-view.html"><i class="Nav_Calendar"></i> Calendar</a>
-            <a href="acccreate.html"><i class="Nav_CAccount"></i> Create An Account</a>
-            <a href="accdel.html"><i class="Nav_DelAccount"></i> Delete An Account</a>
-        </div>
-      </div>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: "Arial", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color:#00508f;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+
+<div class="sidenav">
+<a href="calendar-view.html"><i class="Nav_Calendar"></i> Home</a>
+<a href="unavailability-select.html"><i class="Nav_unavailable"></i> Choose your unavailability</a>
+<a href="shift-manage.html"><i class="Nav_manageshift"></i> Manage Shift</a>
+<a href="acccreate.html"><i class="Nav_CAccount"></i> Create An Account</a>
+<a href="accdel.html"><i class="Nav_DelAccount"></i> Delete An Account</a>
+<a href="login.html"><i class="Nav_login"></i> Log Out</a>
+</div>
 
 
