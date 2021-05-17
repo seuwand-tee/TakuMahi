@@ -59,15 +59,15 @@ public class Server extends Jooby {
         //Test Shifts
         Shift shift1 = new Shift();
         shift1.setEventID(1);
-        shift1.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 9, 0), ZoneId.of("Pacific/Auckland")));
-        shift1.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 10, 0), ZoneId.of("Pacific/Auckland")));
+        shift1.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 9, 0), ZoneId.of("Pacific/Auckland")));
+        shift1.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 10, 0), ZoneId.of("Pacific/Auckland")));
         shift1.setDescription("Clean the gutter");
         shift1.setName("Gutter cleaning");
 
         Shift shift2 = new Shift();
         shift2.setEventID(2);
-        shift2.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 12, 3, 0), ZoneId.of("Pacific/Auckland")));
-        shift2.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 14, 5, 0), ZoneId.of("Pacific/Auckland")));
+        shift2.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 9, 0), ZoneId.of("Pacific/Auckland")));
+        shift2.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 12, 0), ZoneId.of("Pacific/Auckland")));
         shift2.setDescription("Loitering");
         shift2.setName("Being a criminal");
 
@@ -75,23 +75,23 @@ public class Server extends Jooby {
         shift3.setEventID(3);
         shift3.setName("Computer assistance");
         shift3.setDescription("Helping elderly use tech");
-        shift3.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 11, 0), ZoneId.of("Pacific/Auckland")));
-        shift3.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 12, 0), ZoneId.of("Pacific/Auckland")));
+        shift3.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 11, 0), ZoneId.of("Pacific/Auckland")));
+        shift3.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 12, 0), ZoneId.of("Pacific/Auckland")));
 
         //Test unavailability
         Unavailability unavailability1 = new Unavailability();
         unavailability1.setEventID(4);
         unavailability1.setDescription("Busy gaming");
-        unavailability1.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 11, 0), ZoneId.of("Pacific/Auckland")));
-        unavailability1.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 13, 0), ZoneId.of("Pacific/Auckland")));
+        unavailability1.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 11, 0), ZoneId.of("Pacific/Auckland")));
+        unavailability1.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 14, 0), ZoneId.of("Pacific/Auckland")));
         unavailability1.setRepeat(Unavailability.Repeat.Weekly);
         unavailability1.setUser(user1);
 
         Unavailability unavailability2 = new Unavailability();
         unavailability2.setEventID(5);
         unavailability2.setDescription("Busy gaming");
-        unavailability2.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 15, 0), ZoneId.of("Pacific/Auckland")));
-        unavailability2.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 18, 0), ZoneId.of("Pacific/Auckland")));
+        unavailability2.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 14, 0), ZoneId.of("Pacific/Auckland")));
+        unavailability2.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 11, 0), ZoneId.of("Pacific/Auckland")));
         unavailability2.setRepeat(Unavailability.Repeat.Weekly);
         unavailability2.setUser(user2);
 
@@ -127,6 +127,10 @@ public class Server extends Jooby {
         dao.addUser(user1);
         dao.addUser(user2);
         dao.addUser(user3);
+
+        dao.addUnavailabilityToUser(user1.getIdNumber(), unavailability1);
+        dao.addUnavailabilityToUser(user2.getIdNumber(), unavailability2);
+        dao.addUnavailabilityToUser(user3.getIdNumber(), unavailability3);
 
         dao.assignShiftToUser(user1.getIdNumber(), shift1.getEventID());
         dao.assignShiftToUser(user2.getIdNumber(), shift2.getEventID());
