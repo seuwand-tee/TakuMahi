@@ -36,6 +36,7 @@ async function show_users() {
   });
 
   populateEvents(usrdata, shiftdata, unavaliblitydata);
+  showOpenShifts();
 }
 
 function populateEvents(usrdata, shiftdata, unavailabilitydata) {
@@ -46,7 +47,6 @@ function populateEvents(usrdata, shiftdata, unavailabilitydata) {
       unavailabilitydata[index][0].start.dateTime.date.month == dateToday.getMonth() + 1 &&
       unavailabilitydata[index][0].start.dateTime.date.day == dateToday.getDate()) {
       usrnum = unavailabilitydata[index][0].user.idNumber;
-      console.log(unavailabilitydata[index][0])
       let start = unavailabilitydata[index][0].start.dateTime.time.hour;
       let end = unavailabilitydata[index][0].end.dateTime.time.hour;
       for (i = start; i <= end; i++) {
@@ -130,12 +130,15 @@ function createShift(){
   request.send(shift);
 }
 
-function showOpenShifts(){
-  let openShifts = getOpenShifts();
+async function showOpenShifts(){
+  let openShifts = await getOpenShifts();
+  openShifts.forEach((element, index) => {
+    $('#open-shifts').append("<li id='shift-list" + element.eventID + "' class='list-group-item'>" + element.eventID + "</li>");
+  });
 }
 
 async function getOpenShifts(){
-  let url = 'http://localhost:8080/shifts/open';
+  let url = 'http://localhost:8080/api/shifts/open';
   try {
     let res = await fetch(url);
     return await res.json();
@@ -148,6 +151,7 @@ async function getOpenShifts(){
 $("#shift-submit").on("click", function(){
   console.log("Test");
   createShift();
+  showOpenShifts();
 });
 
 $(".calendar td").on("mouseover", function() {
