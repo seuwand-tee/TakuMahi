@@ -74,20 +74,6 @@ function populateEvents(usrdata, shiftdata, unavailabilitydata) {
   });
 }
 
-
-// index = 0;
-// console.log(shiftdata[index][index].start.dateTime.date.year==dateToday.getFullYear());
-// if (shiftdata[index][index].start.dateTime.date.year==dateToday.getFullYear()){
-//   $('#calendar-day' + index + ' td').text("test").addClass("shift")
-//   //$('#calendar-day' + index).text("test").addClass("unavaliblity")
-// }
-
-// for (i = start; i <= end ; i++) {
-//
-//   }
-// }
-
-
 async function getusrdata() {
   let url = 'http://localhost:8080/api/staff';
   try {
@@ -97,14 +83,6 @@ async function getusrdata() {
     console.log("Error: " + error);
   }
 }
-
-// function getshiftdata(usrdata){
-//   let result = [];
-//   usrdata.forEach((element, index) => {
-//     fetch('http://localhost:8080/api/staff/shifts/' + usrdata[index].idNumber)
-//     .then(response => response.json())
-//     .then(data => result.push(data));
-// });
 
 async function getshiftdata(usrdata) {
   const users = [];
@@ -119,22 +97,6 @@ async function getshiftdata(usrdata) {
   return users;
 }
 
-
-
-
-
-//   let results = [];
-//   for (var usr of usrdata) {
-//     results.push(
-//     fetch('http://localhost:8080/api/staff/shifts/' + usr.idNumber)
-//     .then(response => response.json())
-//     .then(data => results.push(data))
-//   );
-//   }
-//   let final_results = await Promise.all(results)
-//   return final_results;
-// }
-
 async function getunavaliblitydata(usrdata) {
   const users = [];
   for (const usr of usrdata) {
@@ -148,9 +110,50 @@ async function getunavaliblitydata(usrdata) {
   return users;
 }
 
+function createShift(){
+
+  //var start = 0;
+  console.log(dateToday);
+  var start = new Date(dateToday.toDateString() + " " + $("#inputStart").val());
+  console.log(start);
+  var end =  new Date(dateToday.toDateString() + " " + $("#inputEnd").val());
+  var name = $("#inputName").val();
+  var description = $("#inputDescription").val();
+  var notes = $("#inputNotes").val();
+  var type = $("#inputType").val();
+
+  console.log(JSON.stringify({ "start": start.toString(), "end": end, "name": name, "description": description, "notes": notes, "type": type }));
+  var shift = JSON.stringify({ "start": start, "end": end, "name": name, "description": description, "notes": notes, "type": type });
+  let request = new XMLHttpRequest();
+  request.open('POST', 'http://localhost:8080/api/shifts/open', false);
+  request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  request.send(shift);
+}
+
+function showOpenShifts(){
+  let openShifts = getOpenShifts();
+}
+
+async function getOpenShifts(){
+  let url = 'http://localhost:8080/shifts/open';
+  try {
+    let res = await fetch(url);
+    return await res.json();
+  } catch (error) {
+    console.log("Error: " + error);
+  }
+}
+
+// Runes the create shift function when shift submit button is pressed
+$("#shift-submit").on("click", function(){
+  console.log("Test");
+  createShift();
+});
+
 $(".calendar td").on("mouseover", function() {
   $(this).addClass("selected");
 });
+
 /* deselects the cell the mouse is in. */
 $(".calendar td").on("mouseout", function() {
   $(this).removeClass("selected");
