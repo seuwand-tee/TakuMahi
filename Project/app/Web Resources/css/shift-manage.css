@@ -25,7 +25,6 @@ td{
 .calendar{
   font-family: Georgia, "Times New Roman", Times, serif;
   padding: 0;
-  position: absolute;
 }
 
 .cal-wrapper{
@@ -38,6 +37,19 @@ td{
   background-color: #ddd !important;
 }
 
-#next-button{
+.button-right{
   margin-right: 5px;
+}
+
+.invisible{
+  visibility: hidden;
+  position: absolute;
+}
+
+.shift{
+  background-color: #DC143C !important;
+}
+
+.unavailability{
+  background-color: #0000CD !important;
 }
