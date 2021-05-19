@@ -132,9 +132,15 @@ function createShift(){
 
 async function showOpenShifts(){
   let openShifts = await getOpenShifts();
+
+
   openShifts.forEach((element, index) => {
-    $('#open-shifts').append("<li id='shift-list" + element.eventID + "' class='list-group-item'>" + element.eventID + "</li>");
+      console.log(element)
+
+    $('#open-shifts').append("<li id='shift-list" + element.eventID + "' class='list-group-item'>" + element.start.dateTime.time.hour + " :00 " +  element.end.dateTime.time.hour + " :00" + "</li>")
+    addInput($('#shift-list' + element.eventID), element.eventID);
   });
+
 }
 
 async function getOpenShifts(){
@@ -145,6 +151,11 @@ async function getOpenShifts(){
   } catch (error) {
     console.log("Error: " + error);
   }
+}
+
+async function assignShift(usrID, eventID){
+  let url = "http://localhost:8080/api/shifts/open/" + eventID + "/" + usrID;
+  fetch(url, {method: 'POST'});
 }
 
 // Runes the create shift function when shift submit button is pressed
@@ -167,6 +178,7 @@ $(".calendar td").on("mouseout", function() {
 $("#next-button").on("click", function() {
   /* remove previous day's data. */
   $('#calander-storage').empty();
+  $('#open-shifts').empty();
 
   /* Set the date of the page to be tomorrow */
   const tomorrow = new Date(dateToday);
@@ -185,6 +197,7 @@ $("#save-button").on("click", function() {
 $("#previous-button").on("click", function() {
   /* remove previous day's data. */
   $('#calander-storage').empty();
+  $('#open-shifts').empty();
   /* set the date on the page to be yesterday */
   const tomorrow = new Date(dateToday);
   tomorrow.setDate(tomorrow.getDate() - 1);
@@ -192,3 +205,33 @@ $("#previous-button").on("click", function() {
   updateDate(dateToday);
   show_users();
 });
+
+function addInput(listElement, eventid){
+  listElement.on("click", function(){
+    var usr = prompt("Please enter the user id for this shift");
+    assignShift(Number(usr), eventid);
+  });
+}
+
+
+
+// TODO: Figure out how I want to delete shifts.
+function inputShift(timeElement, usrID){
+  time.on("click", function(){
+    unassignShift(shiftID, usrID);
+    timeElement.removeClass("shift");
+  })
+}
+
+
+async function unassignShift(shitID, usrID){
+  /* First unassign */
+  let url = "http://localhost:8080/api/shifts/open/" + shiftID + "/" + usrID;
+  fetch(url, {method: 'PUT'});
+}
+
+async function deleteShift(shiftID){
+  /* First unassign */
+  let url = "http://localhost:8080/api/shifts/open/" + shiftID;
+  fetch(url, {method: 'delete'});
+}
