@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -399,12 +400,60 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<Event> getUserEventsForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       String sql = "select * from Availability where idnumber = ?and start >= ?";
+        try (
+                // get a connection to the database
+                 Connection dbCon = DbConnection.getConnection(uri); // create the statement
+                  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+           // Timestamp date = Timestamp.valueOf(startOfPeriod);
+            stmt.setInt(1, userID);
+            //stmt.settimestamp(2, userID);
+            
+            // execute the query
+            ResultSet rs = stmt.executeQuery();
+
+            // Using a List to preserve the order in which the data was returned from the query.
+            Collection<Event> shift = new HashSet<>();
+
+            // iterate through the query results
+            while (rs.next()) {
+
+                // get the data out of the query
+                Instant start = rs.getDate("start").toInstant();
+                Instant end = rs.getDate("end").toInstant();
+                String description = rs.getString("description");
+
+                // use the data to create a user object
+                Unavailability un = new Unavailability(start, end, description);
+
+                // and put it in the collection
+                shift.add(un);
+            }
+
+            return shift;
+
+        } catch (SQLException ex) {  // we are forced to catch SQLException
+            // don't let the SQLException leak from our DAO encapsulation
+            throw new DAOException(ex.getMessage(), ex);
+        }
     }
+    /**
+     * Should I create an alias first then calculate the hours using time difference 
+     * @param userID
+     * @param startOfPeriod
+     * @param daysInPeriod
+     * @return 
+     */
 
     @Override
     public Integer getUserHoursForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            String sql = "select shiftid, start, end from Availability as hours where idnumber = ?and start >= ?";
+            try{
+            }
+                return hours;
+            }catch(SQLException ex){
+            throw new DAOException(ex.getMessage(),ex);
+    }
     }
 
     @Override
