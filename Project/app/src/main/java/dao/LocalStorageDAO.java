@@ -45,14 +45,14 @@ public class LocalStorageDAO implements DAO{
 
         Unavailability unavailabilityOne;
         unavailabilityOne = new Unavailability();
-        unavailabilityOne.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 16, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityOne.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 20, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityOne.setStart(LocalDateTime.of(2021, 5, 13, 16, 0));
+        unavailabilityOne.setEnd(LocalDateTime.of(2021, 5, 13, 20, 0));
         unavailabilityOne.setDescription("Ain't nobody got time for dat");
 
         Unavailability unavailabilityTwo;
         unavailabilityTwo = new Unavailability();
-        unavailabilityTwo.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 16, 7, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityTwo.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 16, 11, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityTwo.setStart(LocalDateTime.of(2021, 5, 16, 7, 0));
+        unavailabilityTwo.setEnd(LocalDateTime.of(2021, 5, 16, 11, 0));
         unavailabilityTwo.setDescription("Ain't nobody got time for dat");
 
         addUser(userOne);

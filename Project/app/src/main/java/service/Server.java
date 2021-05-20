@@ -84,7 +84,6 @@ public class Server extends Jooby {
         unavailability1.setDescription("Busy gaming");
         unavailability1.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 11, 0), ZoneId.of("Pacific/Auckland")));
         unavailability1.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 14, 0), ZoneId.of("Pacific/Auckland")));
-        unavailability1.setRepeat(Unavailability.Repeat.Weekly);
         unavailability1.setUser(user1);
 
         Unavailability unavailability2 = new Unavailability();
@@ -92,7 +91,6 @@ public class Server extends Jooby {
         unavailability2.setDescription("Busy gaming");
         unavailability2.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 14, 0), ZoneId.of("Pacific/Auckland")));
         unavailability2.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 11, 0), ZoneId.of("Pacific/Auckland")));
-        unavailability2.setRepeat(Unavailability.Repeat.Weekly);
         unavailability2.setUser(user2);
 
         Unavailability unavailability3 = new Unavailability();
@@ -100,7 +98,6 @@ public class Server extends Jooby {
         unavailability3.setDescription("Busy gaming");
         unavailability3.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 14, 0), ZoneId.of("Pacific/Auckland")));
         unavailability3.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 16, 0), ZoneId.of("Pacific/Auckland")));
-        unavailability3.setRepeat(Unavailability.Repeat.Weekly);
         unavailability3.setUser(user3);
 
         //open shifts

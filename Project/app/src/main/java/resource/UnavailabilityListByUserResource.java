@@ -57,11 +57,10 @@ public class UnavailabilityListByUserResource extends Jooby {
                     Instant end = Instant.parse(nd);
                                 
                     //Assign rest of constructor values
-                    String repeat = jsonObj.getString("repeat");
                     String description = jsonObj.getString("description");
                     
                     //constructor for unavailability
-                    Unavailability unavailability = new Unavailability(start, end, repeat, description);
+                    Unavailability unavailability = new Unavailability(start, end, description);
                     
                     //store unavailability
                     dao.addUnavailabilityToUser(id, unavailability);

@@ -9,8 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Collection;
 
 public class LocalStorageDAOTest {
@@ -65,8 +63,8 @@ public class LocalStorageDAOTest {
 
         shiftOne = new Shift();
         shiftOne.setEventID(1);
-        shiftOne.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 7, 30), ZoneId.of("Pacific/Auckland")));
-        shiftOne.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 9, 30), ZoneId.of("Pacific/Auckland")));
+        shiftOne.setStart(LocalDateTime.of(2020, 3, 20, 7, 30));
+        shiftOne.setEnd(LocalDateTime.of(2020, 3, 20, 9, 30));
         shiftOne.setName("Morning ISB");
         shiftOne.setDescription("Hmm yes, this is a shift");
         shiftOne.setNotes("Remember Staples");
@@ -74,8 +72,8 @@ public class LocalStorageDAOTest {
 
         shiftTwo = new Shift();
         shiftTwo.setEventID(2);
-        shiftTwo.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 21, 11, 30), ZoneId.of("Pacific/Auckland")));
-        shiftTwo.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 21, 13, 30), ZoneId.of("Pacific/Auckland")));
+        shiftTwo.setStart(LocalDateTime.of(2020, 3, 21, 11, 30));
+        shiftTwo.setEnd(LocalDateTime.of(2020, 3, 21, 13, 30));
         shiftTwo.setName("Midday ISB");
         shiftTwo.setDescription("Hmm yes, this is a shift");
         shiftTwo.setNotes("Remember Staples");
@@ -83,8 +81,8 @@ public class LocalStorageDAOTest {
 
         shiftThree = new Shift();
         shiftThree.setEventID(3);
-        shiftThree.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 22, 3, 30), ZoneId.of("Pacific/Auckland")));
-        shiftThree.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 22, 5, 30), ZoneId.of("Pacific/Auckland")));
+        shiftThree.setStart(LocalDateTime.of(2020, 3, 22, 3, 30));
+        shiftThree.setEnd(LocalDateTime.of(2020, 3, 22, 5, 30));
         shiftThree.setName("Afternoon ISB");
         shiftThree.setDescription("Hmm yes, this is a shift");
         shiftThree.setNotes("Remember Staples");
@@ -92,8 +90,8 @@ public class LocalStorageDAOTest {
 
         shiftFour = new Shift();
         shiftFour.setEventID(4);
-        shiftFour.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 7, 30), ZoneId.of("Pacific/Auckland")));
-        shiftFour.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 9, 30), ZoneId.of("Pacific/Auckland")));
+        shiftFour.setStart(LocalDateTime.of(2020, 3, 20, 7, 30));
+        shiftFour.setEnd(LocalDateTime.of(2020, 3, 20, 9, 30));
         shiftFour.setName("Senior Desk");
         shiftFour.setDescription("Hmm yes, this is a shift");
         shiftFour.setNotes("Remember Phones");
@@ -101,8 +99,8 @@ public class LocalStorageDAOTest {
 
         shiftFive = new Shift();
         shiftFive.setEventID(5);
-        shiftFive.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 14, 0), ZoneId.of("Pacific/Auckland")));
-        shiftFive.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 16, 0), ZoneId.of("Pacific/Auckland")));
+        shiftFive.setStart(LocalDateTime.of(2020, 3, 20, 14, 0));
+        shiftFive.setEnd(LocalDateTime.of(2020, 3, 20, 16, 0));
         shiftFive.setName("Ewaste");
         shiftFive.setDescription("Hmm yes, this is a shift");
         shiftFive.setNotes("Remember Glue");
@@ -110,25 +108,20 @@ public class LocalStorageDAOTest {
 
         unavailabilityOne = new Unavailability();
         unavailabilityOne.setEventID(6);
-        unavailabilityOne.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 16, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityOne.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 20, 20, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityOne.setRepeat(Unavailability.Repeat.Weekly);
-        unavailabilityOne.setRepeatEnd(ZonedDateTime.of(LocalDateTime.of(2020, 5, 20, 0, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityOne.setStart(LocalDateTime.of(2020, 3, 20, 16, 0));
+        unavailabilityOne.setEnd(LocalDateTime.of(2020, 3, 20, 20, 0));
         unavailabilityOne.setDescription("Ain't nobody got time for dat");
 
         unavailabilityTwo = new Unavailability();
         unavailabilityTwo.setEventID(7);
-        unavailabilityTwo.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 3, 30, 7, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityTwo.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 3, 30, 11, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityTwo.setRepeat(Unavailability.Repeat.No);
+        unavailabilityTwo.setStart(LocalDateTime.of(2020, 3, 30, 7, 0));
+        unavailabilityTwo.setEnd(LocalDateTime.of(2020, 3, 30, 11, 0));
         unavailabilityTwo.setDescription("Ain't nobody got time for dat");
 
         unavailabilityThree = new Unavailability();
         unavailabilityThree.setEventID(8);
-        unavailabilityThree.setStart(ZonedDateTime.of(LocalDateTime.of(2020, 4, 20, 11, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityThree.setEnd(ZonedDateTime.of(LocalDateTime.of(2020, 4, 20, 15, 0), ZoneId.of("Pacific/Auckland")));
-        unavailabilityThree.setRepeat(Unavailability.Repeat.Monthly);
-        unavailabilityThree.setRepeatEnd(ZonedDateTime.of(LocalDateTime.of(2020, 8, 20, 0, 0), ZoneId.of("Pacific/Auckland")));
+        unavailabilityThree.setStart(LocalDateTime.of(2020, 4, 20, 11, 0));
+        unavailabilityThree.setEnd(LocalDateTime.of(2020, 4, 20, 15, 0));
         unavailabilityThree.setDescription("Ain't nobody got time for dat");
 
     }

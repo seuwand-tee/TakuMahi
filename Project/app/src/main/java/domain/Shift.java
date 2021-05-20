@@ -1,7 +1,6 @@
 package domain;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
 
 /**
  * The Shift domain class.
