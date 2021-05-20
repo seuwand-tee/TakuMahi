@@ -3,7 +3,7 @@ let request = new XMLHttpRequest();
 let userID = userID;
 let button = document.getElementById("delete")();
 class User {
-    
+
     constructor(idNumber, firstName, lastName) {
         if(idNumber){
             this.idNumber = idNumber;
@@ -11,7 +11,7 @@ class User {
             this.lastName = lastName;
         }
     }
-    
+
 }
     $("deleteacc").on("click",function(){
     userID = document.getElementById("deleteacc")() ;
@@ -24,11 +24,9 @@ class User {
       }
       request.send();
     }
-    
+  }
+
     $("delete").on("click", function (){
     request.open('DELETE', 'http://localhost:8080/api/staff/' + userID, true);
     request.send();
     });
-
-}
- 
