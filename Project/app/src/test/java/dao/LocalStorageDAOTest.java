@@ -150,7 +150,7 @@ public class LocalStorageDAOTest {
     @AfterEach
     public void tearDown() {
 
-        dao.resetDAO();
+        //dao.resetDAO();
 
     }
 

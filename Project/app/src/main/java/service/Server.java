@@ -59,15 +59,15 @@ public class Server extends Jooby {
         //Test Shifts
         Shift shift1 = new Shift();
         shift1.setEventID(1);
-        shift1.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 9, 0), ZoneId.of("Pacific/Auckland")));
-        shift1.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 10, 0), ZoneId.of("Pacific/Auckland")));
+        shift1.setStart(LocalDateTime.of(2021, 5, 17, 9, 0));
+        shift1.setEnd(LocalDateTime.of(2021, 5, 17, 10, 0));
         shift1.setDescription("Clean the gutter");
         shift1.setName("Gutter cleaning");
 
         Shift shift2 = new Shift();
         shift2.setEventID(2);
-        shift2.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 9, 0), ZoneId.of("Pacific/Auckland")));
-        shift2.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 12, 0), ZoneId.of("Pacific/Auckland")));
+        shift2.setStart(LocalDateTime.of(2021, 5, 17, 9, 0));
+        shift2.setEnd(LocalDateTime.of(2021, 5, 17, 12, 0));
         shift2.setDescription("Loitering");
         shift2.setName("Being a criminal");
 
@@ -75,29 +75,29 @@ public class Server extends Jooby {
         shift3.setEventID(3);
         shift3.setName("Computer assistance");
         shift3.setDescription("Helping elderly use tech");
-        shift3.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 11, 0), ZoneId.of("Pacific/Auckland")));
-        shift3.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 12, 0), ZoneId.of("Pacific/Auckland")));
+        shift3.setStart(LocalDateTime.of(2021, 5, 17, 11, 0));
+        shift3.setEnd(LocalDateTime.of(2021, 5, 17, 12, 0));
 
         //Test unavailability
         Unavailability unavailability1 = new Unavailability();
         unavailability1.setEventID(4);
         unavailability1.setDescription("Busy gaming");
-        unavailability1.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 11, 0), ZoneId.of("Pacific/Auckland")));
-        unavailability1.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 14, 0), ZoneId.of("Pacific/Auckland")));
+        unavailability1.setStart(LocalDateTime.of(2021, 5, 17, 11, 0));
+        unavailability1.setEnd(LocalDateTime.of(2021, 5, 17, 14, 0));
         unavailability1.setUser(user1);
 
         Unavailability unavailability2 = new Unavailability();
         unavailability2.setEventID(5);
         unavailability2.setDescription("Busy gaming");
-        unavailability2.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 14, 0), ZoneId.of("Pacific/Auckland")));
-        unavailability2.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 17, 11, 0), ZoneId.of("Pacific/Auckland")));
+        unavailability2.setStart(LocalDateTime.of(2021, 5, 17, 14, 0));
+        unavailability2.setEnd(LocalDateTime.of(2021, 5, 17, 11, 0));
         unavailability2.setUser(user2);
 
         Unavailability unavailability3 = new Unavailability();
         unavailability3.setEventID(6);
         unavailability3.setDescription("Busy gaming");
-        unavailability3.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 14, 0), ZoneId.of("Pacific/Auckland")));
-        unavailability3.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 10, 16, 0), ZoneId.of("Pacific/Auckland")));
+        unavailability3.setStart(LocalDateTime.of(2021, 5, 10, 14, 0));
+        unavailability3.setEnd(LocalDateTime.of(2021, 5, 10, 16, 0));
         unavailability3.setUser(user3);
 
         //open shifts
@@ -105,15 +105,15 @@ public class Server extends Jooby {
         shift4.setEventID(7);
         shift4.setName("A Fresh open shift");
         shift4.setDescription("Helping elderly use tech");
-        shift4.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 12, 11, 0), ZoneId.of("Pacific/Auckland")));
-        shift4.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 12, 0), ZoneId.of("Pacific/Auckland")));
+        shift4.setStart(LocalDateTime.of(2021, 5, 12, 11, 0));
+        shift4.setEnd(LocalDateTime.of(2021, 5, 13, 12, 0));
 
         Shift shift5 = new Shift();
         shift5.setEventID(8);
         shift5.setName("My openshift");
         shift5.setDescription("Helping elderly use tech");
-        shift5.setStart(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 15, 0), ZoneId.of("Pacific/Auckland")));
-        shift5.setEnd(ZonedDateTime.of(LocalDateTime.of(2021, 5, 13, 18, 0), ZoneId.of("Pacific/Auckland")));
+        shift5.setStart(LocalDateTime.of(2021, 5, 13, 15, 0));
+        shift5.setEnd(LocalDateTime.of(2021, 5, 13, 18, 0));
 
         dao.addToOpenShifts(shift1);
         dao.addToOpenShifts(shift2);

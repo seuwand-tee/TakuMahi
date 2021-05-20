@@ -7,8 +7,6 @@ import com.google.common.collect.HashMultimap;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -338,7 +336,7 @@ public class LocalStorageDAO implements DAO{
      * WARNING: WILL WIPE ALL DATA.
      * This method resets all the collections in the DAO.
      */
-    @Override
+   /** @Override
     public void resetDAO() {
         // User access
         usersByDepartment = HashMultimap.create();
@@ -351,6 +349,6 @@ public class LocalStorageDAO implements DAO{
         shiftsByUser = HashMultimap.create();
         unavailabilityByUser = HashMultimap.create();
         openShifts = new HashMap<>();
-    }
+    }**/
 
 }

@@ -25,6 +25,7 @@ shiftid int(10) not null,
 idnumber int(10) not null,
 start DATETIME not null,
 end DATETIME not null,
+description varchar(100),
 constraint Unavailability_PK primary key (shiftid, idnumber),
 constraint Unavailability_User_FK foreign key (idnumber) references User(idnumber),
 constraint Unavailability_Shift_FK foreign key (shiftid) references Shift(shiftid)
@@ -33,6 +34,9 @@ constraint Unavailability_Shift_FK foreign key (shiftid) references Shift(shifti
 create table Availability(
 shiftid int(10) not null,
 idnumber int(10) not null,
+start DATETIME not null,
+end DATETIME not null,
+description varchar(100),
 constraint Availability_PK primary key (shiftid, idnumber),
 constraint Availability_User_FK foreign key (idnumber) references User(idnumber),
 constraint Availability_Shift_FK foreign key (shiftid) references Shift(shiftid)

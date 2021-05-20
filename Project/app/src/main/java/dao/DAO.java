@@ -157,7 +157,7 @@ public interface DAO {
      * WARNING: WILL WIPE ALL DATA.
      * This method resets all the collections in the DAO.
      */
-    void resetDAO();
+    //void resetDAO();
 
     /**
      * This returns whether or not a User is in the DAO.
