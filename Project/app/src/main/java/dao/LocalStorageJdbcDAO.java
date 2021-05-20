@@ -447,13 +447,15 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Integer getUserHoursForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod) {
-            String sql = "select shiftid, start, end from Availability as hours where idnumber = ?and start >= ?";
+        int hours = daysInPeriod;// dummy variable 
+        return hours;
+            /**String sql = "select shiftid, start, end from Availability as hours where idnumber = ?and start >= ?";
             try{
             }
                 return hours;
             }catch(SQLException ex){
             throw new DAOException(ex.getMessage(),ex);
-    }
+    }**/
     }
 
     @Override
