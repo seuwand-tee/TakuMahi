@@ -336,7 +336,6 @@ public class LocalStorageDAO implements DAO{
      * WARNING: WILL WIPE ALL DATA.
      * This method resets all the collections in the DAO.
      */
-   /** @Override
     public void resetDAO() {
         // User access
         usersByDepartment = HashMultimap.create();
@@ -349,6 +348,6 @@ public class LocalStorageDAO implements DAO{
         shiftsByUser = HashMultimap.create();
         unavailabilityByUser = HashMultimap.create();
         openShifts = new HashMap<>();
-    }**/
+    }
 
 }

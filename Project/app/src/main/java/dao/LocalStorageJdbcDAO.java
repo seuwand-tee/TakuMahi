@@ -401,11 +401,11 @@ public class LocalStorageJdbcDAO implements DAO {
     @Override
     public Collection<Event> getUserEventsForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
        String sql = "select * from Availability where idnumber = ?and start >= ?";
+       String del = "";
         try (
                 // get a connection to the database
                  Connection dbCon = DbConnection.getConnection(uri); // create the statement
                   PreparedStatement stmt = dbCon.prepareStatement(sql);) {
-           // Timestamp date = Timestamp.valueOf(startOfPeriod);
             stmt.setInt(1, userID);
             //stmt.settimestamp(2, userID);
             
@@ -552,10 +552,15 @@ public class LocalStorageJdbcDAO implements DAO {
         }
     }
 
-   /** @Override
     public void resetDAO() {
-        String sql = "drop table Unavailability, Availability, Shift, User";
-        String sqlr ="";
+        String sql = "SET FOREIGN_KEY_CHECKS = 0;\n" +
+"\n" +
+"TRUNCATE table unavailability;\n" +
+"TRUNCATE table availability;\n" +
+"TRUNCATE table shift restart identity;\n" +
+"TRUNCATE table user;\n" +
+"\n" +
+"SET FOREIGN_KEY_CHECKS = 1;";
         try (
             Connection dbCon = DbConnection.getConnection(uri);  
             PreparedStatement stmt = dbCon.prepareStatement(sql);) {
@@ -565,7 +570,7 @@ public class LocalStorageJdbcDAO implements DAO {
             // don't let the SQLException leak from our DAO encapsulation
             throw new DAOException(ex.getMessage(), ex);
         }
-    }**/
+    }
 
     @Override
     public boolean userExists(Integer userID) {
