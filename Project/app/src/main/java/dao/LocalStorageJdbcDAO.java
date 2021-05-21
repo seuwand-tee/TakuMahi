@@ -291,7 +291,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<Shift> getShiftsByUser(Integer userID) {
-        String sql = "select * from shift where shiftid = ?";
+        String sql = "select * from Shift where shiftid = ?";
 
         try (
                 // get connection to database
@@ -400,14 +400,14 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<Event> getUserEventsForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
-       String sql = "select * from Availability where idnumber = ?and start >= ?";
-       String del = "";
+       String sql = "select * into #daytable from Availability where idnumber = ? and start >= ?";
         try (
                 // get a connection to the database
-                 Connection dbCon = DbConnection.getConnection(uri); // create the statement
-                  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+            Connection dbCon = DbConnection.getConnection(uri); // create the statement
+            PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+            Timestamp days = Timestamp.valueOf(startOfPeriod.toString());
             stmt.setInt(1, userID);
-            //stmt.settimestamp(2, userID);
+            stmt.setTimestamp(2, days);
             
             // execute the query
             ResultSet rs = stmt.executeQuery();
@@ -437,25 +437,28 @@ public class LocalStorageJdbcDAO implements DAO {
             throw new DAOException(ex.getMessage(), ex);
         }
     }
-    /**
-     * Should I create an alias first then calculate the hours using time difference 
-     * @param userID
-     * @param startOfPeriod
-     * @param daysInPeriod
-     * @return 
-     */
 
     @Override
     public Integer getUserHoursForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod) {
-        int hours = daysInPeriod;// dummy variable 
-        return hours;
-            /**String sql = "select shiftid, start, end from Availability as hours where idnumber = ?and start >= ?";
-            try{
+        String sql = "Select SUM(DATEDIFF(hour, start, end)diffinhour) from #daytable"; 
+        try (
+                // get a connection to the database
+            Connection dbCon = DbConnection.getConnection(uri); // create the statement
+            PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+            // execute the query
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()){
+               int total = rs.getInt(1);
+               return total;
+            }else{
+            return null;
             }
-                return hours;
-            }catch(SQLException ex){
-            throw new DAOException(ex.getMessage(),ex);
-    }**/
+
+        } catch (SQLException ex) {  // we are forced to catch SQLException
+            // don't let the SQLException leak from our DAO encapsulation
+            throw new DAOException(ex.getMessage(), ex);
+        }
     }
 
     @Override
