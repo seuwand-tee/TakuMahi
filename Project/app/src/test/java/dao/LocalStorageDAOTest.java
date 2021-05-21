@@ -13,8 +13,7 @@ import java.util.Collection;
 
 public class LocalStorageDAOTest {
 
-    //private static LocalStorageDAO dao;
-    private static LocalStorageJdbcDAO dao;
+    private static LocalStorageDAO dao;
 
     private static User userOne;
     private static User userTwo;
@@ -33,8 +32,7 @@ public class LocalStorageDAOTest {
     @BeforeAll
     public static void declareAll() {
 
-        //dao = new LocalStorageDAO();
-        dao = new LocalStorageJdbcDAO("jdbc:h2:mem:tests;INIT=runscript from 'src/main/java/dao/schema.sql'");
+        dao = new LocalStorageDAO();
 
         userOne = new User();
         userOne.setUsername("jimmy10p");

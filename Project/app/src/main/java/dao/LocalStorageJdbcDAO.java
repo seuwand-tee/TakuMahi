@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -41,7 +42,7 @@ public class LocalStorageJdbcDAO implements DAO {
     public void addToOpenShifts(Shift shift) {
         String sql = "insert into Shift(name, start, end, description, notes, type) values (?,?,?,?,?,?)";
         try (
-                 Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+            Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             Timestamp start = Timestamp.valueOf(shift.getStart());
             Timestamp end = Timestamp.valueOf(shift.getEnd());
             stmt.setString(1, shift.getName());
@@ -64,6 +65,12 @@ public class LocalStorageJdbcDAO implements DAO {
         String sql = "insert into Unavailability(shiftid, idnumber, start, end, description) values (?,?,?,?,?)";
         try (
                  Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+            if(unavailability.getStart() == null) {
+					unavailability.setStart(LocalDateTime.now());
+				}
+            if(unavailability.getEnd() == null) {
+					unavailability.setEnd(LocalDateTime.now());
+				}
             Timestamp start = Timestamp.valueOf(unavailability.getStart());
             Timestamp end = Timestamp.valueOf(unavailability.getEnd());
             stmt.setInt(1, unavailability.getEventID());
@@ -84,7 +91,8 @@ public class LocalStorageJdbcDAO implements DAO {
     public void addUser(User user) {
         String sql = "insert into User(username, idnumber, role, department, firstname, lastname, emailaddress) values (?,?,?,?,?,?,?)";
         try (
-                 Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+                 Connection dbCon = DbConnection.getConnection(uri);  
+                PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             stmt.setString(1, user.getUsername());
             stmt.setInt(2, user.getIdNumber());
             stmt.setString(3, user.getRole().toString());
@@ -106,8 +114,10 @@ public class LocalStorageJdbcDAO implements DAO {
         String sql = "insert into Availability(shiftid, idnumber) values (?,?)";
         try (
                  Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+
             stmt.setInt(1, shiftID);
             stmt.setInt(2, userID);
+            
 
             stmt.executeUpdate();  // execute the statement
 

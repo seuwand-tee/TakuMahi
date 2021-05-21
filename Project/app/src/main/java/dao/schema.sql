@@ -1,8 +1,8 @@
 create table User(
 idnumber int(10) not null unique,
 username varchar(10) not null unique,
-roleid int(10) not null,
-departmentid int(10) not null,
+role varchar(100) not null,
+department varchar(100) not null,
 firstName varchar(100) not null,
 lastName varchar(100) not null,
 emailaddress varchar(100) not null,
@@ -34,8 +34,8 @@ constraint Unavailability_Shift_FK foreign key (shiftid) references Shift(shifti
 create table Availability(
 shiftid int(10) not null,
 idnumber int(10) not null,
-start timestamp not null,
-end timestamp not null,
+start timestamp,
+end timestamp,
 description varchar(100),
 constraint Availability_PK primary key (shiftid, idnumber),
 constraint Availability_User_FK foreign key (idnumber) references User(idnumber),
