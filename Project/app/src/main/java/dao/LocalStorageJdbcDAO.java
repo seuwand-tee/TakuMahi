@@ -13,11 +13,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -63,16 +61,17 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public void addUnavailabilityToUser(String userID, Unavailability unavailability) {
-        String sql = "insert into Unavailability(idnumber, start, end, description) values (?,?,?,?,?)";
+        String sql = "insert into Unavailability(shiftid, idnumber, start, end, description) values (?,?,?,?,?)";
         try (
                  Connection dbCon = DbConnection.getConnection(uri);  
                 PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             Timestamp start = Timestamp.valueOf(unavailability.getStart());
             Timestamp end = Timestamp.valueOf(unavailability.getEnd());
-            stmt.setString(1, userID);
-            stmt.setTimestamp(2, start);
-            stmt.setTimestamp(3, end);
-            stmt.setString(4, unavailability.getDescription());
+            stmt.setInt(1, unavailability.getEventID());
+            stmt.setString(2, userID);
+            stmt.setTimestamp(3, start);
+            stmt.setTimestamp(4, end);
+            stmt.setString(5, unavailability.getDescription());
 
             stmt.executeUpdate();  // execute the statement
 
@@ -125,7 +124,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public void deleteFromOpenShifts(Integer eventID) {
-        String sql = "Delete from Shifts where shiftid = ?";
+        String sql = "Delete from Shift where shiftid = ?";
         try (
                  Connection dbCon = DbConnection.getConnection(uri); 
                 PreparedStatement stmt = dbCon.prepareStatement(sql);) {
@@ -191,7 +190,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<User> getAllUsers() {
-        String sql = "select * from Users order by userID";
+        String sql = "select * from User order by idnumber";
 
         try (
                 // get a connection to the database
@@ -209,7 +208,8 @@ public class LocalStorageJdbcDAO implements DAO {
                 // get the data out of the query
                 String username = rs.getString("username");
                 String idnumber = rs.getString("idnumber");
-                User.Role role = (User.Role) rs.getObject("role");
+                String rolee = rs.getString("role");
+                User.Role role = User.Role.valueOf(rolee);
                 String firstname = rs.getString("firstname");
                 String lastname = rs.getString("lastname");
                 String emailaddress = rs.getString("emailaddress");
@@ -243,8 +243,10 @@ public class LocalStorageJdbcDAO implements DAO {
 
             // query only returns a single result, so use 'if' instead of 'while'
             if (rs.next()) {
-                Instant start = rs.getDate("start").toInstant();
-                Instant end = rs.getDate("end").toInstant();
+                Timestamp startt = rs.getTimestamp("start");
+                Timestamp endd = rs.getTimestamp("end");
+                Instant start=startt.toInstant();
+                Instant end=endd.toInstant();
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 String notes = rs.getString("notes");
@@ -265,7 +267,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<Shift> getOpenShifts() {
-        String sql = "select * from Shifts order by shiftid where idnumber is null";
+        String sql = "select * from Shift where idnumber is null";
 
         try (
                 // get a connection to the database
@@ -277,8 +279,10 @@ public class LocalStorageJdbcDAO implements DAO {
 
             // query only returns a single result, so use 'if' instead of 'while'
             while (rs.next()) {
-                Instant start = rs.getDate("start").toInstant();
-                Instant end = rs.getDate("end").toInstant();
+                Timestamp startt = rs.getTimestamp("start");
+                Timestamp endd = rs.getTimestamp("end");
+                Instant start=startt.toInstant();
+                Instant end=endd.toInstant();
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 String notes = rs.getString("notes");
@@ -314,8 +318,10 @@ public class LocalStorageJdbcDAO implements DAO {
 
             // query only returns a single result, so use 'if' instead of 'while'
             while (rs.next()) {
-                Instant start = rs.getDate("start").toInstant();
-                Instant end = rs.getDate("end").toInstant();
+                Timestamp startt = rs.getTimestamp("start");
+                Timestamp endd = rs.getTimestamp("end");
+                Instant start=startt.toInstant();
+                Instant end=endd.toInstant();
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 String notes = rs.getString("notes");
@@ -352,8 +358,10 @@ public class LocalStorageJdbcDAO implements DAO {
 
             // query only returns a single result, so use 'if' instead of 'while'
             while (rs.next()) {
-                Instant start = rs.getDate("start").toInstant();
-                Instant end = rs.getDate("end").toInstant();
+                Timestamp startt = rs.getTimestamp("start");
+                Timestamp endd = rs.getTimestamp("end");
+                Instant start=startt.toInstant();
+                Instant end=endd.toInstant();
                 String description = rs.getString("description");
 
                 Unavailability un = new Unavailability(start, end, description);
@@ -388,7 +396,8 @@ public class LocalStorageJdbcDAO implements DAO {
             if (rs.next()) {
                 String username = rs.getString("username");
                 String idnumber = rs.getString("idnumber");
-                User.Role role = (User.Role) rs.getObject("role");
+                String rolee = rs.getString("role");
+                User.Role role = User.Role.valueOf(rolee);
                 String firstname = rs.getString("firstname");
                 String lastname = rs.getString("lastname");
                 String emailaddress = rs.getString("emailaddress");
@@ -408,7 +417,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<Event> getUserEventsForPeriod(String userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
-       String sql = "select * into #daytable from Shift where idnumber = ? and start >= ?";
+       String sql = "select * #daytable from Shift where idnumber = ? and start >= ?";
         try (
                 // get a connection to the database
             Connection dbCon = DbConnection.getConnection(uri); // create the statement
@@ -427,8 +436,10 @@ public class LocalStorageJdbcDAO implements DAO {
             while (rs.next()) {
 
                 // get the data out of the query
-                Instant start = rs.getDate("start").toInstant();
-                Instant end = rs.getDate("end").toInstant();
+                Timestamp startt = rs.getTimestamp("start");
+                Timestamp endd = rs.getTimestamp("end");
+                Instant start=startt.toInstant();
+                Instant end=endd.toInstant();
                 String description = rs.getString("description");
 
                 // use the data to create a user object
@@ -476,7 +487,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<User> getUsersByDepartment(User.Department department) {
-        String sql = "select * from Users where department = ?";
+        String sql = "select * from User where department = ?";
         try (
                 // get a connection to the database
                  Connection dbCon = DbConnection.getConnection(uri); // create the statement
@@ -494,7 +505,8 @@ public class LocalStorageJdbcDAO implements DAO {
                 // get the data out of the query
                 String username = rs.getString("username");
                 String idnumber = rs.getString("idnumber");
-                User.Role role = (User.Role) rs.getObject("role");
+                String rolee = rs.getString("role");
+                User.Role role = User.Role.valueOf(rolee);
                 String firstname = rs.getString("firstname");
                 String lastname = rs.getString("lastname");
                 String emailaddress = rs.getString("emailaddress");
@@ -516,7 +528,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<User> getUsersByRole(User.Role role) {
-        String sql = "select * from Users where role = ?";
+        String sql = "select * from User where role = ?";
         try (
                 // get a connection to the database
                  Connection dbCon = DbConnection.getConnection(uri); // create the statement
@@ -526,7 +538,7 @@ public class LocalStorageJdbcDAO implements DAO {
             ResultSet rs = stmt.executeQuery();
 
             // Using a List to preserve the order in which the data was returned from the query.
-            Collection<User> user = new HashSet<>();
+            Collection<User> user = new ArrayList<>();
 
             // iterate through the query results
             while (rs.next()) {
@@ -570,14 +582,7 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     public void resetDAO() {
-        String sql = "SET FOREIGN_KEY_CHECKS = 0;\n" +
-"\n" +
-"TRUNCATE table unavailability;\n" +
-"TRUNCATE table availability;\n" +
-"TRUNCATE table shift restart identity;\n" +
-"TRUNCATE table user;\n" +
-"\n" +
-"SET FOREIGN_KEY_CHECKS = 1;";
+        String sql = "SET FOREIGN_KEY_CHECKS = 0; TRUNCATE TABLE SHIFT; TRUNCATE TABLE UNAVAILABILITY; TRUNCATE TABLE USER;SET FOREIGN_KEY_CHECKS = 1;";
         try (
             Connection dbCon = DbConnection.getConnection(uri);  
             PreparedStatement stmt = dbCon.prepareStatement(sql);) {
