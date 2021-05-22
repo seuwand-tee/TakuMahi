@@ -40,17 +40,18 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public void addToOpenShifts(Shift shift) {
-        String sql = "insert into Shift(name, start, end, description, notes, type) values (?,?,?,?,?,?)";
+        String sql = "insert into Shift(shiftid, name, start, end, description, notes, type) values (?,?,?,?,?,?,?)";
         try (
             Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             Timestamp start = Timestamp.valueOf(shift.getStart());
             Timestamp end = Timestamp.valueOf(shift.getEnd());
-            stmt.setString(1, shift.getName());
-            stmt.setTimestamp(2, start);
-            stmt.setTimestamp(3, end);
-            stmt.setString(4, shift.getDescription());
-            stmt.setString(5, shift.getNotes());
-            stmt.setString(6, shift.getType().toString());
+            stmt.setInt(1,shift.getEventID());
+            stmt.setString(2, shift.getName());
+            stmt.setTimestamp(3, start);
+            stmt.setTimestamp(4, end);
+            stmt.setString(5, shift.getDescription());
+            stmt.setString(6, shift.getNotes());
+            stmt.setString(7, shift.getType().toString());
 
             stmt.executeUpdate();  // execute the statement
 
@@ -64,20 +65,15 @@ public class LocalStorageJdbcDAO implements DAO {
     public void addUnavailabilityToUser(Integer userID, Unavailability unavailability) {
         String sql = "insert into Unavailability(shiftid, idnumber, start, end, description) values (?,?,?,?,?)";
         try (
-                 Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
-            if(unavailability.getStart() == null) {
-					unavailability.setStart(LocalDateTime.now());
-				}
-            if(unavailability.getEnd() == null) {
-					unavailability.setEnd(LocalDateTime.now());
-				}
+                 Connection dbCon = DbConnection.getConnection(uri);  
+                PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             Timestamp start = Timestamp.valueOf(unavailability.getStart());
             Timestamp end = Timestamp.valueOf(unavailability.getEnd());
             stmt.setInt(1, unavailability.getEventID());
             stmt.setInt(2, userID);
             stmt.setTimestamp(3, start);
             stmt.setTimestamp(4, end);
-            stmt.setString(7, unavailability.getDescription());
+            stmt.setString(5, unavailability.getDescription());
 
             stmt.executeUpdate();  // execute the statement
 
@@ -132,7 +128,8 @@ public class LocalStorageJdbcDAO implements DAO {
     public void deleteFromOpenShifts(Integer eventID) {
         String sql = "delete from Shift where shiftid = ?";
         try (
-                 Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+                 Connection dbCon = DbConnection.getConnection(uri); 
+                PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             stmt.setInt(1, eventID);
             stmt.executeUpdate();  // execute the statement
 
@@ -146,7 +143,8 @@ public class LocalStorageJdbcDAO implements DAO {
     public void deleteUnavailabilityFromUser(Integer userID, Integer eventID) {
         String sql = "delete from Unavailability where shiftid = ? and idnumber = ?)";
         try (
-                 Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+                 Connection dbCon = DbConnection.getConnection(uri);  
+                PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             stmt.setInt(1, eventID);
             stmt.setInt(2, userID);
             stmt.executeUpdate();  // execute the statement
@@ -161,7 +159,8 @@ public class LocalStorageJdbcDAO implements DAO {
     public void deleteUserByID(Integer id) {
         String sql = "delete from User where idnumber = ?";
         try (
-                 Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+                 Connection dbCon = DbConnection.getConnection(uri);  
+                PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             stmt.setInt(1, id);
             stmt.executeUpdate();  // execute the statement
 
@@ -173,7 +172,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public boolean eventExists(Integer eventID) {
-        String sql = "select * from Shift where eventid = ?";
+        String sql = "select * from Shift where shiftid = ?";
 
         try (
                 // get a connection to the database
@@ -231,7 +230,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Event getEventByID(Integer eventID) {
-        String sql = "select * from shift where shiftid = ?";
+        String sql = "select * from Shift where shiftid = ?";
 
         try (
                 // get connection to database
@@ -301,7 +300,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<Shift> getShiftsByUser(Integer userID) {
-        String sql = "select * from Shift where shiftid = ?";
+        String sql = "select * from Shift where idnumber = ?";
 
         try (
                 // get connection to database
@@ -451,12 +450,15 @@ public class LocalStorageJdbcDAO implements DAO {
     @Override
     public Integer getUserHoursForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod) {
         String sql = "Select SUM(DATEDIFF(hour, start, end)diffinhour) from #daytable"; 
+        String drop = "Drop table #daytable";
         try (
                 // get a connection to the database
             Connection dbCon = DbConnection.getConnection(uri); // create the statement
-            PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+            PreparedStatement stmt = dbCon.prepareStatement(sql);
+            PreparedStatement dp = dbCon.prepareStatement(drop);){
             // execute the query
             ResultSet rs = stmt.executeQuery();
+            
 
             if (rs.next()){
                int total = rs.getInt(1);
@@ -464,6 +466,8 @@ public class LocalStorageJdbcDAO implements DAO {
             }else{
             return null;
             }
+           // int dap = dp.executeUpdate();
+            
 
         } catch (SQLException ex) {  // we are forced to catch SQLException
             // don't let the SQLException leak from our DAO encapsulation
@@ -554,7 +558,8 @@ public class LocalStorageJdbcDAO implements DAO {
     public void removeShiftFromUser(Integer userID, Integer eventID) {
         String sql = "delete from Availability where shiftid = ? and idnumber = ?";
         try (
-                 Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+                 Connection dbCon = DbConnection.getConnection(uri);  
+                PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             stmt.setInt(1, eventID);
             stmt.setInt(2, userID);
             stmt.executeUpdate();  // execute the statement

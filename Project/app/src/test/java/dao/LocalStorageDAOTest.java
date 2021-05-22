@@ -14,6 +14,7 @@ import java.util.Collection;
 public class LocalStorageDAOTest {
 
     private static LocalStorageDAO dao;
+   // private static LocalStorageJdbcDAO dao;
 
     private static User userOne;
     private static User userTwo;
@@ -31,8 +32,8 @@ public class LocalStorageDAOTest {
 
     @BeforeAll
     public static void declareAll() {
-
         dao = new LocalStorageDAO();
+        //dao = new LocalStorageJdbcDAO();
 
         userOne = new User();
         userOne.setUsername("jimmy10p");
@@ -107,7 +108,7 @@ public class LocalStorageDAOTest {
         shiftFive.setType(Shift.Type.External);
 
         unavailabilityOne = new Unavailability();
-        unavailabilityOne.setEventID(6);
+        //unavailabilityOne.setEventID(6);
         unavailabilityOne.setStart(LocalDateTime.of(2020, 3, 20, 16, 0));
         unavailabilityOne.setEnd(LocalDateTime.of(2020, 3, 20, 20, 0));
         unavailabilityOne.setDescription("Ain't nobody got time for dat");
@@ -199,13 +200,13 @@ public class LocalStorageDAOTest {
     @Test
     public void addToOpenShiftsTest() {
 
-        assertFalse(dao.eventExists(5));
+        //assertFalse(dao.eventExists(5));
 
         assertFalse(dao.getOpenShifts().contains(shiftFive));
 
         dao.addToOpenShifts(shiftFive);
 
-        assertTrue(dao.eventExists(5));
+        //assertTrue(dao.eventExists(5));
 
         assertTrue(dao.getOpenShifts().contains(shiftFive));
 
@@ -214,7 +215,7 @@ public class LocalStorageDAOTest {
     @Test
     public void deleteFromOpenShiftsTest() {
 
-        assertTrue(dao.eventExists(4));
+        //assertTrue(dao.eventExists(4));
 
         assertTrue(dao.getOpenShifts().contains(shiftFour));
 

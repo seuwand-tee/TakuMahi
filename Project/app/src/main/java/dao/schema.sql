@@ -10,7 +10,7 @@ constraint User_PK primary key (idnumber)
 );
 
 create table Shift(
-shiftid int(10) not null auto_increment(1000),
+shiftid int(10) not null,
 name varchar (100) not null,
 start timestamp not null,
 end timestamp not null,
