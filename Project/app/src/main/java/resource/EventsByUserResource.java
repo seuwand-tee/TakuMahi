@@ -24,7 +24,7 @@ public class EventsByUserResource extends Jooby {
                 * Route that checks User ID is valid
                 */
                 use("/:userId", (req, rsp, chain) -> {
-                    Integer id = Integer.parseInt(req.param("userId").value());
+                    String id = String.valueOf(req.param("userId").value());
 
                     if (dao.userExists(id)) {
 			// ID is OK, so pass request on to the next route in the chain
@@ -39,7 +39,7 @@ public class EventsByUserResource extends Jooby {
                 //Gets events in period for specified user
 		get("/:userId", (req, rsp) -> {       
                     //extracts parameters
-                    Integer userId = Integer.parseInt(req.param("userId").value());
+                    String userId = String.valueOf(req.param("userId").value());
                     String sPeriod = String.valueOf(req.param("startOfPeriod").value());
                     Integer daysInPeriod = Integer.parseInt(req.param("daysInPeriod").value());
                     Integer filter = Integer.parseInt(req.param("filter").value());

@@ -13,8 +13,8 @@ import java.util.Collection;
 
 public class LocalStorageDAOTest {
 
-    private static LocalStorageDAO dao;
-   // private static LocalStorageJdbcDAO dao;
+    //private static LocalStorageDAO dao;
+   private static LocalStorageJdbcDAO dao;
 
     private static User userOne;
     private static User userTwo;
@@ -32,12 +32,12 @@ public class LocalStorageDAOTest {
 
     @BeforeAll
     public static void declareAll() {
-        dao = new LocalStorageDAO();
-        //dao = new LocalStorageJdbcDAO();
+        //dao = new LocalStorageDAO();
+        dao = new LocalStorageJdbcDAO();
 
         userOne = new User();
         userOne.setUsername("jimmy10p");
-        userOne.setIdNumber(1);
+        userOne.setIdNumber("1");
         userOne.setRole(User.Role.Casual);
         userOne.setDepartment(User.Department.StudentIT);
         userOne.setFirstName("Jimmy");
@@ -46,7 +46,7 @@ public class LocalStorageDAOTest {
 
         userTwo = new User();
         userTwo.setUsername("billy20p");
-        userTwo.setIdNumber(2);
+        userTwo.setIdNumber("2");
         userTwo.setRole(User.Role.Manager);
         userTwo.setDepartment(User.Department.GeneralEnquiries);
         userTwo.setFirstName("Billy");
@@ -55,7 +55,7 @@ public class LocalStorageDAOTest {
 
         userThree = new User();
         userThree.setUsername("donna30p");
-        userThree.setIdNumber(3);
+        userThree.setIdNumber("3");
         userThree.setRole(User.Role.Senior);
         userThree.setDepartment(User.Department.StudentIT);
         userThree.setFirstName("Donna");
@@ -138,12 +138,12 @@ public class LocalStorageDAOTest {
         dao.addToOpenShifts(shiftThree);
         dao.addToOpenShifts(shiftFour);
         // leaving shiftFive
-        dao.assignShiftToUser(1, 1);
-        dao.assignShiftToUser(1, 2);
-        dao.assignShiftToUser(1, 3);
+        dao.assignShiftToUser("1", 1);
+        dao.assignShiftToUser("1", 2);
+        dao.assignShiftToUser("1", 3);
         // leaving shiftFour unassigned
-        dao.addUnavailabilityToUser(1, unavailabilityOne);
-        dao.addUnavailabilityToUser(2, unavailabilityTwo);
+        dao.addUnavailabilityToUser("1", unavailabilityOne);
+        dao.addUnavailabilityToUser("2", unavailabilityTwo);
         // leaving unavailabilityThree
 
     }
@@ -158,7 +158,7 @@ public class LocalStorageDAOTest {
     @Test
     public void addUserTest() {
 
-        assertFalse(dao.userExists(3));
+        assertFalse(dao.userExists("3"));
 
         assertFalse(dao.getUsersByRole(User.Role.Senior).contains(userThree));
 
@@ -166,9 +166,9 @@ public class LocalStorageDAOTest {
 
         dao.addUser(userThree);
 
-        assertTrue(dao.userExists(3));
+        assertTrue(dao.userExists("3"));
 
-        User user = dao.getUserByID(3);
+        User user = dao.getUserByID("3");
 
         assertEquals(userThree, user);
 
@@ -181,15 +181,15 @@ public class LocalStorageDAOTest {
     @Test
     public void deleteUserByIDTest() {
 
-        assertTrue(dao.userExists(1));
+        assertTrue(dao.userExists("1"));
 
         assertTrue(dao.getUsersByRole(User.Role.Casual).contains(userOne));
 
         assertTrue(dao.getUsersByDepartment(User.Department.StudentIT).contains(userOne));
 
-        dao.deleteUserByID(1);
+        dao.deleteUserByID("1");
 
-        assertFalse(dao.userExists(1));
+        assertFalse(dao.userExists("1"));
 
         assertFalse(dao.getUsersByRole(User.Role.Casual).contains(userOne));
 
@@ -230,13 +230,13 @@ public class LocalStorageDAOTest {
     @Test
     public void assignShiftToUserTest() {
 
-        assertFalse(dao.getShiftsByUser(2).contains(shiftFour));
+        assertFalse(dao.getShiftsByUser("2").contains(shiftFour));
 
         assertTrue(dao.getOpenShifts().contains(shiftFour));
 
-        dao.assignShiftToUser(2, 4);
+        dao.assignShiftToUser("2", 4);
 
-        assertTrue(dao.getShiftsByUser(2).contains(shiftFour));
+        assertTrue(dao.getShiftsByUser("2").contains(shiftFour));
 
         assertFalse(dao.getOpenShifts().contains(shiftFour));
 
@@ -245,13 +245,13 @@ public class LocalStorageDAOTest {
     @Test
     public void removeShiftFromUserTest() {
 
-        assertTrue(dao.getShiftsByUser(1).contains(shiftThree));
+        assertTrue(dao.getShiftsByUser("1").contains(shiftThree));
 
         assertFalse(dao.getOpenShifts().contains(shiftThree));
 
-        dao.removeShiftFromUser(1, 3);
+        dao.removeShiftFromUser("1", 3);
 
-        assertFalse(dao.getShiftsByUser(1).contains(shiftThree));
+        assertFalse(dao.getShiftsByUser("1").contains(shiftThree));
 
         assertTrue(dao.getOpenShifts().contains(shiftThree));
 
@@ -260,13 +260,13 @@ public class LocalStorageDAOTest {
     @Test
     public void addUnavailabilityToUserTest() {
 
-        assertFalse(dao.getUnavailabilityByUser(2).contains(unavailabilityThree));
+        assertFalse(dao.getUnavailabilityByUser("2").contains(unavailabilityThree));
 
         assertFalse(dao.eventExists(8));
 
-        dao.addUnavailabilityToUser(2, unavailabilityThree);
+        dao.addUnavailabilityToUser("2", unavailabilityThree);
 
-        assertTrue(dao.getUnavailabilityByUser(2).contains(unavailabilityThree));
+        assertTrue(dao.getUnavailabilityByUser("2").contains(unavailabilityThree));
 
         assertTrue(dao.eventExists(8));
 
@@ -275,13 +275,13 @@ public class LocalStorageDAOTest {
     @Test
     public void deleteUnavailabilityFromUserTest() {
 
-        assertTrue(dao.getUnavailabilityByUser(2).contains(unavailabilityTwo));
+        assertTrue(dao.getUnavailabilityByUser("2").contains(unavailabilityTwo));
 
         assertTrue(dao.eventExists(7));
 
-        dao.deleteUnavailabilityFromUser(2, 7);
+        dao.deleteUnavailabilityFromUser("2", 7);
 
-        assertFalse(dao.getUnavailabilityByUser(2).contains(unavailabilityTwo));
+        assertFalse(dao.getUnavailabilityByUser("2").contains(unavailabilityTwo));
 
         assertFalse(dao.eventExists(7));
 
@@ -290,9 +290,9 @@ public class LocalStorageDAOTest {
     @Test
     public void getUserEventsForPeriodTest() {
 
-        Collection<Event> events = dao.getUserEventsForPeriod(1, LocalDate.of(2020, 3, 20), 2, 0);
-        Collection<Event> shifts = dao.getUserEventsForPeriod(1, LocalDate.of(2020, 3, 20), 2, 1);
-        Collection<Event> unavailabilitys = dao.getUserEventsForPeriod(1, LocalDate.of(2020, 3, 20), 2, 2);
+        Collection<Event> events = dao.getUserEventsForPeriod("1", LocalDate.of(2020, 3, 20), 2, 0);
+        Collection<Event> shifts = dao.getUserEventsForPeriod("1", LocalDate.of(2020, 3, 20), 2, 1);
+        Collection<Event> unavailabilitys = dao.getUserEventsForPeriod("1", LocalDate.of(2020, 3, 20), 2, 2);
 
         assertEquals(3, events.size());
         assertTrue(events.contains(shiftOne));
@@ -311,11 +311,11 @@ public class LocalStorageDAOTest {
     @Test
     public void getUserHoursForPeriodTest() {
 
-        int hours = dao.getUserHoursForPeriod(1, LocalDate.of(2020, 3, 20), 2);
+        int hours = dao.getUserHoursForPeriod("1", LocalDate.of(2020, 3, 20), 2);
 
         assertEquals(4, hours);
 
-        hours = dao.getUserHoursForPeriod(1, LocalDate.of(2020, 3, 20), 1);
+        hours = dao.getUserHoursForPeriod("1", LocalDate.of(2020, 3, 20), 1);
 
         assertEquals(2, hours);
 
@@ -324,9 +324,9 @@ public class LocalStorageDAOTest {
     @Test
     public void userExistsTest() {
 
-        assertTrue(dao.userExists(1));
+        assertTrue(dao.userExists("1"));
 
-        assertFalse(dao.userExists(3));
+        assertFalse(dao.userExists("3"));
 
     }
 
@@ -344,7 +344,7 @@ public class LocalStorageDAOTest {
     @Test
     public void getUserByIDTest() {
 
-        User user = dao.getUserByID(1);
+        User user = dao.getUserByID("1");
 
         assertEquals(userOne, user);
 
@@ -383,7 +383,7 @@ public class LocalStorageDAOTest {
     @Test
     public void getShiftsByUserTest() {
 
-        Collection<Shift> shifts = dao.getShiftsByUser(1);
+        Collection<Shift> shifts = dao.getShiftsByUser("1");
 
         assertEquals(3, shifts.size());
         assertTrue(shifts.contains(shiftOne));
@@ -395,7 +395,7 @@ public class LocalStorageDAOTest {
     @Test
     public void getUnavailabilityByUserTest() {
 
-        Collection<Unavailability> unavailabilitys = dao.getUnavailabilityByUser(1);
+        Collection<Unavailability> unavailabilitys = dao.getUnavailabilityByUser("1");
 
         assertEquals(1, unavailabilitys.size());
         assertTrue(unavailabilitys.contains(unavailabilityOne));

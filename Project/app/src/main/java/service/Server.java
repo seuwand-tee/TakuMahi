@@ -44,17 +44,17 @@ public class Server extends Jooby {
         user1.setFirstName("Robert");
         user1.setUsername("RobertTheDestroyer");
         user1.setLastName("Potter");
-        user1.setIdNumber(1);
+        user1.setIdNumber("1");
         User user2 = new User();
         user2.setFirstName("Rionagh");
         user2.setUsername("RionaghTheBoss");
         user2.setLastName("Isat");
-        user2.setIdNumber(2);
+        user2.setIdNumber("2");
         User user3 = new User();
         user3.setUsername("LassoMartin");
         user3.setFirstName("Martin");
         user3.setLastName("Home");
-        user3.setIdNumber(3);
+        user3.setIdNumber("3");
 
         //Test Shifts
         Shift shift1 = new Shift();

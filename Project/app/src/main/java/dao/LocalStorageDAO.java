@@ -21,7 +21,7 @@ public class LocalStorageDAO implements DAO{
     // User access
     private static Multimap<User.Department, User> usersByDepartment = HashMultimap.create();
     private static Multimap<User.Role, User> usersByRole = HashMultimap.create();
-    private static Map<Integer, User> usersByID = new HashMap<>();
+    private static Map<String, User> usersByID = new HashMap<>();
 
     // Event access
     private static Map<Integer, Event> eventsByID = new HashMap<>();
@@ -34,7 +34,7 @@ public class LocalStorageDAO implements DAO{
         User userOne;
         userOne = new User();
         userOne.setUsername("jimmy10p");
-        userOne.setIdNumber(1);
+        userOne.setIdNumber("1");
         userOne.setRole(User.Role.Casual);
         userOne.setDepartment(User.Department.StudentIT);
         userOne.setFirstName("Jimmy");
@@ -54,8 +54,8 @@ public class LocalStorageDAO implements DAO{
         unavailabilityTwo.setDescription("Ain't nobody got time for dat");
 
         addUser(userOne);
-        addUnavailabilityToUser(1, unavailabilityOne);
-        addUnavailabilityToUser(1, unavailabilityTwo);
+        addUnavailabilityToUser("1", unavailabilityOne);
+        addUnavailabilityToUser("1", unavailabilityTwo);
     }
 
     /**
@@ -77,7 +77,7 @@ public class LocalStorageDAO implements DAO{
      * @param id The ID value for the User being deleted.
      */
     @Override
-    public void deleteUserByID(Integer id) {
+    public void deleteUserByID(String id) {
         User u = usersByID.get(id);
         Collection<Shift> s = shiftsByUser.get(u);
         for (Shift sh : s) {
@@ -123,7 +123,7 @@ public class LocalStorageDAO implements DAO{
      * @param shiftID The ID for the shift being assigned.
      */
     @Override
-    public void assignShiftToUser(Integer userID, Integer shiftID) {
+    public void assignShiftToUser(String userID, Integer shiftID) {
         Shift s = openShifts.get(shiftID);
         User u = usersByID.get(userID);
         s.setUser(u);
@@ -138,7 +138,7 @@ public class LocalStorageDAO implements DAO{
      * @param eventID The ID for the shift being removed.
      */
     @Override
-    public void removeShiftFromUser(Integer userID, Integer eventID) {
+    public void removeShiftFromUser(String userID, Integer eventID) {
         Shift s = (Shift) eventsByID.get(eventID);
         User u = usersByID.get(userID);
         shiftsByUser.remove(u, s);
@@ -153,7 +153,7 @@ public class LocalStorageDAO implements DAO{
      * @param unavailability The Unavailability being added.
      */
     @Override
-    public void addUnavailabilityToUser(Integer userID, Unavailability unavailability) {
+    public void addUnavailabilityToUser(String userID, Unavailability unavailability) {
         User u = usersByID.get(userID);
         unavailability.setUser(u);
         unavailabilityByUser.put(u, unavailability);
@@ -168,7 +168,7 @@ public class LocalStorageDAO implements DAO{
      * @param eventID The EventID of the Unavailability.
      */
     @Override
-    public void deleteUnavailabilityFromUser(Integer userID, Integer eventID) {
+    public void deleteUnavailabilityFromUser(String userID, Integer eventID) {
         User u = usersByID.get(userID);
         Unavailability un = (Unavailability) eventsByID.get(eventID);
         unavailabilityByUser.remove(u, un);
@@ -185,7 +185,7 @@ public class LocalStorageDAO implements DAO{
      * @return Returns a Collection of type Event. If no events fit criteria the Collection will be empty.
      */
     @Override
-    public Collection<Event> getUserEventsForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
+    public Collection<Event> getUserEventsForPeriod(String userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
         Collection<Event> events = new ArrayList<>();
         Collection<Event> usersEvents = new ArrayList<>();
         for (int i = 0; i < daysInPeriod; i++) {
@@ -233,7 +233,7 @@ public class LocalStorageDAO implements DAO{
      * @return Returns a Integer value representing the sum of hours assigned.
      */
     @Override
-    public Integer getUserHoursForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod) {
+    public Integer getUserHoursForPeriod(String userID, LocalDate startOfPeriod, int daysInPeriod) {
         Collection<Event> shifts = getUserEventsForPeriod(userID, startOfPeriod, daysInPeriod, 1);
         int sum = 0;
         for (Event e : shifts) {
@@ -249,7 +249,7 @@ public class LocalStorageDAO implements DAO{
      * @return Returns true if the user is located, false if not.
      */
     @Override
-    public boolean userExists(Integer userID) {
+    public boolean userExists(String userID) {
         return usersByID.containsKey(userID);
     }
     
@@ -266,7 +266,7 @@ public class LocalStorageDAO implements DAO{
      * @return Returns the User object with that ID.
      */
     @Override
-    public User getUserByID(Integer userID) {
+    public User getUserByID(String userID) {
         return usersByID.get(userID);
     }
 
@@ -293,7 +293,7 @@ public class LocalStorageDAO implements DAO{
      * @return Returns all shifts assigned to that User.
      */
     @Override
-    public Collection<Shift> getShiftsByUser(Integer userID) {
+    public Collection<Shift> getShiftsByUser(String userID) {
         return shiftsByUser.get(usersByID.get(userID));
     }
 
@@ -302,7 +302,7 @@ public class LocalStorageDAO implements DAO{
      * @return Returns all unavailability events for that User.
      */
     @Override
-    public Collection<Unavailability> getUnavailabilityByUser(Integer userID) {
+    public Collection<Unavailability> getUnavailabilityByUser(String userID) {
         return unavailabilityByUser.get(usersByID.get(userID));
     }
 

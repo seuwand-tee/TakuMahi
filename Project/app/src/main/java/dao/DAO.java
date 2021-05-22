@@ -31,7 +31,7 @@ public interface DAO {
      * @param userID The ID of the User.
      * @param unavailability The Unavailability being added.
      */
-    void addUnavailabilityToUser(Integer userID, Unavailability unavailability);
+    void addUnavailabilityToUser(String userID, Unavailability unavailability);
 
     /**
      * This adds a User object to the relevant collections, based on ID, Role, and Department.
@@ -46,7 +46,7 @@ public interface DAO {
      * @param userID The ID for the user receiving the shift.
      * @param shiftID The ID for the shift being assigned.
      */
-    void assignShiftToUser(Integer userID, Integer shiftID);
+    void assignShiftToUser(String userID, Integer shiftID);
 
     /**
      * This deletes a Shift from the OpenShifts collection.
@@ -61,7 +61,7 @@ public interface DAO {
      * @param userID The ID of the User.
      * @param eventID The EventID of the Unavailability.
      */
-    void deleteUnavailabilityFromUser(Integer userID, Integer eventID);
+    void deleteUnavailabilityFromUser(String userID, Integer eventID);
 
     /**
      * This deletes a User from the relevant collections.
@@ -70,7 +70,7 @@ public interface DAO {
      * the UnavailabilityByUser collection. And then they are removed from all User collections.
      * @param id The ID value for the User being deleted.
      */
-    void deleteUserByID(Integer id);
+    void deleteUserByID(String id);
 
     /**
      * @param eventID The EventID to check.
@@ -98,19 +98,19 @@ public interface DAO {
      * @param userID The ID of the User.
      * @return Returns all shifts assigned to that User.
      */
-    Collection<Shift> getShiftsByUser(Integer userID);
+    Collection<Shift> getShiftsByUser(String userID);
 
     /**
      * @param userID The ID of the User.
      * @return Returns all unavailability events for that User.
      */
-    Collection<Unavailability> getUnavailabilityByUser(Integer userID);
+    Collection<Unavailability> getUnavailabilityByUser(String userID);
 
     /**
      * @param userID The ID of the User.
      * @return Returns the User object with that ID.
      */
-    User getUserByID(Integer userID);
+    User getUserByID(String userID);
 
     /**
      * This returns a Collection of events relevant to a given user, over a given period.
@@ -120,7 +120,7 @@ public interface DAO {
      * @param filter Filter decides which events get returned. 0 is all, 1 is Shift, and 2 is Unavailability.
      * @return Returns a Collection of type Event. If no events fit criteria the Collection will be empty.
      */
-    Collection<Event> getUserEventsForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod, int filter);
+    Collection<Event> getUserEventsForPeriod(String userID, LocalDate startOfPeriod, int daysInPeriod, int filter);
 
     /**
      * This will return the amount of hours a User has been assigned for a given period.
@@ -131,7 +131,7 @@ public interface DAO {
      * @param daysInPeriod The amount of days in the period.
      * @return Returns a Integer value representing the sum of hours assigned.
      */
-    Integer getUserHoursForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod);
+    Integer getUserHoursForPeriod(String userID, LocalDate startOfPeriod, int daysInPeriod);
 
     /**
      * @param department The User Department value.
@@ -151,7 +151,7 @@ public interface DAO {
      * @param userID The ID for the user the shift is being removed from.
      * @param eventID The ID for the shift being removed.
      */
-    void removeShiftFromUser(Integer userID, Integer eventID);
+    void removeShiftFromUser(String userID, Integer eventID);
 
     /**
      * WARNING: WILL WIPE ALL DATA.
@@ -164,6 +164,6 @@ public interface DAO {
      * @param userID The ID of the User.
      * @return Returns true if the user is located, false if not.
      */
-    boolean userExists(Integer userID);
+    boolean userExists(String userID);
     
 }

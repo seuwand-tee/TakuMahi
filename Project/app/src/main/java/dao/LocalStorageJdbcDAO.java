@@ -62,18 +62,17 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public void addUnavailabilityToUser(Integer userID, Unavailability unavailability) {
-        String sql = "insert into Unavailability(shiftid, idnumber, start, end, description) values (?,?,?,?,?)";
+    public void addUnavailabilityToUser(String userID, Unavailability unavailability) {
+        String sql = "insert into Unavailability(idnumber, start, end, description) values (?,?,?,?,?)";
         try (
                  Connection dbCon = DbConnection.getConnection(uri);  
                 PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             Timestamp start = Timestamp.valueOf(unavailability.getStart());
             Timestamp end = Timestamp.valueOf(unavailability.getEnd());
-            stmt.setInt(1, unavailability.getEventID());
-            stmt.setInt(2, userID);
-            stmt.setTimestamp(3, start);
-            stmt.setTimestamp(4, end);
-            stmt.setString(5, unavailability.getDescription());
+            stmt.setString(1, userID);
+            stmt.setTimestamp(2, start);
+            stmt.setTimestamp(3, end);
+            stmt.setString(4, unavailability.getDescription());
 
             stmt.executeUpdate();  // execute the statement
 
@@ -90,7 +89,7 @@ public class LocalStorageJdbcDAO implements DAO {
                  Connection dbCon = DbConnection.getConnection(uri);  
                 PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             stmt.setString(1, user.getUsername());
-            stmt.setInt(2, user.getIdNumber());
+            stmt.setString(2, user.getIdNumber());
             stmt.setString(3, user.getRole().toString());
             stmt.setString(4, user.getDepartment().toString());
             stmt.setString(5, user.getFirstName());
@@ -106,13 +105,13 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public void assignShiftToUser(Integer userID, Integer shiftID) {
-        String sql = "insert into Availability(shiftid, idnumber) values (?,?)";
+    public void assignShiftToUser(String userID, Integer shiftID) {
+        String sql = "update Shift set idnumber = ? where shiftid = ?";
         try (
                  Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
 
-            stmt.setInt(1, shiftID);
-            stmt.setInt(2, userID);
+            stmt.setString(1, userID);
+            stmt.setInt(2, shiftID);
             
 
             stmt.executeUpdate();  // execute the statement
@@ -126,7 +125,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public void deleteFromOpenShifts(Integer eventID) {
-        String sql = "delete from Shift where shiftid = ?";
+        String sql = "Delete from Shifts where shiftid = ?";
         try (
                  Connection dbCon = DbConnection.getConnection(uri); 
                 PreparedStatement stmt = dbCon.prepareStatement(sql);) {
@@ -140,13 +139,13 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public void deleteUnavailabilityFromUser(Integer userID, Integer eventID) {
+    public void deleteUnavailabilityFromUser(String userID, Integer eventID) {
         String sql = "delete from Unavailability where shiftid = ? and idnumber = ?)";
         try (
                  Connection dbCon = DbConnection.getConnection(uri);  
                 PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             stmt.setInt(1, eventID);
-            stmt.setInt(2, userID);
+            stmt.setString(2, userID);
             stmt.executeUpdate();  // execute the statement
 
         } catch (SQLException ex) {  // we are forced to catch SQLException
@@ -156,12 +155,12 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public void deleteUserByID(Integer id) {
+    public void deleteUserByID(String id) {
         String sql = "delete from User where idnumber = ?";
         try (
                  Connection dbCon = DbConnection.getConnection(uri);  
                 PreparedStatement stmt = dbCon.prepareStatement(sql);) {
-            stmt.setInt(1, id);
+            stmt.setString(1, id);
             stmt.executeUpdate();  // execute the statement
 
         } catch (SQLException ex) {  // we are forced to catch SQLException
@@ -209,7 +208,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
                 // get the data out of the query
                 String username = rs.getString("username");
-                Integer idnumber = rs.getInt("idnumber");
+                String idnumber = rs.getString("idnumber");
                 User.Role role = (User.Role) rs.getObject("role");
                 String firstname = rs.getString("firstname");
                 String lastname = rs.getString("lastname");
@@ -266,7 +265,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<Shift> getOpenShifts() {
-        String sql = "select * from Shifts order by shiftid";
+        String sql = "select * from Shifts order by shiftid where idnumber is null";
 
         try (
                 // get a connection to the database
@@ -299,7 +298,7 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public Collection<Shift> getShiftsByUser(Integer userID) {
+    public Collection<Shift> getShiftsByUser(String userID) {
         String sql = "select * from Shift where idnumber = ?";
 
         try (
@@ -307,7 +306,7 @@ public class LocalStorageJdbcDAO implements DAO {
                  Connection connection = DbConnection.getConnection(uri); // create the statement
                   PreparedStatement stmt = connection.prepareStatement(sql);) {
             // set the parameter
-            stmt.setInt(1, userID);
+            stmt.setString(1, userID);
 
             // execute the query
             ResultSet rs = stmt.executeQuery();
@@ -337,7 +336,7 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public Collection<Unavailability> getUnavailabilityByUser(Integer userID) {
+    public Collection<Unavailability> getUnavailabilityByUser(String userID) {
         String sql = "select * from Unavailability where idnumber = ?";
 
         try (
@@ -345,7 +344,7 @@ public class LocalStorageJdbcDAO implements DAO {
                  Connection connection = DbConnection.getConnection(uri); // create the statement
                   PreparedStatement stmt = connection.prepareStatement(sql);) {
             // set the parameter
-            stmt.setInt(1, userID);
+            stmt.setString(1, userID);
 
             // execute the query
             ResultSet rs = stmt.executeQuery();
@@ -372,7 +371,7 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public User getUserByID(Integer userID) {
+    public User getUserByID(String userID) {
         String sql = "select * from User where idnumber = ?";
 
         try (
@@ -380,7 +379,7 @@ public class LocalStorageJdbcDAO implements DAO {
                  Connection connection = DbConnection.getConnection(uri); // create the statement
                   PreparedStatement stmt = connection.prepareStatement(sql);) {
             // set the parameter
-            stmt.setInt(1, userID);
+            stmt.setString(1, userID);
 
             // execute the query
             ResultSet rs = stmt.executeQuery();
@@ -388,7 +387,7 @@ public class LocalStorageJdbcDAO implements DAO {
             // query only returns a single result, so use 'if' instead of 'while'
             if (rs.next()) {
                 String username = rs.getString("username");
-                Integer idnumber = rs.getInt("idnumber");
+                String idnumber = rs.getString("idnumber");
                 User.Role role = (User.Role) rs.getObject("role");
                 String firstname = rs.getString("firstname");
                 String lastname = rs.getString("lastname");
@@ -408,14 +407,14 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public Collection<Event> getUserEventsForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
-       String sql = "select * into #daytable from Availability where idnumber = ? and start >= ?";
+    public Collection<Event> getUserEventsForPeriod(String userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
+       String sql = "select * into #daytable from Shift where idnumber = ? and start >= ?";
         try (
                 // get a connection to the database
             Connection dbCon = DbConnection.getConnection(uri); // create the statement
             PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             Timestamp days = Timestamp.valueOf(startOfPeriod.toString());
-            stmt.setInt(1, userID);
+            stmt.setString(1, userID);
             stmt.setTimestamp(2, days);
             
             // execute the query
@@ -448,7 +447,7 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public Integer getUserHoursForPeriod(Integer userID, LocalDate startOfPeriod, int daysInPeriod) {
+    public Integer getUserHoursForPeriod(String userID, LocalDate startOfPeriod, int daysInPeriod) {
         String sql = "Select SUM(DATEDIFF(hour, start, end)diffinhour) from #daytable"; 
         String drop = "Drop table #daytable";
         try (
@@ -494,7 +493,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
                 // get the data out of the query
                 String username = rs.getString("username");
-                Integer idnumber = rs.getInt("idnumber");
+                String idnumber = rs.getString("idnumber");
                 User.Role role = (User.Role) rs.getObject("role");
                 String firstname = rs.getString("firstname");
                 String lastname = rs.getString("lastname");
@@ -534,7 +533,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
                 // get the data out of the query
                 String username = rs.getString("username");
-                Integer idnumber = rs.getInt("idnumber");
+                String idnumber = rs.getString("idnumber");
                 String firstname = rs.getString("firstname");
                 String lastname = rs.getString("lastname");
                 String emailaddress = rs.getString("emailaddress");
@@ -555,13 +554,13 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public void removeShiftFromUser(Integer userID, Integer eventID) {
-        String sql = "delete from Availability where shiftid = ? and idnumber = ?";
+    public void removeShiftFromUser(String userID, Integer eventID) {
+        String sql = "Update into Shift idnumber = null where shiftid = ? and idnumber = ?";
         try (
                  Connection dbCon = DbConnection.getConnection(uri);  
                 PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             stmt.setInt(1, eventID);
-            stmt.setInt(2, userID);
+            stmt.setString(2, userID);
             stmt.executeUpdate();  // execute the statement
 
         } catch (SQLException ex) {  // we are forced to catch SQLException
@@ -591,14 +590,14 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public boolean userExists(Integer userID) {
+    public boolean userExists(String userID) {
         String sql = "select * from User where idnumber = ?";
 
         try (
                 // get a connection to the database
                  Connection dbCon = DbConnection.getConnection(uri); // create the statement
                   PreparedStatement stmt = dbCon.prepareStatement(sql);) {
-            stmt.setInt(1, userID);
+            stmt.setString(1, userID);
 // execute the query
             ResultSet rs = stmt.executeQuery();
 
