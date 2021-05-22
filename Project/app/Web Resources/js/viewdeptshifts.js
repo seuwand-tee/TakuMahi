@@ -262,17 +262,7 @@ function setDates() {
 }
 
 //fills calendar with the users/shifts in shift list
-function fillCalendar() {
-    //clear calendar
-//    cellMappings.clear();
-//    currentEvents.clear();
-//    loadedCells = [];
-//    let tds = document.getElementsByClassName("calendar container-fluid")[0].getElementsByTagName("td");
-//    let cells = [...tds];
-//    cells.forEach((cell) => {
-//        $(cell).removeClass("selected");
-//    })
-//  
+function fillCalendar() { 
     $("#tbody").empty();
     const table = document.getElementById("tbody");
     //set users to those in shift list
@@ -624,17 +614,17 @@ $("#next-button").on("click", function(){
             initRequest.send();
             deptShifts = allList.slice();
             break;
-        case "StudentIT":
+        case "Student IT":
             studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', false);
             studItInitRequest.send();
             deptShifts = studItList.slice();
             break;
-        case "AskIT":
+        case "Ask IT":
             askItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/AskIT', false);
             askItInitRequest.send();
             deptShifts = askItList.slice();
             break;
-        case "GeneralEnquiries":
+        case "General Enquiries":
             genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', false);
             genEnqInitRequest.send();
             deptShifts = genEnqList.slice();
@@ -709,17 +699,18 @@ $("#back-button").on("click", function(){
             initRequest.send();
             deptShifts = allList.slice();
             break;
-        case "StudentIT":
+        case "Student IT":
             studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', false);
             studItInitRequest.send();
             deptShifts = studItList.slice();
             break;
-        case "AskIT":
+        case "Ask IT":
             askItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/AskIT', false);
             askItInitRequest.send();
             deptShifts = askItList.slice();
+            console.log(deptShifts);
             break;
-        case "GeneralEnquiries":
+        case "General Enquiries":
             genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', false);
             genEnqInitRequest.send();
             deptShifts = genEnqList.slice();
