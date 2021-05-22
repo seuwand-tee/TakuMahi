@@ -2,6 +2,7 @@
 
 //Variable declarations: Lists for storing queries, call booleans and calendar
 var shftList = new Array();
+var users = new Array();
 var allList = new Array();
 var studItList = new Array();
 var studItCalled = false;
@@ -28,13 +29,26 @@ var request = new XMLHttpRequest();
 initRequest.open('GET', 'http://localhost:8080/api/staff', false);
 initRequest.onload = function () {
     var data = JSON.parse(initRequest.response);
+    //set dates for request
+    let pMonth = days[0].getMonth() + 1;
+    if (pMonth.toString().length < 2) {
+        pMonth = "0" + pMonth
+    }
+    let pDate = days[0].getDate();
+    if (pDate.toString().length < 2) {
+        pDate = "0" + pDate
+    }
+    let pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
     for(let i=0; i<data.length; i++){
         let userId = data[i].idNumber;
-        request.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        if (!users.includes(userId)){
+            users.push(userId);
+        }
+        request.open('GET', 'http://localhost:8080/api/staff/events/' + userId + '?startOfPeriod=' + pStart + '&daysInPeriod=7&filter=1', false);
         request.onload = function () {
             var shifts = JSON.parse(request.response);
             for(let j=0; j<shifts.length; j++) {
-                shftList.push(shifts[j]);
+                allList.push(shifts[j]);
             }
         };
         request.send();
@@ -44,16 +58,29 @@ initRequest.onload = function () {
 //StudentIT Request
 var studItInitRequest = new XMLHttpRequest();
 var studItRequest = new XMLHttpRequest();
-studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', false);
+studItInitRequest.open('GET', 'http://localhost:8080/api/staff/events/department/StudentIT', false);
 studItInitRequest.onload = function () {
     var data = JSON.parse(studItInitRequest.response);
+    //set dates for request
+    let pMonth = days[0].getMonth() + 1;
+    if (pMonth.toString().length < 2) {
+        pMonth = "0" + pMonth
+    }
+    let pDate = days[0].getDate();
+    if (pDate.toString().length < 2) {
+        pDate = "0" + pDate
+    }
+    let pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
     for(let i=0; i<data.length; i++){
         let userId = data[i].idNumber;
+        if (!users.includes(userId)){
+            users.push(userId);
+        }
         studItRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
         studItRequest.onload = function () {
             var shifts = JSON.parse(studItRequest.response);
             for(let j=0; j<shifts.length; j++) {
-                shftList.push(shifts[j]);
+                studItList.push(shifts[j]);
             }
         };
         studItRequest.send();
@@ -73,7 +100,7 @@ askItInitRequest.onload = function () {
         askItRequest.onload = function () {
             var shifts = JSON.parse(askItRequest.response);
             for(let j=0; j<shifts.length; j++) {
-                shftList.push(shifts[j]);
+                askItList.push(shifts[j]);
             }
         };
         askItRequest.send();
@@ -93,7 +120,7 @@ genEnqInitRequest.onload = function () {
         genEnqRequest.onload = function () {
             var shifts = JSON.parse(genEnqRequest.response);
             for(let j=0; j<shifts.length; j++) {
-                shftList.push(shifts[j]);
+                genEnqList.push(shifts[j]);
             }
         };
         genEnqRequest.send();
@@ -113,7 +140,7 @@ managerInitRequest.onload = function () {
         managerRequest.onload = function () {
             var shifts = JSON.parse(managerRequest.response);
             for(let j=0; j<shifts.length; j++) {
-                shftList.push(shifts[j]);
+                managerList.push(shifts[j]);
             }
         };
         managerRequest.send();
@@ -133,7 +160,7 @@ seniorInitRequest.onload = function () {
         seniorRequest.onload = function () {
             var shifts = JSON.parse(seniorRequest.response);
             for(let j=0; j<shifts.length; j++) {
-                shftList.push(shifts[j]);
+                seniorList.push(shifts[j]);
             }
         };
         seniorRequest.send();
@@ -153,7 +180,7 @@ casualInitRequest.onload = function () {
         casualRequest.onload = function () {
             var shifts = JSON.parse(casualRequest.response);
             for(let j=0; j<shifts.length; j++) {
-                shftList.push(shifts[j]);
+                casualList.push(shifts[j]);
             }
         };
         casualRequest.send();
@@ -164,30 +191,30 @@ casualInitRequest.onload = function () {
 //initial setup
 setDates();
 initRequest.send();
-allList = shftList.slice();
-fillTable();
+shftList = allList.slice();
+//fillTable();
 fillCalendar();
 
 //fills table with shifts in the shftList array
-function fillTable(){
-    const table = document.getElementById("tbody");
-    for(let y=0; y<shftList.length; y++){
-        let row = table.insertRow();
-        let name = row.insertCell(0);
-        let id = row.insertCell(1);
-        let type = row.insertCell(2);
-        let user = row.insertCell(3);
-        let start = row.insertCell(4);
-        let end = row.insertCell(5);
-        let shift = shftList[y];
-        name.innerHTML = shift.name;
-        id.innerHTML = shift.eventID;
-        type.innerHTML = shift.type;
-        user.innerHTML = shift.user.firstName + " " + shift.user.lastName;
-        start.innerHTML = shift.start.dateTime.date.day + "/" + shift.start.dateTime.date.month + "/" + shift.start.dateTime.date.year + " " + shift.start.dateTime.time.hour + ":" + shift.start.dateTime.time.minute;
-        end.innerHTML = shift.end.dateTime.date.day + "/" + shift.end.dateTime.date.month + "/" + shift.end.dateTime.date.year + " " + shift.end.dateTime.time.hour + ":" + shift.end.dateTime.time.minute;
-    }
-}
+//function fillTable(){
+//    const tabl = document.getElementById("tbody");
+//    for(let y=0; y<shftList.length; y++){
+//        let row = tabl.insertRow();
+//        let name = row.insertCell(0);
+//        let id = row.insertCell(1);
+//        let type = row.insertCell(2);
+//        let user = row.insertCell(3);
+//        let start = row.insertCell(4);
+//        let end = row.insertCell(5);
+//        let shift = shftList[y];
+//        name.innerHTML = shift.name;
+//        id.innerHTML = shift.eventID;
+//        type.innerHTML = shift.type;
+//        user.innerHTML = shift.user.firstName + " " + shift.user.lastName;
+//        start.innerHTML = shift.start.dateTime.date.day + "/" + shift.start.dateTime.date.month + "/" + shift.start.dateTime.date.year + " " + shift.start.dateTime.time.hour + ":" + shift.start.dateTime.time.minute;
+//        end.innerHTML = shift.end.dateTime.date.day + "/" + shift.end.dateTime.date.month + "/" + shift.end.dateTime.date.year + " " + shift.end.dateTime.time.hour + ":" + shift.end.dateTime.time.minute;
+//    }
+//}
 
 function setDates() {
     const offSet = currentDate.getDay() - 1;
@@ -206,6 +233,7 @@ function setDates() {
     document.getElementById("sunday").innerText = days[6].toDateString();
 }
 
+//fills calendar with the users/shifts in shift list
 function fillCalendar() {
     //clear calendar
     cellMappings.clear();
@@ -217,74 +245,62 @@ function fillCalendar() {
         $(cell).removeClass("selected");
     })
     
-    //set dates for request
-    let pMonth = days[0].getMonth() + 1;
-    if (pMonth.toString().length < 2) {
-        pMonth = "0" + pMonth
-    }
-    let pDate = days[0].getDate();
-    if (pDate.toString().length < 2) {
-        pDate = "0" + pDate
-    }
-    let pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
+    const table = document.getElementById("tbody");
     
-    let shiftRequest = new XMLHttpRequest();
-    //TO DO: Fill with actual details
-    shiftRequest.open('GET', 'http://localhost:8080/api/staff/events/0?startOfPeriod=' + pStart + '&daysInPeriod=7&filter=1', true);
-    shiftRequest.onload = function () {
-        
-        let data = JSON.parse(this.response);
-        
-        if (shiftRequest.status >= 200 && shiftRequest.status < 400) {
-            let cells = []
-            
-            data.forEach((shift) => {
-                let s = shift.start.dateTime;
-                let e = shift.end.dateTime;
+    for(let i=0; i<users.length; i++) {
+        let user = users[i];
+        for(let j=0; j<shftList.length; j++) {
+            let shift = shftList[j];
+            if (user == shift.user.idNumber){
+                let s = shftList[j].start.dateTime;
+                let e = shftList[j].end.dateTime;
                 let start = new Date(s.date.year, s.date.month - 1, s.date.day, s.time.hour, s.time.minute, s.time.second);
                 let end = new Date(e.date.year, e.date.month - 1, e.date.day, e.time.hour, e.time.minute, e.time.second);
                 
-                let cellID = start.getDay().toString();
-                if (cellID === "0") {
-                    cellID = "6";
-                } else {
-                    cellID = cellID - 1;
-                }
-                let hours = start.getHours().toString();
-                if (hours.length < 2) {
-                    hours = "0" + hours;
-                }
-                cellID += hours;
+                let row = table.insertRow();
+                let userCell = row.insertCell(0);
+                let mondayCell = row.insertCell(1);
+                let tuesdayCell = row.insertCell(2);
+                let wednesdayCell = row.insertCell(3);
+                let thursdayCell = row.insertCell(4);
+                let fridayCell = row.insertCell(5);
+                let saturdayCell = row.insertCell(6);
+                let sundayCell = row.insertCell(7);
                 
-                let event = new Event(start,end);
-                event.eventID = shift.eventID;
+                userCell.innerHTML = shift.user.firstName + " " + shift.user.lastName;
+                userCell.classList.add("table-dark");
                 
-                let span = end.getHours() - start.getHours();
-                for (let j = 1; j <= span; j++) {
-                    let c = cellID++
-                    
-                    if ((""+c).length == 1) {
-                        c = "00"+c;
-                    } else if ((""+c).length == 2) {
-                        c = "0"+c;
-                    }
-                    c = c + "";
-                    cellMappings.set(c, event.eventID);
-                    cells.push(c);
-                    console.log(event);
-                    console.log(event.cellID);
-                    event.cellID.push(c);
+                let dayOfWeek = start.getDay().toString();
+                switch(dayOfWeek) {
+                    case "0":
+                        sundayCell.innerHTML = start.time.hour + ":" + start.time.minute + " to " + end.time.hour + ":" + end.time.minute;
+                        break;
+                    case "1":
+                        mondayCell.innerHTML = start.time.hour + ":" + start.time.minute + " to " + end.time.hour + ":" + end.time.minute;
+                        break;
+                    case "2":
+                        tuesdayCell.innerHTML = start.time.hour + ":" + start.time.minute + " to " + end.time.hour + ":" + end.time.minute;
+                        break;
+                    case "3":
+                        wednesdayCell.innerHTML = start.time.hour + ":" + start.time.minute + " to " + end.time.hour + ":" + end.time.minute;
+                        break;
+                    case "4":
+                        thursdayCell.innerHTML = start.time.hour + ":" + start.time.minute + " to " + end.time.hour + ":" + end.time.minute;
+                        break;
+                    case "5":
+                        fridayCell.innerHTML = start.time.hour + ":" + start.time.minute + " to " + end.time.hour + ":" + end.time.minute;
+                        break;
+                    case "6":
+                        saturdayCell.innerHTML = s.time.hour + ":" + s.time.minute + " to " + e.time.hour + ":" + e.time.minute;
+                        saturdayCell.style.backgroundColor = "rgba(255,193,14,255)";
+                        break;
                 }
-                currentEvents.set(event.eventID, event);
-            });
-            
-            cells.forEach((cell) => {
-                $('#' + cell).addClass("selected");
-                loadedCells.push(cell);
-            })
+                //let shiftDay = 
+            } else {
+                break;
+            }
         }
     }
-    shiftRequest.send();
 }
 
 //when All Departments Clicked
@@ -306,7 +322,7 @@ $("#allDeptBtn").on("click", function(){
             shftList = casualList.slice();
             break;
     }
-    fillTable();
+    fillCalendar();
     document.getElementById("selectedOption").innerHTML = "All Departments";
 });
 
@@ -316,7 +332,7 @@ $("#studItBtn").on("click", function(){
     shftList = [];
     if (studItCalled == false) {
         studItInitRequest.send();
-        studItList = shftList.slice();
+        shftList = studItList.slice();
     } else if (studItCalled) {
         shftList = studItList.slice();
     }
@@ -334,7 +350,7 @@ $("#studItBtn").on("click", function(){
             shftList = shftList.filter(a => casualList.some(b => a.eventID === b.eventID));
             break;
     }
-    fillTable();
+    fillCalendar();
     document.getElementById("selectedOption").innerHTML = "Student IT";
 });
 
@@ -344,7 +360,7 @@ $("#askItBtn").on("click", function(){
     shftList = [];
     if (askItCalled == false) {
         askItInitRequest.send();
-        askItList = shftList.slice();
+        shftList = askItList.slice();
     } else if (askItCalled) {
         shftList = askItList.slice();
     }
@@ -362,7 +378,7 @@ $("#askItBtn").on("click", function(){
             shftList = shftList.filter(a => casualList.some(b => a.eventID === b.eventID));
             break;
     }
-    fillTable();
+    fillCalendar();
     document.getElementById("selectedOption").innerHTML = "Ask IT";
 });
 
@@ -372,7 +388,7 @@ $("#genEnqBtn").on("click", function(){
     shftList = [];
     if (genEnqCalled == false) {
         genEnqInitRequest.send();
-        genEnqList = shftList.slice();
+        shftList = genEnqList.slice();
     } else if (genEnqCalled) {
         shftList = genEnqList.slice();
     }
@@ -390,7 +406,7 @@ $("#genEnqBtn").on("click", function(){
             shftList = shftList.filter(a => casualList.some(b => a.eventID === b.eventID));
             break;
     }
-    fillTable();
+    fillCalendar();
     document.getElementById("selectedOption").innerHTML = "General Enquiries";
 });
 
@@ -413,7 +429,7 @@ $("#allRoleBtn").on("click", function(){
             shftList = genEnqList.slice();
             break;
     }  
-    fillTable();
+    fillCalendar();
     document.getElementById("selectedRole").innerHTML = "All Roles";
 });
 
@@ -423,7 +439,7 @@ $("#managerBtn").on("click", function(){
     shftList = [];
     if (managerCalled == false) {
         managerInitRequest.send();
-        managerList = shftList.slice();
+        shftList = managerList.slice();
     } else if (managerCalled) {
         shftList = managerList.slice();
     }
@@ -441,7 +457,7 @@ $("#managerBtn").on("click", function(){
             shftList = shftList.filter(a => genEnqList.some(b => a.eventID === b.eventID));
             break;
     }  
-    fillTable();
+    fillCalendar();
     document.getElementById("selectedRole").innerHTML = "Manager";
 });
 
@@ -451,7 +467,7 @@ $("#seniorBtn").on("click", function(){
     shftList = [];
     if (seniorCalled == false) {
         seniorInitRequest.send();
-        seniorList = shftList.slice();
+        shftList = seniorList.slice();
     } else if (genEnqCalled) {
         shftList = seniorList.slice();
     }
@@ -469,7 +485,7 @@ $("#seniorBtn").on("click", function(){
             shftList = shftList.filter(a => genEnqList.some(b => a.eventID === b.eventID));
             break;
     }
-    fillTable();
+    fillCalendar();
     document.getElementById("selectedRole").innerHTML = "Senior";
 });
 
@@ -479,7 +495,7 @@ $("#casualBtn").on("click", function(){
     shftList = [];
     if (casualCalled == false) {
         casualInitRequest.send();
-        casualList = shftList.slice();
+        shftList = casualList.slice();
     } else if (casualCalled) {
         shftList = casualList.slice();
     }
@@ -497,6 +513,162 @@ $("#casualBtn").on("click", function(){
             shftList = shftList.filter(a => genEnqList.some(b => a.eventID === b.eventID));
             break;
     }
-    fillTable();
+    fillCalendar();
     document.getElementById("selectedRole").innerHTML = "Casual";
+});
+
+//When Next Button Clicked
+$("#next-button").on("click", function(){
+    //reset calendar and stored queries
+    $("#tbody").empty();
+    shftList = [];
+    allList = [];
+    studItList = [];
+    studItCalled = false;
+    askItList = [];
+    askItCalled = false;
+    genEnqList = [];
+    genEnqCalled = false;
+    managerList = [];
+    managerCalled = false;
+    seniorList = [];
+    seniorCalled = false;
+    casualList = [];
+    casualCalled = false;
+    
+    //get selected filters
+    let dept = document.getElementById('selectedOption').innerHTML;
+    let role = document.getElementById('selectedRole').innerHTML;
+    let deptShifts = [];
+    let roleShifts = [];
+    
+    //set new date
+    currentDate.setDate(currentDate.getDate() + 7);
+    setDates();
+    switch(dept) {
+        case "All Departments":
+            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
+            initRequest.send();
+            deptShifts = allList;
+            break;
+        case "StudentIT":
+            studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', true);
+            studItInitRequest.send();
+            deptShifts = studItList;
+            break;
+        case "AskIT":
+            askItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/AskIT', true);
+            askItInitRequest.send();
+            deptShifts = askItList;
+            break;
+        case "GeneralEnquiries":
+            genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', true);
+            genEnqInitRequest.send();
+            deptShifts = genEnqList;
+            break;
+    }
+    switch(role) {
+        case "All Roles":
+            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
+            initRequest.send();
+            roleShifts = allList;
+            break;
+        case "Manager":
+            managerInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Manager', false);
+            managerInitRequest.send();
+            roleShifts = managerList;
+            break;
+        case "Senior":
+            seniorInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Senior', false);
+            seniorInitRequest.send();
+            roleShifts = seniorList;
+            break;
+        case "Casual":
+            casualInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Casual', false);
+            casualInitRequest.send();
+            roleShifts = casualList;
+            break;
+    }
+    //compare common values and assign shift list
+    shftList = deptShifts.filter(a => roleShifts.some(b => a.eventID === b.eventID));
+    fillCalendar();
+    
+});
+
+//When Back Button Clicked
+$("#back-button").on("click", function(){
+    //reset calendar and stored queries
+    $("#tbody").empty();
+    shftList = [];
+    allList = [];
+    studItList = [];
+    studItCalled = false;
+    askItList = [];
+    askItCalled = false;
+    genEnqList = [];
+    genEnqCalled = false;
+    managerList = [];
+    managerCalled = false;
+    seniorList = [];
+    seniorCalled = false;
+    casualList = [];
+    casualCalled = false;
+    
+    //get selected filters
+    let dept = document.getElementById('selectedOption').innerHTML;
+    let role = document.getElementById('selectedRole').innerHTML;
+    let deptShifts = [];
+    let roleShifts = [];
+    
+    //set new date
+    currentDate.setDate(currentDate.getDate() - 7);
+    setDates();
+    switch(dept) {
+        case "All Departments":
+            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
+            initRequest.send();
+            deptShifts = allList;
+            break;
+        case "StudentIT":
+            studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', true);
+            studItInitRequest.send();
+            deptShifts = studItList;
+            break;
+        case "AskIT":
+            askItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/AskIT', true);
+            askItInitRequest.send();
+            deptShifts = askItList;
+            break;
+        case "GeneralEnquiries":
+            genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', true);
+            genEnqInitRequest.send();
+            deptShifts = genEnqList;
+            break;
+    }
+    switch(role) {
+        case "All Roles":
+            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
+            initRequest.send();
+            roleShifts = allList;
+            break;
+        case "Manager":
+            managerInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Manager', false);
+            managerInitRequest.send();
+            roleShifts = managerList;
+            break;
+        case "Senior":
+            seniorInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Senior', false);
+            seniorInitRequest.send();
+            roleShifts = seniorList;
+            break;
+        case "Casual":
+            casualInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Casual', false);
+            casualInitRequest.send();
+            roleShifts = casualList;
+            break;
+    }
+    //compare common values and assign shift list
+    shftList = deptShifts.filter(a => roleShifts.some(b => a.eventID === b.eventID));
+    fillCalendar();
+    
 });
