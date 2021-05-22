@@ -52,13 +52,14 @@ initRequest.onload = function () {
             }
         };
         request.send();
+        console.log(allList);
     }
 };
 
 //StudentIT Request
 var studItInitRequest = new XMLHttpRequest();
 var studItRequest = new XMLHttpRequest();
-studItInitRequest.open('GET', 'http://localhost:8080/api/staff/events/department/StudentIT', false);
+studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', false);
 studItInitRequest.onload = function () {
     var data = JSON.parse(studItInitRequest.response);
     //set dates for request
@@ -73,10 +74,7 @@ studItInitRequest.onload = function () {
     let pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
     for(let i=0; i<data.length; i++){
         let userId = data[i].idNumber;
-        if (!users.includes(userId)){
-            users.push(userId);
-        }
-        studItRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        studItRequest.open("GET", 'http://localhost:8080/api/staff/events/' + userId + '?startOfPeriod=' + pStart + '&daysInPeriod=7&filter=1', false);
         studItRequest.onload = function () {
             var shifts = JSON.parse(studItRequest.response);
             for(let j=0; j<shifts.length; j++) {
@@ -94,9 +92,19 @@ var askItRequest = new XMLHttpRequest();
 askItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/AskIT', false);
 askItInitRequest.onload = function () {
     var data = JSON.parse(askItInitRequest.response);
+    //set dates for request
+    let pMonth = days[0].getMonth() + 1;
+    if (pMonth.toString().length < 2) {
+        pMonth = "0" + pMonth
+    }
+    let pDate = days[0].getDate();
+    if (pDate.toString().length < 2) {
+        pDate = "0" + pDate
+    }
+    let pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
     for(let i=0; i<data.length; i++){
         let userId = data[i].idNumber;
-        askItRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        askItRequest.open("GET", 'http://localhost:8080/api/staff/events/' + userId + '?startOfPeriod=' + pStart + '&daysInPeriod=7&filter=1', false);
         askItRequest.onload = function () {
             var shifts = JSON.parse(askItRequest.response);
             for(let j=0; j<shifts.length; j++) {
@@ -114,9 +122,19 @@ var genEnqRequest = new XMLHttpRequest();
 genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', false);
 genEnqInitRequest.onload = function () {
     var data = JSON.parse(genEnqInitRequest.response);
+    //set dates for request
+    let pMonth = days[0].getMonth() + 1;
+    if (pMonth.toString().length < 2) {
+        pMonth = "0" + pMonth
+    }
+    let pDate = days[0].getDate();
+    if (pDate.toString().length < 2) {
+        pDate = "0" + pDate
+    }
+    let pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
     for(let i=0; i<data.length; i++){
         let userId = data[i].idNumber;
-        genEnqRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        genEnqRequest.open("GET", 'http://localhost:8080/api/staff/events/' + userId + '?startOfPeriod=' + pStart + '&daysInPeriod=7&filter=1', false);
         genEnqRequest.onload = function () {
             var shifts = JSON.parse(genEnqRequest.response);
             for(let j=0; j<shifts.length; j++) {
@@ -134,9 +152,19 @@ var managerRequest = new XMLHttpRequest();
 managerInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Manager', false);
 managerInitRequest.onload = function () {
     var data = JSON.parse(managerInitRequest.response);
+    //set dates for request
+    let pMonth = days[0].getMonth() + 1;
+    if (pMonth.toString().length < 2) {
+        pMonth = "0" + pMonth
+    }
+    let pDate = days[0].getDate();
+    if (pDate.toString().length < 2) {
+        pDate = "0" + pDate
+    }
+    let pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
     for(let i=0; i<data.length; i++){
         let userId = data[i].idNumber;
-        managerRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        managerRequest.open("GET", 'http://localhost:8080/api/staff/events/' + userId + '?startOfPeriod=' + pStart + '&daysInPeriod=7&filter=1', false);
         managerRequest.onload = function () {
             var shifts = JSON.parse(managerRequest.response);
             for(let j=0; j<shifts.length; j++) {
@@ -154,9 +182,19 @@ var seniorRequest = new XMLHttpRequest();
 seniorInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Senior', false);
 seniorInitRequest.onload = function () {
     var data = JSON.parse(seniorInitRequest.response);
+    //set dates for request
+    let pMonth = days[0].getMonth() + 1;
+    if (pMonth.toString().length < 2) {
+        pMonth = "0" + pMonth
+    }
+    let pDate = days[0].getDate();
+    if (pDate.toString().length < 2) {
+        pDate = "0" + pDate
+    }
+    let pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
     for(let i=0; i<data.length; i++){
         let userId = data[i].idNumber;
-        seniorRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        seniorRequest.open("GET", 'http://localhost:8080/api/staff/events/' + userId + '?startOfPeriod=' + pStart + '&daysInPeriod=7&filter=1', false);
         seniorRequest.onload = function () {
             var shifts = JSON.parse(seniorRequest.response);
             for(let j=0; j<shifts.length; j++) {
@@ -174,9 +212,19 @@ var casualRequest = new XMLHttpRequest();
 casualInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Casual', false);
 casualInitRequest.onload = function () {
     var data = JSON.parse(casualInitRequest.response);
+    //set dates for request
+    let pMonth = days[0].getMonth() + 1;
+    if (pMonth.toString().length < 2) {
+        pMonth = "0" + pMonth
+    }
+    let pDate = days[0].getDate();
+    if (pDate.toString().length < 2) {
+        pDate = "0" + pDate
+    }
+    let pStart = pMonth + "-" + pDate + "-" + days[0].getFullYear()
     for(let i=0; i<data.length; i++){
         let userId = data[i].idNumber;
-        casualRequest.open("GET", "http://localhost:8080/api/staff/shifts/" + userId, false);
+        casualRequest.open("GET", 'http://localhost:8080/api/staff/events/' + userId + '?startOfPeriod=' + pStart + '&daysInPeriod=7&filter=1', false);
         casualRequest.onload = function () {
             var shifts = JSON.parse(casualRequest.response);
             for(let j=0; j<shifts.length; j++) {
@@ -192,29 +240,8 @@ casualInitRequest.onload = function () {
 setDates();
 initRequest.send();
 shftList = allList.slice();
-//fillTable();
 fillCalendar();
 
-//fills table with shifts in the shftList array
-//function fillTable(){
-//    const tabl = document.getElementById("tbody");
-//    for(let y=0; y<shftList.length; y++){
-//        let row = tabl.insertRow();
-//        let name = row.insertCell(0);
-//        let id = row.insertCell(1);
-//        let type = row.insertCell(2);
-//        let user = row.insertCell(3);
-//        let start = row.insertCell(4);
-//        let end = row.insertCell(5);
-//        let shift = shftList[y];
-//        name.innerHTML = shift.name;
-//        id.innerHTML = shift.eventID;
-//        type.innerHTML = shift.type;
-//        user.innerHTML = shift.user.firstName + " " + shift.user.lastName;
-//        start.innerHTML = shift.start.dateTime.date.day + "/" + shift.start.dateTime.date.month + "/" + shift.start.dateTime.date.year + " " + shift.start.dateTime.time.hour + ":" + shift.start.dateTime.time.minute;
-//        end.innerHTML = shift.end.dateTime.date.day + "/" + shift.end.dateTime.date.month + "/" + shift.end.dateTime.date.year + " " + shift.end.dateTime.time.hour + ":" + shift.end.dateTime.time.minute;
-//    }
-//}
 
 function setDates() {
     const offSet = currentDate.getDay() - 1;
@@ -333,7 +360,7 @@ $("#studItBtn").on("click", function(){
     if (studItCalled == false) {
         studItInitRequest.send();
         shftList = studItList.slice();
-    } else if (studItCalled) {
+    } else if (askItCalled) {
         shftList = studItList.slice();
     }
     let role = document.getElementById('selectedRole').innerHTML;
@@ -517,158 +544,162 @@ $("#casualBtn").on("click", function(){
     document.getElementById("selectedRole").innerHTML = "Casual";
 });
 
-//When Next Button Clicked
-$("#next-button").on("click", function(){
-    //reset calendar and stored queries
-    $("#tbody").empty();
-    shftList = [];
-    allList = [];
-    studItList = [];
-    studItCalled = false;
-    askItList = [];
-    askItCalled = false;
-    genEnqList = [];
-    genEnqCalled = false;
-    managerList = [];
-    managerCalled = false;
-    seniorList = [];
-    seniorCalled = false;
-    casualList = [];
-    casualCalled = false;
-    
-    //get selected filters
-    let dept = document.getElementById('selectedOption').innerHTML;
-    let role = document.getElementById('selectedRole').innerHTML;
-    let deptShifts = [];
-    let roleShifts = [];
-    
-    //set new date
-    currentDate.setDate(currentDate.getDate() + 7);
-    setDates();
-    switch(dept) {
-        case "All Departments":
-            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
-            initRequest.send();
-            deptShifts = allList;
-            break;
-        case "StudentIT":
-            studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', true);
-            studItInitRequest.send();
-            deptShifts = studItList;
-            break;
-        case "AskIT":
-            askItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/AskIT', true);
-            askItInitRequest.send();
-            deptShifts = askItList;
-            break;
-        case "GeneralEnquiries":
-            genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', true);
-            genEnqInitRequest.send();
-            deptShifts = genEnqList;
-            break;
-    }
-    switch(role) {
-        case "All Roles":
-            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
-            initRequest.send();
-            roleShifts = allList;
-            break;
-        case "Manager":
-            managerInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Manager', false);
-            managerInitRequest.send();
-            roleShifts = managerList;
-            break;
-        case "Senior":
-            seniorInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Senior', false);
-            seniorInitRequest.send();
-            roleShifts = seniorList;
-            break;
-        case "Casual":
-            casualInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Casual', false);
-            casualInitRequest.send();
-            roleShifts = casualList;
-            break;
-    }
-    //compare common values and assign shift list
-    shftList = deptShifts.filter(a => roleShifts.some(b => a.eventID === b.eventID));
-    fillCalendar();
-    
-});
-
-//When Back Button Clicked
-$("#back-button").on("click", function(){
-    //reset calendar and stored queries
-    $("#tbody").empty();
-    shftList = [];
-    allList = [];
-    studItList = [];
-    studItCalled = false;
-    askItList = [];
-    askItCalled = false;
-    genEnqList = [];
-    genEnqCalled = false;
-    managerList = [];
-    managerCalled = false;
-    seniorList = [];
-    seniorCalled = false;
-    casualList = [];
-    casualCalled = false;
-    
-    //get selected filters
-    let dept = document.getElementById('selectedOption').innerHTML;
-    let role = document.getElementById('selectedRole').innerHTML;
-    let deptShifts = [];
-    let roleShifts = [];
-    
-    //set new date
-    currentDate.setDate(currentDate.getDate() - 7);
-    setDates();
-    switch(dept) {
-        case "All Departments":
-            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
-            initRequest.send();
-            deptShifts = allList;
-            break;
-        case "StudentIT":
-            studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', true);
-            studItInitRequest.send();
-            deptShifts = studItList;
-            break;
-        case "AskIT":
-            askItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/AskIT', true);
-            askItInitRequest.send();
-            deptShifts = askItList;
-            break;
-        case "GeneralEnquiries":
-            genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', true);
-            genEnqInitRequest.send();
-            deptShifts = genEnqList;
-            break;
-    }
-    switch(role) {
-        case "All Roles":
-            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
-            initRequest.send();
-            roleShifts = allList;
-            break;
-        case "Manager":
-            managerInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Manager', false);
-            managerInitRequest.send();
-            roleShifts = managerList;
-            break;
-        case "Senior":
-            seniorInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Senior', false);
-            seniorInitRequest.send();
-            roleShifts = seniorList;
-            break;
-        case "Casual":
-            casualInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Casual', false);
-            casualInitRequest.send();
-            roleShifts = casualList;
-            break;
-    }
-    //compare common values and assign shift list
-    shftList = deptShifts.filter(a => roleShifts.some(b => a.eventID === b.eventID));
-    fillCalendar();
-    
-});
+////When Next Button Clicked
+//$("#next-button").on("click", function(){
+//    //reset calendar and stored queries
+//    $("#tbody").empty();
+//    shftList = [];
+//    allList = [];
+//    studItList = [];
+//    studItCalled = false;
+//    askItList = [];
+//    askItCalled = false;
+//    genEnqList = [];
+//    genEnqCalled = false;
+//    managerList = [];
+//    managerCalled = false;
+//    seniorList = [];
+//    seniorCalled = false;
+//    casualList = [];
+//    casualCalled = false;
+//    
+//    //get selected filters
+//    let dept = document.getElementById('selectedOption').innerHTML;
+//    let role = document.getElementById('selectedRole').innerHTML;
+//    let deptShifts = [];
+//    let roleShifts = [];
+//    
+//    //set new date
+//    currentDate.setDate(currentDate.getDate() + 7);
+//    setDates();
+//    switch(dept) {
+//        case "All Departments":
+//            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
+//            initRequest.send();
+//            deptShifts = allList.slice();
+//            break;
+//        case "StudentIT":
+//            studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', true);
+//            studItInitRequest.send();
+//            deptShifts = studItList.slice();
+//            break;
+//        case "AskIT":
+//            askItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/AskIT', true);
+//            askItInitRequest.send();
+//            deptShifts = askItList.slice();
+//            break;
+//        case "GeneralEnquiries":
+//            genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', true);
+//            genEnqInitRequest.send();
+//            deptShifts = genEnqList.slice();
+//            break;
+//    }
+//    switch(role) {
+//        case "All Roles":
+//            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
+//            initRequest.send();
+//            roleShifts = allList.slice();
+//            break;
+//        case "Manager":
+//            managerInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Manager', false);
+//            managerInitRequest.send();
+//            roleShifts = managerList.slice();
+//            break;
+//        case "Senior":
+//            seniorInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Senior', false);
+//            seniorInitRequest.send();
+//            roleShifts = seniorList.slice();
+//            break;
+//        case "Casual":
+//            casualInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Casual', false);
+//            casualInitRequest.send();
+//            roleShifts = casualList.slice();
+//            break;
+//    }
+//    //compare common values and assign shift list
+//    console.log(allList.toString());
+//    shftList = deptShifts.filter(a => roleShifts.some(b => a.eventID === b.eventID));
+//    console.log(shftList.toString());
+//    fillCalendar();
+//    
+//});
+//
+////When Back Button Clicked
+//$("#back-button").on("click", function(){
+//    //reset calendar and stored queries
+//    $("#tbody").empty();
+//    shftList = [];
+//    allList = [];
+//    studItList = [];
+//    studItCalled = false;
+//    askItList = [];
+//    askItCalled = false;
+//    genEnqList = [];
+//    genEnqCalled = false;
+//    managerList = [];
+//    managerCalled = false;
+//    seniorList = [];
+//    seniorCalled = false;
+//    casualList = [];
+//    casualCalled = false;
+//    
+//    //get selected filters
+//    let dept = document.getElementById('selectedOption').innerHTML;
+//    let role = document.getElementById('selectedRole').innerHTML;
+//    let deptShifts = [];
+//    let roleShifts = [];
+//    
+//    //set new date
+//    currentDate.setDate(currentDate.getDate() - 7);
+//    setDates();
+//    switch(dept) {
+//        case "All Departments":
+//            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
+//            initRequest.send();
+//            deptShifts = allList.slice();
+//            break;
+//        case "StudentIT":
+//            studItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/StudentIT', true);
+//            studItInitRequest.send();
+//            deptShifts = studItList.slice();
+//            break;
+//        case "AskIT":
+//            askItInitRequest.open('GET', 'http://localhost:8080/api/staff/department/AskIT', true);
+//            askItInitRequest.send();
+//            deptShifts = askItList.slice();
+//            break;
+//        case "GeneralEnquiries":
+//            genEnqInitRequest.open('GET', 'http://localhost:8080/api/staff/department/GeneralEnquiries', true);
+//            genEnqInitRequest.send();
+//            deptShifts = genEnqList.slice();
+//            break;
+//    }
+//    switch(role) {
+//        case "All Roles":
+//            initRequest.open('GET', 'http://localhost:8080/api/staff', true);
+//            initRequest.send();
+//            roleShifts = allList.slice();
+//            break;
+//        case "Manager":
+//            managerInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Manager', false);
+//            managerInitRequest.send();
+//            roleShifts = managerList.slice();
+//            break;
+//        case "Senior":
+//            seniorInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Senior', false);
+//            seniorInitRequest.send();
+//            roleShifts = seniorList.slice();
+//            break;
+//        case "Casual":
+//            casualInitRequest.open('GET', 'http://localhost:8080/api/staff/role/Casual', false);
+//            casualInitRequest.send();
+//            roleShifts = casualList.slice();
+//            break;
+//    }
+//    //compare common values and assign shift list
+//    console.log(allList.toString());
+//    shftList = deptShifts.filter(a => roleShifts.some(b => a.eventID === b.eventID));
+//    console.log(shftList.toString());
+//    fillCalendar();
+//    
+//});
