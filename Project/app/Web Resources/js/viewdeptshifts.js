@@ -274,6 +274,7 @@ function fillCalendar() {
        }
     });
     
+    //goes through each user and adds their shifts to calendar
     for(let i=0; i<users.length; i++) {
         let user = users[i];
         let row = table.insertRow();
@@ -284,16 +285,22 @@ function fillCalendar() {
         let thursdayCell = row.insertCell(4);
         let fridayCell = row.insertCell(5);
         let saturdayCell = row.insertCell(6);
-        let sundayCell = row.insertCell(7);            
-        for(let j=0; j<shftList.length; j++) {
-            let shift = shftList[j];
+        let sundayCell = row.insertCell(7); 
+        console.log('User before loop:')
+        console.log(user);
+        console.log('Shift List before loop:');
+        console.log(shftList.length);
+        //go through all shifts
+        shftList.forEach((shift) => {
             if (user == shift.user.idNumber){
+                console.log(userCell);
                 if(userCell.innerHTML == "") {
+                    console.log("call add name")
                     userCell.innerHTML = shift.user.firstName + " " + shift.user.lastName;
                     userCell.classList.add("table-dark");
                 }
-                let s = shftList[j].start.dateTime;
-                let e = shftList[j].end.dateTime;
+                let s = shift.start.dateTime;
+                let e = shift.end.dateTime;
                 let start = new Date(s.date.year, s.date.month - 1, s.date.day, s.time.hour, s.time.minute, s.time.second);
                 let end = new Date(e.date.year, e.date.month - 1, e.date.day, e.time.hour, e.time.minute, e.time.second);
                 let dayOfWeek = start.getDay().toString();
@@ -327,13 +334,8 @@ function fillCalendar() {
                         saturdayCell.style.backgroundColor = "rgba(255,193,14,255)";
                         break;
                 }
-            } else {
-                break;
-            }      
-                
-                //let shiftDay = 
-            
-        }
+            }
+        });
     }
 }
 
@@ -341,14 +343,12 @@ function fillCalendar() {
 $("#allDeptBtn").on("click", function(){
     $("#tbody").empty();
     shftList = [];
-    console.log(allListCalled);
     if (allListCalled == false) {
         initRequest.open('GET', 'http://localhost:8080/api/staff', false);
         initRequest.send();
         shftList = allList.slice();
     } else if (allListCalled) {
         shftList = allList.slice();
-        console.log(allList);
     }
     let role = document.getElementById('selectedRole').innerHTML;
     switch(role) {
@@ -740,8 +740,6 @@ $("#back-button").on("click", function(){
             break;
     }
     //compare common values and assign shift list
-    console.log(allList);
     shftList = deptShifts.filter(a => roleShifts.some(b => a.eventID === b.eventID));
-    console.log(shftList);
     fillCalendar();    
 });
