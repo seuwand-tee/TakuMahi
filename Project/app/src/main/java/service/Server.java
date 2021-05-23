@@ -47,6 +47,7 @@ public class Server extends Jooby {
         user1.setFirstName("Robert");
         user1.setUsername("RobertTheDestroyer");
         user1.setLastName("Potter");
+        user1.setEmailAddress("yeet@yote.org");
         user1.setIdNumber("1");
         user1.setRole(User.Role.Manager);
         user1.setDepartment(User.Department.AskIT);
@@ -54,6 +55,7 @@ public class Server extends Jooby {
         user2.setFirstName("Rionagh");
         user2.setUsername("RionaghTheBoss");
         user2.setLastName("Isat");
+        user2.setEmailAddress("yeet@yote.org");
         user2.setIdNumber("2");
         user2.setRole(User.Role.Manager);
         user2.setDepartment(User.Department.AskIT);
@@ -61,6 +63,7 @@ public class Server extends Jooby {
         user3.setUsername("LassoMartin");
         user3.setFirstName("Martin");
         user3.setLastName("Home");
+        user3.setEmailAddress("yeet@yote.org");
         user3.setIdNumber("3");
         user3.setRole(User.Role.Manager);
         user3.setDepartment(User.Department.AskIT);
@@ -119,6 +122,7 @@ public class Server extends Jooby {
         shift4.setDescription("Helping elderly use tech");
         shift4.setStart(LocalDateTime.of(2021, 5, 12, 11, 0));
         shift4.setEnd(LocalDateTime.of(2021, 5, 13, 12, 0));
+        shift4.setType(Shift.Type.Round);
 
         Shift shift5 = new Shift();
         shift5.setEventID(8);
@@ -126,6 +130,7 @@ public class Server extends Jooby {
         shift5.setDescription("Helping elderly use tech");
         shift5.setStart(LocalDateTime.of(2021, 5, 13, 15, 0));
         shift5.setEnd(LocalDateTime.of(2021, 5, 13, 18, 0));
+        shift5.setType(Shift.Type.Round);
 
         dao.addToOpenShifts(shift1);
         dao.addToOpenShifts(shift2);
