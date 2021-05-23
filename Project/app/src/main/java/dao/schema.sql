@@ -1,8 +1,8 @@
 create table User(
 idnumber varchar(100),
 username varchar(100) not null unique,
-role varchar(100) not null,
-department varchar(100) not null,
+role varchar(100),
+department varchar(100),
 firstName varchar(100) not null,
 lastName varchar(100) not null,
 emailaddress varchar(100) not null,

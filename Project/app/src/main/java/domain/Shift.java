@@ -61,5 +61,6 @@ public class Shift extends Event {
     public void setType(Type type) {
         this.type = type;
     }
+    
 
 }

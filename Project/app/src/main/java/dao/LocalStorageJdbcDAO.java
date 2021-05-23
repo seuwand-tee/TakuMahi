@@ -50,10 +50,8 @@ public class LocalStorageJdbcDAO implements DAO {
             stmt.setTimestamp(4, end);
             stmt.setString(5, shift.getDescription());
             stmt.setString(6, shift.getNotes());
+            stmt.setString(7, shift.getType().name());
             System.out.println(stmt.toString());
-            String type = shift.getType().toString();
-            stmt.setString(7, type);
-
             stmt.executeUpdate();  // execute the statement
 
         } catch (SQLException ex) {  // we are forced to catch SQLException

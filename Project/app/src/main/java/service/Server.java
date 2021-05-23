@@ -40,22 +40,30 @@ public class Server extends Jooby {
         use(new EventsByUserResource(dao));
         use(new HoursByUserResource(dao));
 **/
+
+        dao.resetDAO();
         //Test users
         User user1 = new User();
         user1.setFirstName("Robert");
         user1.setUsername("RobertTheDestroyer");
         user1.setLastName("Potter");
         user1.setIdNumber("1");
+        user1.setRole(User.Role.Manager);
+        user1.setDepartment(User.Department.AskIT);
         User user2 = new User();
         user2.setFirstName("Rionagh");
         user2.setUsername("RionaghTheBoss");
         user2.setLastName("Isat");
         user2.setIdNumber("2");
+        user2.setRole(User.Role.Manager);
+        user2.setDepartment(User.Department.AskIT);
         User user3 = new User();
         user3.setUsername("LassoMartin");
         user3.setFirstName("Martin");
         user3.setLastName("Home");
         user3.setIdNumber("3");
+        user3.setRole(User.Role.Manager);
+        user3.setDepartment(User.Department.AskIT);
 
         //Test Shifts
         Shift shift1 = new Shift();
@@ -64,6 +72,7 @@ public class Server extends Jooby {
         shift1.setEnd(LocalDateTime.of(2021, 5, 17, 10, 0));
         shift1.setDescription("Clean the gutter");
         shift1.setName("Gutter cleaning");
+        shift1.setType(Shift.Type.Round);
 
         Shift shift2 = new Shift();
         shift2.setEventID(2);
@@ -71,6 +80,7 @@ public class Server extends Jooby {
         shift2.setEnd(LocalDateTime.of(2021, 5, 17, 12, 0));
         shift2.setDescription("Loitering");
         shift2.setName("Being a criminal");
+        shift2.setType(Shift.Type.Round);
 
         Shift shift3 = new Shift();
         shift3.setEventID(3);
@@ -78,6 +88,7 @@ public class Server extends Jooby {
         shift3.setDescription("Helping elderly use tech");
         shift3.setStart(LocalDateTime.of(2021, 5, 17, 11, 0));
         shift3.setEnd(LocalDateTime.of(2021, 5, 17, 12, 0));
+        shift3.setType(Shift.Type.Round);
 
         //Test unavailability
         Unavailability unavailability1 = new Unavailability();
