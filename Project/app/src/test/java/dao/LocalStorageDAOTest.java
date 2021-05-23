@@ -10,12 +10,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
-
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.*;
 
 public class LocalStorageDAOTest {
 
     //private static LocalStorageDAO dao;
-  private static LocalStorageJdbcDAO dao;
+    private static LocalStorageJdbcDAO dao;
 
     private static User userOne;
     private static User userTwo;
@@ -161,126 +163,67 @@ public class LocalStorageDAOTest {
         //fail();
 
         //assertFalse(dao.userExists("3"));
-
-        assertFalse(dao.getUsersByRole(User.Role.Senior).contains(userThree));
-
-        assertFalse(dao.getUsersByDepartment(User.Department.StudentIT).contains(userThree));
-
         dao.addUser(userThree);
-
-        assertTrue(dao.userExists("3"));
-
-        User user = dao.getUserByID("3");
-
-        assertEquals(userThree, user);
-
-        assertTrue(dao.getUsersByRole(User.Role.Senior).contains(userThree));
-
-        assertTrue(dao.getUsersByDepartment(User.Department.StudentIT).contains(userThree));
-
+        assertThat(userThree, equalTo(dao.getUserByID("3")));
     }
-    /**@Test
+
+    @Test
     public void deleteUserByIDTest() {
-         
-
-        assertTrue(dao.userExists("1"));
-
-        assertTrue(dao.getUsersByRole(User.Role.Casual).contains(userOne));
-
-        assertTrue(dao.getUsersByDepartment(User.Department.StudentIT).contains(userOne));
-
+        assertThat(dao.getAllUsers(), hasItem(userOne));
         dao.deleteUserByID("1");
-
-        assertFalse(dao.userExists("1"));
-
-        assertFalse(dao.getUsersByRole(User.Role.Casual).contains(userOne));
-
-        assertFalse(dao.getUsersByDepartment(User.Department.StudentIT).contains(userOne));
+        assertThat(dao.getAllUsers(), not(hasItem(userOne)));
+        assertThat(dao.getAllUsers(), hasSize(1));
 
     }
 
     @Test
     public void addToOpenShiftsTest() {
-       //  fail();
-
-        //assertFalse(dao.eventExists(5));
-
-        assertFalse(dao.getOpenShifts().contains(shiftFive));
-
+        //  fail();
         dao.addToOpenShifts(shiftFive);
-
-        //assertTrue(dao.eventExists(5));
-
-        assertTrue(dao.getOpenShifts().contains(shiftFive));
-
+        assertThat(dao.getOpenShifts(), hasItem(shiftFive));
     }
 
     @Test
     public void deleteFromOpenShiftsTest() {
-         //fail();
 
-        //assertTrue(dao.eventExists(4));
-
-        assertTrue(dao.getOpenShifts().contains(shiftFour));
-
+        assertThat(dao.getOpenShifts(), hasItem(shiftFour));
         dao.deleteFromOpenShifts(4);
-
-        assertFalse(dao.eventExists(4));
-
-        assertFalse(dao.getOpenShifts().contains(shiftFour));
+        assertThat(dao.getOpenShifts(), not(hasItem(shiftFour)));
+        assertThat(dao.getOpenShifts(), hasSize(1));
 
     }
 
     @Test
     public void assignShiftToUserTest() {
-         //fail();
-
-        assertFalse(dao.getShiftsByUser("2").contains(shiftFour));
-
-        assertTrue(dao.getOpenShifts().contains(shiftFour));
-
+        //fail();
+        assertThat(dao.getOpenShifts(), not(hasItem(shiftFour)));
         dao.assignShiftToUser("2", 4);
-
         assertTrue(dao.getShiftsByUser("2").contains(shiftFour));
-
-        assertFalse(dao.getOpenShifts().contains(shiftFour));
+        assertThat(dao.getOpenShifts(), not(hasItem(shiftFour)));
 
     }
 
     @Test
     public void removeShiftFromUserTest() {
-         //fail();
-
-        assertTrue(dao.getShiftsByUser("1").contains(shiftThree));
-
-        assertFalse(dao.getOpenShifts().contains(shiftThree));
-
+        //fail();
         dao.removeShiftFromUser("1", 3);
-
         assertFalse(dao.getShiftsByUser("1").contains(shiftThree));
-
-        assertTrue(dao.getOpenShifts().contains(shiftThree));
+        assertThat(dao.getOpenShifts(), hasItem(shiftThree));
 
     }
 
     @Test
     public void addUnavailabilityToUserTest() {
 
-        assertFalse(dao.getUnavailabilityByUser("2").contains(unavailabilityThree));
-
-        assertFalse(dao.eventExists(8));
-
         dao.addUnavailabilityToUser("2", unavailabilityThree);
-
         assertTrue(dao.getUnavailabilityByUser("2").contains(unavailabilityThree));
-
         assertTrue(dao.eventExists(8));
 
     }
 
     @Test
     public void deleteUnavailabilityFromUserTest() {
-         //fail();
+        //fail();
 
         assertTrue(dao.getUnavailabilityByUser("2").contains(unavailabilityTwo));
 
@@ -296,7 +239,7 @@ public class LocalStorageDAOTest {
 
     @Test
     public void getUserEventsForPeriodTest() {
-         //fail();
+        //fail();
 
         Collection<Event> events = dao.getUserEventsForPeriod("1", LocalDate.of(2020, 3, 20), 2, 0);
         Collection<Event> shifts = dao.getUserEventsForPeriod("1", LocalDate.of(2020, 3, 20), 2, 1);
@@ -318,7 +261,7 @@ public class LocalStorageDAOTest {
 
     @Test
     public void getUserHoursForPeriodTest() {
-         //fail();
+        //fail();
 
         int hours = dao.getUserHoursForPeriod("1", LocalDate.of(2020, 3, 20), 2);
 
@@ -332,7 +275,7 @@ public class LocalStorageDAOTest {
 
     @Test
     public void userExistsTest() {
-         //fail();
+        //fail();
 
         assertTrue(dao.userExists("1"));
 
@@ -342,13 +285,11 @@ public class LocalStorageDAOTest {
 
     @Test
     public void getAllUsersTest() {
-       //  fail();
+        //  fail();
 
-        Collection<User> users = dao.getAllUsers();
-
-        assertEquals(2, users.size());
-        assertTrue(users.contains(userOne));
-        assertTrue(users.contains(userTwo));
+            assertThat(dao.getAllUsers(), hasItem(userOne));
+		assertThat(dao.getAllUsers(), hasItem(userTwo));
+		assertThat(dao.getAllUsers(), hasSize(2));
 
     }
 
@@ -356,15 +297,14 @@ public class LocalStorageDAOTest {
     public void getUserByIDTest() {
         // fail();
 
-        User user = dao.getUserByID("1");
-
-        assertEquals(userOne, user);
+        dao.getUserByID("1");
+        assertThat(userOne, equalTo(products.searchByID("product2")));
 
     }
 
     @Test
     public void getUsersByRoleTest() {
-         //fail();
+        //fail();
 
         Collection<User> users = dao.getUsersByRole(User.Role.Casual);
 
@@ -380,17 +320,14 @@ public class LocalStorageDAOTest {
 
     @Test
     public void getUsersByDepartmentTest() {
-         //fail();
+        //fail();
+        assertThat(products.getCategories(), hasItem(product2.getCategory()));
+        assertThat(products.getCategories(), hasItem(product3.getCategory()));
+        assertThat(products.getProducts(), hasSize(2));
 
-        Collection<User> users = dao.getUsersByDepartment(User.Department.StudentIT);
-
-        assertEquals(1, users.size());
-        assertTrue(users.contains(userOne));
-
-        users = dao.getUsersByDepartment(User.Department.GeneralEnquiries);
-
-        assertEquals(1, users.size());
-        assertTrue(users.contains(userTwo));
+        assertThat(userOne, equalTo(dao.getUsersByDepartment(User.Department.StudentIT)));
+        assertThat(userTwo, equalTo(dao.getUsersByDepartment(User.Department.GeneralEnquiries)));
+        assertThat(product1, not(equalTo(products.searchByID("product1"))));
 
     }
 
@@ -409,33 +346,31 @@ public class LocalStorageDAOTest {
 
     @Test
     public void getUnavailabilityByUserTest() {
- fail();
-        Collection<Unavailability> unavailabilitys = dao.getUnavailabilityByUser("1");
 
-        assertEquals(1, unavailabilitys.size());
-        assertTrue(unavailabilitys.contains(unavailabilityOne));
+        assertThat(dao.getUnavailabilityByUser("1"), hasItem(unavailabilityOne));
+        assertThat(dao.getUnavailabilityByUser(), hasSize(1));
 
     }
 
     @Test
     public void getOpenShiftsTest() {
-         //fail();
-
-        Collection<Shift> shifts = dao.getOpenShifts();
-
-        assertEquals(1, shifts.size());
-        assertTrue(shifts.contains(shiftFour));
+        //fail();
+        assertThat(dao.getOpenShifts(), hasItem(shiftFour));
+        assertThat(dao.getOpenShifts(), hasSize(1));
 
     }
 
     @Test
     public void eventExistsTest() {
-         //fail();
+        //fail();
+        assertThat(product2, equalTo(products.searchByID("product2")));
+        assertThat(product3, equalTo(products.searchByID("product3")));
+        assertThat(product1, not(equalTo(products.searchByID("product1"))));
 
         assertTrue(dao.eventExists(1));
 
         assertFalse(dao.eventExists(9));
 
-    }**/
-    
+    }
+
 }

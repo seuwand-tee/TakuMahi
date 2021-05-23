@@ -51,8 +51,8 @@ public class LocalStorageJdbcDAO implements DAO {
             stmt.setString(5, shift.getDescription());
             stmt.setString(6, shift.getNotes());
             stmt.setString(7, shift.getType().name());
-            System.out.println(stmt.toString());
             stmt.executeUpdate();  // execute the statement
+            System.out.println(stmt.toString());
 
         } catch (SQLException ex) {  // we are forced to catch SQLException
             // don't let the SQLException leak from our DAO encapsulation
@@ -109,7 +109,8 @@ public class LocalStorageJdbcDAO implements DAO {
     public void assignShiftToUser(String userID, Integer shiftID) {
         String sql = "update Shift set idnumber = ? where shiftid = ?";
         try (
-                 Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+                 Connection dbCon = DbConnection.getConnection(uri);  
+                PreparedStatement stmt = dbCon.prepareStatement(sql);) {
 
             stmt.setString(1, userID);
             stmt.setInt(2, shiftID);
@@ -419,7 +420,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
     @Override
     public Collection<Event> getUserEventsForPeriod(String userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
-       String sql = "select * #daytable from Shift where idnumber = ? and start >= ?";
+        String sql = "with dayhours as (select start, end, description, ROW_NUMBER() OVER (ORDER BY start) from Shift where idnumber = ? and start >= ?) select * into #temp from dayhours where ROW_NUMBER() between 0 and ? ";
         try (
                 // get a connection to the database
             Connection dbCon = DbConnection.getConnection(uri); // create the statement
@@ -427,6 +428,8 @@ public class LocalStorageJdbcDAO implements DAO {
             Timestamp days = Timestamp.valueOf(startOfPeriod.toString());
             stmt.setString(1, userID);
             stmt.setTimestamp(2, days);
+            stmt.setInt(3, daysInPeriod);
+            
             
             // execute the query
             ResultSet rs = stmt.executeQuery();

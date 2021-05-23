@@ -20,7 +20,7 @@ notes varchar(500),
 type varchar(100),
 constraint Shift_PK primary key (shiftid),
 constraint Shift_User_FK foreign key (idnumber) references User(idnumber)
-);
+); 
 
 create table Unavailability(
 shiftid int(10),
@@ -32,3 +32,9 @@ constraint Unavailability_PK primary key (shiftid, idnumber),
 constraint Unavailability_User_FK foreign key (idnumber) references User(idnumber)
 );
 
+create table #temp
+(
+    start timestamp, 
+    end timestamp,
+    hours int(5),
+)

@@ -191,7 +191,7 @@ public class LocalStorageDAO implements DAO{
         for (int i = 0; i < daysInPeriod; i++) {
             events.addAll(eventsByDate.get(startOfPeriod.plusDays(i)));
         }
-        switch (filter){
+       /** switch (filter){
             case 0:
                 for (Event e : events) {
                     if (e.getUser() != null) {
@@ -219,7 +219,7 @@ public class LocalStorageDAO implements DAO{
                     }
                 }
                 break;
-        }
+        }**/
         return usersEvents;
     }
 
