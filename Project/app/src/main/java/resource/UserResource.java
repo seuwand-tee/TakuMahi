@@ -19,7 +19,7 @@ public class UserResource extends Jooby {
                          * Route that checks User ID is valid
                          */
 			use("/:userId", (req, rsp, chain) -> {
-				Integer id = Integer.parseInt(req.param("userId").value());
+				String id = String.valueOf(req.param("userId").value());
 
 				if (dao.userExists(id)) {
 					// ID is OK, so pass request on to the next route in the chain
@@ -34,7 +34,7 @@ public class UserResource extends Jooby {
                          * Gets User by ID
                          */
 			get("/:userId", (req) -> {
-				Integer id = Integer.parseInt(req.param("userId").value());
+				String id = String.valueOf(req.param("userId").value());
 				return dao.getUserByID(id);
 			});
 			
@@ -42,7 +42,7 @@ public class UserResource extends Jooby {
                          * Deletes a User by their ID
                          */
 			delete("/:userId", (req, rsp) -> {
-				Integer id = Integer.parseInt(req.param("userId").value());
+				String id = String.valueOf(req.param("userId").value());
 				dao.deleteUserByID(id);
 				rsp.status(Status.NO_CONTENT);
 			});

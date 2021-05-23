@@ -21,7 +21,7 @@ public class User {
     }
 
     private String username;
-    private Integer idNumber;
+    private  String idNumber;
     private Role role;
     private Department department;
     //private String password; <- This would be a hashed password in functioning product. We are not
@@ -34,7 +34,7 @@ public class User {
 
     public User(){};
 
-    public User(String username, Integer idNumber, Role role, String firstName, String lastName, String emailAddress) {
+    public User(String username, String idNumber, Role role, String firstName, String lastName, String emailAddress) {
         this.username = username;
         this.idNumber = idNumber;
         this.role = role;
@@ -51,11 +51,11 @@ public class User {
         this.username = username;
     }
 
-    public Integer getIdNumber() {
+    public String getIdNumber() {
         return idNumber;
     }
 
-    public void setIdNumber(Integer idNumber) {
+    public void setIdNumber(String idNumber) {
         this.idNumber = idNumber;
     }
 

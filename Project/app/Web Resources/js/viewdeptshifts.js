@@ -20,9 +20,6 @@ var casualCalled = false;
 var userId;
 var currentDate = new Date();
 var days = [];
-var loadedCells = [];
-var currentEvents = new Map();
-var cellMappings = new Map();
 
 //initial request - all staff
 var initRequest = new XMLHttpRequest();
@@ -289,7 +286,7 @@ function fillCalendar() {
         console.log('User before loop:')
         console.log(user);
         console.log('Shift List before loop:');
-        console.log(shftList.length);
+        console.log(shftList);
         //go through all shifts
         shftList.forEach((shift) => {
             if (user == shift.user.idNumber){
@@ -299,8 +296,11 @@ function fillCalendar() {
                     userCell.innerHTML = shift.user.firstName + " " + shift.user.lastName;
                     userCell.classList.add("table-dark");
                 }
-                let s = shift.start.dateTime;
-                let e = shift.end.dateTime;
+//                let s = shift.start.dateTime;
+//                let e = shift.end.dateTime;
+                let s = shift.start;
+                let e = shift.end;
+                console.log(shift);
                 let start = new Date(s.date.year, s.date.month - 1, s.date.day, s.time.hour, s.time.minute, s.time.second);
                 let end = new Date(e.date.year, e.date.month - 1, e.date.day, e.time.hour, e.time.minute, e.time.second);
                 let dayOfWeek = start.getDay().toString();
@@ -577,7 +577,7 @@ $("#casualBtn").on("click", function(){
 });
 
 //When Next Button Clicked
-$("#next-button").on("click", function(){
+$("#fnext-button").on("click", function(){
     //reset calendar and stored queries
     $("#tbody").empty();
     shftList.length = 0;
@@ -743,3 +743,5 @@ $("#back-button").on("click", function(){
     shftList = deptShifts.filter(a => roleShifts.some(b => a.eventID === b.eventID));
     fillCalendar();    
 });
+
+//TODO: Shift/User info, 

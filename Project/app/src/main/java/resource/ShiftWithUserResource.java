@@ -21,7 +21,7 @@ public class ShiftWithUserResource extends Jooby {
 			post("/:eventId/:userId", (req, rsp) -> {
                                 //extracts params
 				Integer eventId = Integer.parseInt(req.param("eventId").value());
-                                Integer userId = Integer.parseInt(req.param("userId").value());
+                                String userId = String.valueOf(req.param("userId").value());
                                 
                                 //checks Event and User exist
                                 if ((dao.eventExists(eventId))&&(dao.userExists(userId))) {
@@ -39,7 +39,7 @@ public class ShiftWithUserResource extends Jooby {
 			put("/:eventId/:userId", (req, rsp) -> {
 				//extracts params
 				Integer eventId = Integer.parseInt(req.param("eventId").value());
-                                Integer userId = Integer.parseInt(req.param("userId").value());
+                                String userId = String.valueOf(req.param("userId").value());
                                 
                                 //checks event and user exists
                                 if ((dao.eventExists(eventId))&&(dao.userExists(userId))) {

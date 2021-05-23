@@ -10,16 +10,21 @@
       <!-- link custom stylesheet in -->
       <link rel="stylesheet" href="css/calendar.css">
 
+
+      <!--Load Mobile recognition-->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
       <!-- load jquerry -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="js/angular.js"></script>
     <script src="js/angular-resource.js"></script>
     <script src="js/ngStorage.js"></script>
     <script src="js/user.js"></script>
-
+    <img src="css/Logo.jpg" alt="Logo1">   
+    <img src="css/tessellation.png" alt="Logo">
   </head>
   <body>
- <div ng-include="'menu.html'" ></div>
+ <div ng-include="navbar.html" ></div>
 
   <!-- Div that wraps around the navigation buttons above the calander -->
   <div class="button-wrapper">
@@ -48,16 +53,30 @@
     <table class="table table-bordered table-striped">
     <!-- Talbe header (Weekdays and time title) -->
       <thead class="table-dark">
-        <tr>
-          <th>Time</th>
+        <tr id=Desktop>
+          <th>Time</th> 
           <th>Monday</th>
           <th>Tuesday</th>
-          <th>Wednsday</th>
+          <th>Wednesday</th>
           <th>Thursday</th>
           <th>Friday</th>
           <th>Saturday</th>
           <th>Sunday</th>
         </tr>
+
+        <!-- Displays only when Mobile is Active-->
+        <thead class="table-dark" >
+          <tr id=Mobile>
+              <th>Tim</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+              <th>Sat</th>
+              <th>Sun</th>
+            </tr>
+          </thead>
       </thead>
       <tbody>
         <!-- first row -->
@@ -375,6 +394,7 @@
   <div id="calendar-month" class="hidden-calendar calendar container-fluid">
       <table class="table table-bordered table-striped">
         <thead class="table-dark">
+          <tr id=Desktop>
           <th>Monday</th>
           <th>Tuesday</th>
           <th>Wednsday</th>
@@ -382,6 +402,23 @@
           <th>Friday</th>
           <th>Saturday</th>
           <th>Sunday</th>
+          </tr>
+          </thead>
+
+           <!-- Displays only when Mobile is Active-->
+        <thead class="table-dark" >
+          <tr id=Mobile>
+              <th>Tim</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+              <th>Sat</th>
+              <th>Sun</th>
+            </tr>
+
+
         </thead>
         <tbody>
           <tr>

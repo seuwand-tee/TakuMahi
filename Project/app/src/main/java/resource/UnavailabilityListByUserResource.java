@@ -22,7 +22,7 @@ public class UnavailabilityListByUserResource extends Jooby {
                 * Route that checks User ID is valid
                 */
 		use("/:userId", (req, rsp, chain) -> {
-			Integer id = Integer.parseInt(req.param("userId").value());
+			String id = String.valueOf(req.param("userId").value());
 
 			if (dao.userExists(id)) {
 				// ID is OK, so pass request on to the next route in the chain
@@ -37,7 +37,7 @@ public class UnavailabilityListByUserResource extends Jooby {
                 * Gets list of User Unavailabilities
                 */
 		get("/:userId", (req) -> {
-                    Integer id = Integer.parseInt(req.param("userId").value());
+                   String id = String.valueOf(req.param("userId").value());
                     return dao.getUnavailabilityByUser(id);
 		});
                         
@@ -46,7 +46,7 @@ public class UnavailabilityListByUserResource extends Jooby {
                 */
 		post("/:userId", (req, rsp) -> {
                     //extract id value
-                    Integer id = Integer.parseInt(req.param("userId").value());
+                    String id = String.valueOf(req.param("userId").value());
                     
                     //extract instant values from request body to send in constructor (can be used to convert date to any format)
                     String shift = req.body(String.class);
@@ -57,11 +57,10 @@ public class UnavailabilityListByUserResource extends Jooby {
                     Instant end = Instant.parse(nd);
                                 
                     //Assign rest of constructor values
-                    String repeat = jsonObj.getString("repeat");
                     String description = jsonObj.getString("description");
                     
                     //constructor for unavailability
-                    Unavailability unavailability = new Unavailability(start, end, repeat, description);
+                    Unavailability unavailability = new Unavailability(start, end, description);
                     
                     //store unavailability
                     dao.addUnavailabilityToUser(id, unavailability);

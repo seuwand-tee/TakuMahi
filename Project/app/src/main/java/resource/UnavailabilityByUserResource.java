@@ -22,7 +22,7 @@ public class UnavailabilityByUserResource extends Jooby {
 			delete("/:userId/:eventId", (req, rsp) -> {
                             
                             //extracts params
-                            Integer userId = Integer.parseInt(req.param("userId").value());
+                            String userId = String.valueOf(req.param("userId").value());
                             Integer eventId = Integer.parseInt(req.param("eventId").value());
                             
                             //checks event and user exists

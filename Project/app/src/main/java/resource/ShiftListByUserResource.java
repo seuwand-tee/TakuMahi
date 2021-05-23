@@ -20,7 +20,7 @@ public class ShiftListByUserResource extends Jooby {
                          * Route that checks User ID is valid
                          */
 			use("/:userId", (req, rsp, chain) -> {
-				Integer id = Integer.parseInt(req.param("userId").value());
+				String id = String.valueOf(req.param("userId").value());
 
 				if (dao.userExists(id)) {
 					// ID is OK, so pass request on to the next route in the chain
@@ -35,7 +35,7 @@ public class ShiftListByUserResource extends Jooby {
                          * Gets User Shifts by ID
                          */
 			get("/:userId", (req) -> {
-				Integer id = Integer.parseInt(req.param("userId").value());
+				String id = String.valueOf(req.param("userId").value());
 				return dao.getShiftsByUser(id);
 			});
         }).produces(MediaType.json).consumes(MediaType.json);

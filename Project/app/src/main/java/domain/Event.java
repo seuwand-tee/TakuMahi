@@ -1,6 +1,7 @@
 package domain;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -14,16 +15,20 @@ public abstract class Event {
 
     private Integer eventID;
     private User user;
-    private ZonedDateTime start; // Parse DateTimes from String in Resource.
-    private ZonedDateTime end;
+    private LocalDateTime start; // Parse DateTimes from String in Resource.
+    private LocalDateTime end;
 
-    public Event(){};
+    public Event(){
+        eventID = idCount;
+        idCount++;
+    };
 
     public Event(Instant start, Instant end) {
         eventID = idCount;
         idCount++;
-        ZonedDateTime strt = start.atZone(ZoneId.of("Pacific/Auckland"));
-        ZonedDateTime nd = end.atZone(ZoneId.of("Pacific/Auckland"));
+        ZoneId z =(ZoneId.of("Pacific/Auckland"));
+        LocalDateTime strt = LocalDateTime.ofInstant(start, z);
+        LocalDateTime nd = LocalDateTime.ofInstant(end, z);
         this.start = strt;
         this.end = nd;
     }
@@ -44,19 +49,19 @@ public abstract class Event {
         this.user = user;
     }
 
-    public ZonedDateTime getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(ZonedDateTime start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public ZonedDateTime getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(ZonedDateTime end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 

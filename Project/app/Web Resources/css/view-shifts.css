@@ -15,6 +15,24 @@
   cursor: pointer;
 }
 
+#back-button{
+  background-color:rgba(255,193,14,255);
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+#fnext-button{
+  background-color:rgba(255,193,14,255);
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
 .filterdropdown {
   position: relative;
   display: inline-block;

@@ -14,23 +14,6 @@ td{
   border-right: solid;
 }
 
-
-
-
-#Mobile { 
-  visibility: collapse; 
-}
-
-@media screen and (max-width: 600px){
-  #Mobile{
-    visibility:visible;
-  }
-
-  #Desktop{
-    visibility: collapse; 
-  }
-}
-
 /* buttosn for viewing  */
 .view-button{
   border-left: 2px;
@@ -42,7 +25,6 @@ td{
 .calendar{
   font-family: Georgia, "Times New Roman", Times, serif;
   padding: 0;
-  position: absolute;
 }
 
 .cal-wrapper{
@@ -55,18 +37,19 @@ td{
   background-color: #ddd !important;
 }
 
-.hidden-calendar{
+.button-right{
+  margin-right: 5px;
+}
+
+.invisible{
   visibility: hidden;
+  position: absolute;
 }
 
-#previous-button{
-  margin: 10px;
+.shift{
+  background-color: #DC143C !important;
 }
 
-#next-button{
-  margin: 10px;
-}
-
-#set-button{
-  margin: 10px;
+.unavailability{
+  background-color: #0000CD !important;
 }
