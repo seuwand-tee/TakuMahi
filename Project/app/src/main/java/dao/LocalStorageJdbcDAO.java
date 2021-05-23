@@ -40,7 +40,8 @@ public class LocalStorageJdbcDAO implements DAO {
     public void addToOpenShifts(Shift shift) {
         String sql = "insert into Shift(shiftid, name, start, end, description, notes, type) values (?,?,?,?,?,?,?)";
         try (
-            Connection dbCon = DbConnection.getConnection(uri);  PreparedStatement stmt = dbCon.prepareStatement(sql);) {
+            Connection dbCon = DbConnection.getConnection(uri);  
+            PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             Timestamp start = Timestamp.valueOf(shift.getStart());
             Timestamp end = Timestamp.valueOf(shift.getEnd());
             stmt.setInt(1,shift.getEventID());
@@ -49,7 +50,9 @@ public class LocalStorageJdbcDAO implements DAO {
             stmt.setTimestamp(4, end);
             stmt.setString(5, shift.getDescription());
             stmt.setString(6, shift.getNotes());
-            stmt.setString(7, shift.getType().toString());
+            System.out.println(stmt.toString());
+            String type = shift.getType().toString();
+            stmt.setString(7, type);
 
             stmt.executeUpdate();  // execute the statement
 
@@ -96,6 +99,7 @@ public class LocalStorageJdbcDAO implements DAO {
             stmt.setString(7, user.getEmailAddress());
 
             stmt.executeUpdate();  // execute the statement
+            System.out.println(stmt.toString());
 
         } catch (SQLException ex) {  // we are forced to catch SQLException
             // don't let the SQLException leak from our DAO encapsulation
@@ -103,7 +107,7 @@ public class LocalStorageJdbcDAO implements DAO {
         }
     }
 
-    @Override
+   @Override
     public void assignShiftToUser(String userID, Integer shiftID) {
         String sql = "update Shift set idnumber = ? where shiftid = ?";
         try (
@@ -484,7 +488,6 @@ public class LocalStorageJdbcDAO implements DAO {
             throw new DAOException(ex.getMessage(), ex);
         }
     }
-
     @Override
     public Collection<User> getUsersByDepartment(User.Department department) {
         String sql = "select * from User where department = ?";
@@ -493,6 +496,7 @@ public class LocalStorageJdbcDAO implements DAO {
                  Connection dbCon = DbConnection.getConnection(uri); // create the statement
                   PreparedStatement stmt = dbCon.prepareStatement(sql);) {
             stmt.setString(1, department.toString());
+            System.out.println(stmt.toString());
             // execute the query
             ResultSet rs = stmt.executeQuery();
 

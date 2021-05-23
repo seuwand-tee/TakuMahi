@@ -1,6 +1,7 @@
 package service;
 
 import dao.LocalStorageDAO;
+import dao.LocalStorageJdbcDAO;
 import domain.*;
 import resource.*;
 import org.jooby.Jooby;
@@ -16,9 +17,9 @@ public class Server extends Jooby {
 
     public Server() {
 
-        LocalStorageDAO dao = new LocalStorageDAO();
+        LocalStorageJdbcDAO dao = new LocalStorageJdbcDAO();
 
-        port(8080);
+       /** port(8080);
 
         Cors cor = new Cors().withMethods("*");
         cor.allowOrigin("*");
@@ -38,7 +39,7 @@ public class Server extends Jooby {
         use(new UnavailabilityByUserResource(dao));
         use(new EventsByUserResource(dao));
         use(new HoursByUserResource(dao));
-
+**/
         //Test users
         User user1 = new User();
         user1.setFirstName("Robert");
@@ -135,7 +136,10 @@ public class Server extends Jooby {
     }
 
     public static void main(String[] args) throws IOException {
-        new Server().start();
+        Server server = new Server();
+        
+        //new Server().start();
     }
+    
 
 }
