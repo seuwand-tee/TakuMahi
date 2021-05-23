@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1269ff74-6f6a-4ba6-a229-50ed891a1080" name="Default Changelist" comment="" />
+    <list default="true" id="1269ff74-6f6a-4ba6-a229-50ed891a1080" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/app/Web Resources/js/shift-manage.js" beforeDir="false" afterPath="$PROJECT_DIR$/Project/app/Web Resources/js/shift-manage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/app/Web Resources/shift-manage.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project/app/Web Resources/shift-manage.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
