@@ -240,7 +240,6 @@ initRequest.send();
 shftList = allList.slice();
 fillCalendar();
 
-
 function setDates() {
     const offSet = currentDate.getDay() - 1;
     days = [];
@@ -256,6 +255,7 @@ function setDates() {
     document.getElementById("friday").innerText = days[4].toDateString();
     document.getElementById("saturday").innerText = days[5].toDateString();
     document.getElementById("sunday").innerText = days[6].toDateString();
+    document.getElementById("h2").innerText = "Week beginning " + days[0].toDateString() + "    ";
 }
 
 //fills calendar with the users/shifts in shift list
@@ -265,7 +265,7 @@ function fillCalendar() {
     //set users to those in shift list
     users = [];
     shftList.forEach((shift) => {
-       let shiftUser = shift.user.idNumber;
+       let shiftUser = shift.user;
        if(!users.includes(shiftUser)) {
            users.push(shiftUser);
        }
@@ -289,15 +289,13 @@ function fillCalendar() {
         console.log(shftList);
         //go through all shifts
         shftList.forEach((shift) => {
-            if (user == shift.user.idNumber){
+            if (user.idNumber == shift.user.idNumber){
                 console.log(userCell);
                 if(userCell.innerHTML == "") {
                     console.log("call add name")
-                    userCell.innerHTML = shift.user.firstName + " " + shift.user.lastName;
+                    userCell.innerHTML = user.firstName + " " + user.lastName + "<p>" + user.department + "</p><p>" + user.role + "</p>";
                     userCell.classList.add("table-dark");
                 }
-//                let s = shift.start.dateTime;
-//                let e = shift.end.dateTime;
                 let s = shift.start;
                 let e = shift.end;
                 console.log(shift);
@@ -306,31 +304,31 @@ function fillCalendar() {
                 let dayOfWeek = start.getDay().toString();
                 switch(dayOfWeek) {
                     case "0":
-                        sundayCell.innerHTML = s.time.hour + ":" + s.time.minute + " to " + e.time.hour + ":" + e.time.minute;
+                        sundayCell.innerHTML = s.time.hour + ":" + s.time.minute + "0 to " + e.time.hour + ":" + e.time.minute + "0 <p>" + shift.name + "</p><p>" + shift.type + "</p>";
                         sundayCell.style.backgroundColor = "rgba(255,193,14,255)";
                         break;
                     case "1":
-                        mondayCell.innerHTML = s.time.hour + ":" + s.time.minute + " to " + e.time.hour + ":" + e.time.minute;
+                        mondayCell.innerHTML = s.time.hour + ":" + s.time.minute + "0 to " + e.time.hour + ":" + e.time.minute + "0 <p>" + shift.name + "</p><p>" + shift.type + "</p>";
                         mondayCell.style.backgroundColor = "rgba(255,193,14,255)";
                         break;
                     case "2":
-                        tuesdayCell.innerHTML = s.time.hour + ":" + s.time.minute + " to " + e.time.hour + ":" + e.time.minute;
+                        tuesdayCell.innerHTML = s.time.hour + ":" + s.time.minute + "0 to " + e.time.hour + ":" + e.time.minute + "0 <p>" + shift.name + "</p><p>" + shift.type + "</p>";
                         tuesdayCell.style.backgroundColor = "rgba(255,193,14,255)";
                         break;
                     case "3":
-                        wednesdayCell.innerHTML = s.time.hour + ":" + s.time.minute + " to " + e.time.hour + ":" + e.time.minute;
+                        wednesdayCell.innerHTML = s.time.hour + ":" + s.time.minute + "0 to " + e.time.hour + ":" + e.time.minute + "0 <p>" + shift.name + "</p><p>" + shift.type + "</p>";
                         wednesdayCell.style.backgroundColor = "rgba(255,193,14,255)";
                         break;
                     case "4":
-                        thursdayCell.innerHTML = s.time.hour + ":" + s.time.minute + " to " + e.time.hour + ":" + e.time.minute;
+                        thursdayCell.innerHTML = s.time.hour + ":" + s.time.minute + "0 to " + e.time.hour + ":" + e.time.minute + "0 <p>" + shift.name + "</p><p>" + shift.type + "</p>";
                         thursdayCell.style.backgroundColor = "rgba(255,193,14,255)";
                         break;
                     case "5":
-                        fridayCell.innerHTML = s.time.hour + ":" + s.time.minute + " to " + e.time.hour + ":" + e.time.minute;
+                        fridayCell.innerHTML = s.time.hour + ":" + s.time.minute + "0 to " + e.time.hour + ":" + e.time.minute + "0 <p>" + shift.name + "</p><p>" + shift.type + "</p>";
                         fridayCell.style.backgroundColor = "rgba(255,193,14,255)";
                         break;
                     case "6":
-                        saturdayCell.innerHTML = s.time.hour + ":" + s.time.minute + " to " + e.time.hour + ":" + e.time.minute;
+                        saturdayCell.innerHTML = s.time.hour + ":" + s.time.minute + "0 to " + e.time.hour + ":" + e.time.minute + "0";
                         saturdayCell.style.backgroundColor = "rgba(255,193,14,255)";
                         break;
                 }
@@ -601,7 +599,7 @@ $("#fnext-button").on("click", function(){
     var role = document.getElementById('selectedRole').innerHTML;
     console.log(dept);
     console.log(role);
-    var deptShifts = new Array;
+    var deptShifts = new Array();
     var roleShifts = new Array();
     
     //set new date
@@ -743,5 +741,3 @@ $("#back-button").on("click", function(){
     shftList = deptShifts.filter(a => roleShifts.some(b => a.eventID === b.eventID));
     fillCalendar();    
 });
-
-//TODO: Shift/User info, 

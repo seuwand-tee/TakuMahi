@@ -15,6 +15,13 @@
   cursor: pointer;
 }
 
+.h2 {
+    font-size: 30px;
+    overflow: hidden;
+    display: inline;
+    position: absolute;
+}
+
 #back-button{
   background-color:rgba(255,193,14,255);
   color: white;
