@@ -269,7 +269,7 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public Collection<Shift> getOpenShifts() {
+    public Collection<Event> getOpenShifts() {
         String sql = "select * from Shift where idnumber is null";
 
         try (
@@ -278,7 +278,7 @@ public class LocalStorageJdbcDAO implements DAO {
                   PreparedStatement stmt = dbCon.prepareStatement(sql);) {
 
             ResultSet rs = stmt.executeQuery();
-            Collection<Shift> shift = new HashSet<>();
+            Collection<Event> shift = new HashSet<>();
 
             // query only returns a single result, so use 'if' instead of 'while'
             while (rs.next()) {
@@ -305,7 +305,7 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public Collection<Shift> getShiftsByUser(String userID) {
+    public Collection<Event> getShiftsByUser(String userID) {
         String sql = "select * from Shift where idnumber = ?";
 
         try (
@@ -317,7 +317,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
             // execute the query
             ResultSet rs = stmt.executeQuery();
-            Collection<Shift> shift = new HashSet<>();
+            Collection<Event> shift = new HashSet<>();
 
             // query only returns a single result, so use 'if' instead of 'while'
             while (rs.next()) {
@@ -345,7 +345,7 @@ public class LocalStorageJdbcDAO implements DAO {
     }
 
     @Override
-    public Collection<Unavailability> getUnavailabilityByUser(String userID) {
+    public Collection<Event> getUnavailabilityByUser(String userID) {
         String sql = "select * from Unavailability where idnumber = ?";
 
         try (
@@ -357,7 +357,7 @@ public class LocalStorageJdbcDAO implements DAO {
 
             // execute the query
             ResultSet rs = stmt.executeQuery();
-            Collection<Unavailability> unavailable = new HashSet<>();
+            Collection<Event> unavailable = new HashSet<>();
 
             // query only returns a single result, so use 'if' instead of 'while'
             while (rs.next()) {
@@ -453,7 +453,18 @@ public class LocalStorageJdbcDAO implements DAO {
                 // and put it in the collection
                 shift.add(un);
             }
-
+            switch (filter){
+            case 0:
+                String join = "Select start ..... join ..... where idnumber = ? and start >= ?";
+                break;
+            case 1:
+                String shiftq = "with dayhours as (select start, end, description, ROW_NUMBER() OVER (ORDER BY start) from Shift where idnumber = ? and start >= ?) select * into #temp from dayhours where ROW_NUMBER() between 0 and ? ";
+                break;
+            case 2:
+                String unavailability = "with dayhours as (select start, end, description, ROW_NUMBER() OVER (ORDER BY start) from Unavailability where idnumber = ? and start >= ?) select * into #temp from dayhours where ROW_NUMBER() between 0 and ? ";
+                break;
+            }
+       
             return shift;
 
         } catch (SQLException ex) {  // we are forced to catch SQLException

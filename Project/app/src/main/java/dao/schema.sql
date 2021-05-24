@@ -1,4 +1,4 @@
-create table User(
+create table User (
 idnumber varchar(100),
 username varchar(100) not null unique,
 role varchar(100),
@@ -6,7 +6,7 @@ department varchar(100),
 firstName varchar(100) not null,
 lastName varchar(100) not null,
 emailaddress varchar(100) not null,
-constraint User_PK primary key (idnumber),
+constraint User_PK primary key (idnumber)
 );
 
 create table Shift(
@@ -32,9 +32,9 @@ constraint Unavailability_PK primary key (shiftid, idnumber),
 constraint Unavailability_User_FK foreign key (idnumber) references User(idnumber)
 );
 
-create table #temp
-(
-    start timestamp, 
-    end timestamp,
-    hours int(5),
-)
+-- create temporary table temp
+-- (
+--     start timestamp, 
+--     end timestamp,
+--     hours as (datediff(hours,start,end))
+-- )

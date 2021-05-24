@@ -41,7 +41,7 @@ public class Server extends Jooby {
         use(new HoursByUserResource(dao));
 **/
 
-        dao.resetDAO();
+//        dao.resetDAO();
         //Test users
         User user1 = new User();
         user1.setFirstName("Robert");

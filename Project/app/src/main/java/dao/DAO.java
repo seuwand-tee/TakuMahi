@@ -92,19 +92,19 @@ public interface DAO {
     /**
      * @return Returns all the Open Shifts.
      */
-    Collection<Shift> getOpenShifts();
+    Collection<Event> getOpenShifts();
 
     /**
      * @param userID The ID of the User.
      * @return Returns all shifts assigned to that User.
      */
-    Collection<Shift> getShiftsByUser(String userID);
+    Collection<Event> getShiftsByUser(String userID);
 
     /**
      * @param userID The ID of the User.
      * @return Returns all unavailability events for that User.
      */
-    Collection<Unavailability> getUnavailabilityByUser(String userID);
+    Collection<Event> getUnavailabilityByUser(String userID);
 
     /**
      * @param userID The ID of the User.
@@ -165,5 +165,6 @@ public interface DAO {
      * @return Returns true if the user is located, false if not.
      */
     boolean userExists(String userID);
-    
+
+    void resetDAO();
 }
