@@ -1,6 +1,6 @@
 package resource;
 
-import dao.LocalStorageDAO;
+import dao.DAO;
 import domain.ErrorMessage;
 import domain.Event;
 import domain.User;
@@ -14,7 +14,7 @@ import org.jooby.Status;
  */
 public class UnavailabilityByUserResource extends Jooby {
     
-    public UnavailabilityByUserResource(LocalStorageDAO dao) {
+    public UnavailabilityByUserResource(DAO dao) {
         
         path("/api/staff/unavailability", () -> {
                         

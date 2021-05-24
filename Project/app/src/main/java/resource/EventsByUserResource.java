@@ -1,6 +1,6 @@
 package resource;
 
-import dao.LocalStorageDAO;
+import dao.DAO;
 import domain.ErrorMessage;
 import domain.Event;
 import java.time.LocalDate;
@@ -16,7 +16,7 @@ import org.jooby.Status;
  */
 public class EventsByUserResource extends Jooby {
     
-    public EventsByUserResource(LocalStorageDAO dao) {
+    public EventsByUserResource(DAO dao) {
         
         path("/api/staff/events", () -> {
                         

@@ -16,6 +16,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 //import static org.hamcrest.Matchers.*;
 
@@ -39,8 +40,9 @@ public class LocalStorageDAOTest {
 
     @BeforeAll
     public static void declareAll() {
-        dao = new LocalStorageDAO();
-//        dao = new LocalStorageJdbcDAO("jdbc:h2:mem:tests;INIT=runscript from 'src/main/java/dao/schema.sql'");
+   //dao = new LocalStorageDAO();
+      dao = new LocalStorageJdbcDAO("jdbc:h2:mem:tests;INIT=runscript from 'src/main/java/dao/schema.sql'");
+//      dao = new LocalStorageJdbcDAO("jdbc:h2:tcp://localhost/~/dbs/test");
 
         userOne = new User();
         userOne.setUsername("jimmy10p");
@@ -159,7 +161,7 @@ public class LocalStorageDAOTest {
     @AfterEach
     public void tearDown() {
 
-        dao.resetDAO();
+       dao.resetDAO();
 
     }
 
@@ -172,11 +174,12 @@ public class LocalStorageDAOTest {
 
     @Test
     public void deleteUserByIDTest() {
-        assertThat(dao.getAllUsers(), hasItem(userOne));
-        dao.deleteUserByID("1");
-        assertThat(dao.getAllUsers(), not(hasItem(userOne)));
-        assertThat(dao.getAllUsers(), hasSize(1));
+        dao.addUser(userThree);
 
+        assertThat(dao.getAllUsers(), hasItem(userThree));
+        dao.deleteUserByID("3");
+        assertThat(dao.getAllUsers(), not(hasItem(userThree)));
+        assertThat(dao.getAllUsers(), hasSize(2));
     }
 
     @Test
@@ -215,9 +218,9 @@ public class LocalStorageDAOTest {
 
     @Test
     public void addUnavailabilityToUserTest() {
-        assertThat(dao.getUnavailabilityByUser("2"), hasItem(dao.getEventByID(7)));
+        assertThat(dao.getUnavailabilityByUser("2"), hasItem(unavailabilityTwo));
         dao.deleteUnavailabilityFromUser("2", 7);
-        assertThat(dao.getUnavailabilityByUser("2"), not(hasItem(dao.getEventByID(7))));
+        assertThat(dao.getUnavailabilityByUser("2"), not(hasItem(unavailabilityThree)));
 
         assertThat(dao.getUnavailabilityByUser("2"), not(hasItem(shiftFour)));
 //        dao.assignShiftToUser("2", unavailabilityThree.getEventID());
@@ -230,7 +233,8 @@ public class LocalStorageDAOTest {
     @Test
     public void deleteUnavailabilityFromUserTest() {
         //fail();
-        assertThat(dao.getUnavailabilityByUser("2"), hasItem(dao.getEventByID(7)));
+//        dao.addUnavailabilityToUser("2", unavailabilityTwo);
+        assertThat(dao.getUnavailabilityByUser("2"), hasItem(unavailabilityTwo));
         dao.deleteUnavailabilityFromUser("2", 7);
         assertThat(dao.getUnavailabilityByUser("2"), not(hasItem(dao.getEventByID(7))));
     }
@@ -243,16 +247,16 @@ public class LocalStorageDAOTest {
         Collection<Event> shifts = dao.getUserEventsForPeriod("1", LocalDate.of(2020, 3, 20), 2, 1);
         Collection<Event> unavailabilitys = dao.getUserEventsForPeriod("1", LocalDate.of(2020, 3, 20), 2, 2);
 
-        assertEquals(3, events.size());
+        assertEquals(3, dao.getUserEventsForPeriod("1", LocalDate.of(2020, 3, 20), 2, 0).size());
         assertTrue(events.contains(shiftOne));
         assertTrue(events.contains(shiftTwo));
         assertTrue(events.contains(unavailabilityOne));
 
-        assertEquals(2, shifts.size());
+        assertEquals(2, dao.getUserEventsForPeriod("1", LocalDate.of(2020, 3, 20), 2, 1).size());
         assertTrue(shifts.contains(shiftOne));
         assertTrue(shifts.contains(shiftTwo));
 
-        assertEquals(1, unavailabilitys.size());
+        assertEquals(1, dao.getUserEventsForPeriod("1", LocalDate.of(2020, 3, 20), 2, 2).size());
         assertTrue(unavailabilitys.contains(unavailabilityOne));
 
     }

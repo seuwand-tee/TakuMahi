@@ -1,6 +1,6 @@
 package resource;
 
-import dao.LocalStorageDAO;
+import dao.DAO;
 import domain.ErrorMessage;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +14,7 @@ import org.jooby.Status;
  */
 public class HoursByUserResource extends Jooby {
     
-    public HoursByUserResource(LocalStorageDAO dao) {
+    public HoursByUserResource(DAO dao) {
         
         path("/api/staff/hours", () -> {
                         

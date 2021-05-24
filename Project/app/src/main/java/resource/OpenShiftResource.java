@@ -1,6 +1,6 @@
 package resource;
 
-import dao.LocalStorageDAO;
+import dao.DAO;
 import domain.ErrorMessage;
 import org.jooby.Jooby;
 import org.jooby.MediaType;
@@ -11,7 +11,7 @@ import org.jooby.Status;
  */
 public class OpenShiftResource extends Jooby {
     
-    public OpenShiftResource(LocalStorageDAO dao) {
+    public OpenShiftResource(DAO dao) {
         
         path("/api/shifts/open", () -> {
 

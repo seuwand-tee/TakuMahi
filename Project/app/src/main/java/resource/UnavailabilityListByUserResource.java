@@ -1,6 +1,6 @@
 package resource;
 
-import dao.LocalStorageDAO;
+import dao.DAO;
 import domain.ErrorMessage;
 import domain.Unavailability;
 import java.time.Instant;
@@ -14,7 +14,7 @@ import org.json.JSONObject;
  */
 public class UnavailabilityListByUserResource extends Jooby {
     
-    public UnavailabilityListByUserResource(LocalStorageDAO dao) {
+    public UnavailabilityListByUserResource(DAO dao) {
         
         path("/api/staff/unavailability", () -> {
             

@@ -1,6 +1,6 @@
 package resource;
 
-import dao.LocalStorageDAO;
+import dao.DAO;
 import domain.ErrorMessage;
 import org.jooby.Jooby;
 import org.jooby.MediaType;
@@ -11,7 +11,7 @@ import org.jooby.Status;
  */
 public class UserResource extends Jooby {
     
-    public UserResource(LocalStorageDAO dao) {
+    public UserResource(DAO dao) {
         
         path("/api/staff", () -> {
 

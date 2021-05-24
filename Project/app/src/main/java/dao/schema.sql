@@ -31,10 +31,3 @@ description varchar(100),
 constraint Unavailability_PK primary key (shiftid, idnumber),
 constraint Unavailability_User_FK foreign key (idnumber) references User(idnumber)
 );
-
--- create temporary table temp
--- (
---     start timestamp, 
---     end timestamp,
---     hours as (datediff(hours,start,end))
--- )

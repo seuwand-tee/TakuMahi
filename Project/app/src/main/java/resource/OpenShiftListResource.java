@@ -1,6 +1,6 @@
 package resource;
 
-import dao.LocalStorageDAO;
+import dao.DAO;
 import domain.Shift;
 import java.time.Instant;
 import org.jooby.Jooby;
@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 public class OpenShiftListResource extends Jooby {
     
-    public OpenShiftListResource(LocalStorageDAO dao) {
+    public OpenShiftListResource(DAO dao) {
             
                 path("/api/shifts/open", () -> {
 

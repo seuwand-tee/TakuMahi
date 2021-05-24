@@ -1,6 +1,6 @@
 package resource;
 
-import dao.LocalStorageDAO;
+import dao.DAO;
 import domain.User;
 import domain.ErrorMessage;
 import org.jooby.Jooby;
@@ -12,7 +12,7 @@ import org.jooby.Status;
  */
 public class UserListByDepartmentResource extends Jooby {
     
-    public UserListByDepartmentResource(LocalStorageDAO dao) {
+    public UserListByDepartmentResource(DAO dao) {
         
         path("/api/staff/department", () -> {
 

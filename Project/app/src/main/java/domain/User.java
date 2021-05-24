@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Objects;
+
 /**
  *  The User class is used for all user accounts in the system.
  *  The role data-field will be used to allocate a users permissions on the site.
@@ -99,4 +101,60 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.username);
+        hash = 23 * hash + Objects.hashCode(this.idNumber);
+        hash = 23 * hash + Objects.hashCode(this.role);
+        hash = 23 * hash + Objects.hashCode(this.department);
+        hash = 23 * hash + Objects.hashCode(this.firstName);
+        hash = 23 * hash + Objects.hashCode(this.lastName);
+        hash = 23 * hash + Objects.hashCode(this.emailAddress);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (!Objects.equals(this.username, other.username)) {
+            return false;
+        }
+        if (!Objects.equals(this.idNumber, other.idNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.firstName, other.firstName)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastName, other.lastName)) {
+            return false;
+        }
+        if (!Objects.equals(this.emailAddress, other.emailAddress)) {
+            return false;
+        }
+        if (this.role != other.role) {
+            return false;
+        }
+        if (this.department != other.department) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "username=" + username + ", idNumber=" + idNumber + ", role=" + role + ", department=" + department + ", firstName=" + firstName + ", lastName=" + lastName + ", emailAddress=" + emailAddress + '}';
+    }
+
+    
+    
 }

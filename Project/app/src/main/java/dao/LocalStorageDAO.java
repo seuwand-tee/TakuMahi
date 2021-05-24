@@ -182,7 +182,9 @@ public class LocalStorageDAO implements DAO{
      * @param startOfPeriod The Start Date of the period you are interested in.
      * @param daysInPeriod The amount of days you want the period to be.
      * @param filter Filter decides which events get returned. 0 is all, 1 is Shift, and 2 is Unavailability.
-     * @return Returns a Collection of type Event. If no events fit criteria the Collection will be empty.
+     * @return Returns a Collection of type Event. If no events fit criteria the Collection will be empty
+     * 
+     * Mark says "WTF?"
      */
     @Override
     public Collection<Event> getUserEventsForPeriod(String userID, LocalDate startOfPeriod, int daysInPeriod, int filter) {
