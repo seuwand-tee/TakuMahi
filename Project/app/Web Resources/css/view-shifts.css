@@ -1,0 +1,76 @@
+/*Filter Form (for viewing shifts page)*/
+.Filter_Form {border:2px solid black;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+  }
+
+/*Style for Filter Buttons*/
+.filterdropbtn {
+  background-color:rgba(255,193,14,255);
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.h2 {
+    font-size: 30px;
+    overflow: hidden;
+    display: inline;
+    position: absolute;
+}
+
+#back-button{
+  background-color:rgba(255,193,14,255);
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+#fnext-button{
+  background-color:rgba(255,193,14,255);
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.filterdropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.filterdropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.filterdropdown-content button {
+  background-color:#f9f9f9;
+  width: 100%;
+  color: black;
+  padding: 16px;
+  text-align: left;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.filterdropdown-content button:hover {background-color:rgba(255,193,14,255);color: white}
+
+.filterdropdown:hover .filterdropdown-content {
+  display: block;
+}
+
+.filterdropdown:hover .filterdropbtn {
+  background-color:rgba(255,193,14,255);
+}
