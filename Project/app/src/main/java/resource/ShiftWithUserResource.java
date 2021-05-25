@@ -46,7 +46,7 @@ public class ShiftWithUserResource extends Jooby {
                                     Event event = dao.getEventByID(eventId);
                                     User user = dao.getUserByID(userId);
                                     //ids are ok, check user matches shift
-                                    if (event.getUser()==user) {
+                                    if (event.getUser().getIdNumber().equals(user.getIdNumber())) {
                                         //event matches user, delete user from shift
                                         dao.removeShiftFromUser(userId, eventId);
                                         rsp.status(Status.NO_CONTENT);

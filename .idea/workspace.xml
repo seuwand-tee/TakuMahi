@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1269ff74-6f6a-4ba6-a229-50ed891a1080" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project/app/Web Resources/js/shift-manage.js" beforeDir="false" afterPath="$PROJECT_DIR$/Project/app/Web Resources/js/shift-manage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project/app/Web Resources/shift-manage.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project/app/Web Resources/shift-manage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Project/app/src/main/java/dao/LocalStorageJdbcDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project/app/src/main/java/dao/LocalStorageJdbcDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/app/src/main/java/resource/ShiftWithUserResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project/app/src/main/java/resource/ShiftWithUserResource.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,5 +207,46 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Project/app/src/main/java/resource/ShiftWithUserResource.java</url>
+          <line>48</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Project/app/src/main/java/resource/ShiftWithUserResource.java</url>
+          <line>49</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Project/app/src/main/java/resource/ShiftWithUserResource.java</url>
+          <line>50</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Project/app/src/main/java/resource/ShiftWithUserResource.java</url>
+          <line>51</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Project/app/src/main/java/resource/ShiftWithUserResource.java</url>
+          <line>52</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Project/app/src/main/java/resource/ShiftWithUserResource.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Project/app/src/main/java/resource/ShiftWithUserResource.java</url>
+          <line>47</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

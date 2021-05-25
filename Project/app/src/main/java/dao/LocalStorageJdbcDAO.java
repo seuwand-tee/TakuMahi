@@ -258,8 +258,19 @@ public class LocalStorageJdbcDAO implements DAO {
                 String description = rs.getString("description");
                 String notes = rs.getString("notes");
                 String type = rs.getString("type");
-                
-                return new Shift(start, end, name, description, notes, type);
+                Integer id = rs.getInt("shiftID");
+                String userID = rs.getString("IdNumber");
+
+                User test = new User();
+                test.setIdNumber(userID);
+
+                Shift s = new Shift(start, end, name, description, notes, type);
+
+                s.setEventID(id);
+                s.setUser(test);
+
+
+                return s;
                 
             } else {
                 // no student matches given ID so return null
@@ -335,8 +346,10 @@ public class LocalStorageJdbcDAO implements DAO {
                 String description = rs.getString("description");
                 String notes = rs.getString("notes");
                 String type = rs.getString("type");
+                Integer id = rs.getInt("shiftID");
                 
                 Shift s = new Shift(start, end, name, description, notes, type);
+                s.setEventID(id);
                 
                 shift.add(s);
                 
@@ -512,8 +525,10 @@ public class LocalStorageJdbcDAO implements DAO {
                 String description = rs.getString("description");
                 String notes = rs.getString("notes");
                 String type = rs.getString("type");
+                Integer id = rs.getInt("ShiftID");
                 
                 Shift s = new Shift(start, end, name, description, notes, type);
+                s.setEventID(id);
                 
                 shift.add(s);
                 
