@@ -26,7 +26,6 @@ async function show_users() {
 
   let usrdata = await getusrdata();
   let shiftdata = await getshiftdata(usrdata)
-  //console.log(shiftdata[0]);
   let unavaliblitydata = await getunavaliblitydata(usrdata)
 
   // Duplicate the weekly view and create a new one for each element.
@@ -43,12 +42,12 @@ function populateEvents(usrdata, shiftdata, unavailabilitydata) {
 
   unavailabilitydata.forEach((element, index) => {
     var usrnume;
-    if (unavailabilitydata[index][0].start.dateTime.date.year == dateToday.getFullYear() &&
-      unavailabilitydata[index][0].start.dateTime.date.month == dateToday.getMonth() + 1 &&
-      unavailabilitydata[index][0].start.dateTime.date.day == dateToday.getDate()) {
-      usrnum = unavailabilitydata[index][0].user.idNumber;
-      let start = unavailabilitydata[index][0].start.dateTime.time.hour;
-      let end = unavailabilitydata[index][0].end.dateTime.time.hour;
+    if (unavailabilitydata[index][0].start.date.year == dateToday.getFullYear() &&
+      unavailabilitydata[index][0].start.date.month == dateToday.getMonth() + 1 &&
+      unavailabilitydata[index][0].start.date.day == dateToday.getDate()) {
+      usrnum = element.usrID;
+      let start = unavailabilitydata[index][0].start.time.hour;
+      let end = unavailabilitydata[index][0].end.time.hour;
       for (i = start; i <= end; i++) {
         $('#calendar-day' + usrnum).find('#' + i).text(unavailabilitydata[index][0].description)
           .addClass("unavailability");
@@ -59,16 +58,17 @@ function populateEvents(usrdata, shiftdata, unavailabilitydata) {
   //
   shiftdata.forEach((element, index) => {
     var usrnam;
-    if (shiftdata[index][0].start.dateTime.date.year == dateToday.getFullYear() &&
-      shiftdata[index][0].start.dateTime.date.month == (dateToday.getMonth() + 1) &&
-      shiftdata[index][0].start.dateTime.date.day == dateToday.getDate()) {
-      usrnum = shiftdata[index][0].user.idNumber;
+    if (shiftdata[index][0].start.date.year == dateToday.getFullYear() &&
+      shiftdata[index][0].start.date.month == (dateToday.getMonth() + 1) &&
+      shiftdata[index][0].start.date.day == dateToday.getDate()) {
+      usrnum = element.usrID;
 
-      let start = shiftdata[index][0].start.dateTime.time.hour
-      let end = shiftdata[index][0].end.dateTime.time.hour
+      let start = shiftdata[index][0].start.time.hour
+      let end = shiftdata[index][0].end.time.hour
       for (i = start; i <= end; i++) {
         $('#calendar-day' + usrnum).find('#' + i).text(shiftdata[index][0].description).removeClass("unavailability")
           .addClass("shift");
+          addUnassignShift($('#calendar-day' + usrnum).find('#' + i), shiftdata[index][0].eventID, usrnum);
       }
     }
   });
@@ -90,6 +90,7 @@ async function getshiftdata(usrdata) {
     let user = await fetch('http://localhost:8080/api/staff/shifts/' + usr.idNumber)
       .then(response => response.json())
       .then(data => {
+        data["usrID"] = usr.idNumber;
         return data;
       })
     users.push(user);
@@ -103,6 +104,7 @@ async function getunavaliblitydata(usrdata) {
     let user = await fetch('http://localhost:8080/api/staff/unavailability/' + usr.idNumber)
       .then(response => response.json())
       .then(data => {
+        data["usrID"] = usr.idNumber;
         return data;
       })
     users.push(user);
@@ -113,16 +115,13 @@ async function getunavaliblitydata(usrdata) {
 function createShift(){
 
   //var start = 0;
-  console.log(dateToday);
   var start = new Date(dateToday.toDateString() + " " + $("#inputStart").val());
-  console.log(start);
   var end =  new Date(dateToday.toDateString() + " " + $("#inputEnd").val());
   var name = $("#inputName").val();
   var description = $("#inputDescription").val();
   var notes = $("#inputNotes").val();
   var type = $("#inputType").val();
 
-  console.log(JSON.stringify({ "start": start.toString(), "end": end, "name": name, "description": description, "notes": notes, "type": type }));
   var shift = JSON.stringify({ "start": start, "end": end, "name": name, "description": description, "notes": notes, "type": type });
   let request = new XMLHttpRequest();
   request.open('POST', 'http://localhost:8080/api/shifts/open', false);
@@ -133,12 +132,13 @@ function createShift(){
 async function showOpenShifts(){
   let openShifts = await getOpenShifts();
 
-
   openShifts.forEach((element, index) => {
-      console.log(element)
-
-    $('#open-shifts').append("<li id='shift-list" + element.eventID + "' class='list-group-item'>" + element.start.dateTime.time.hour + " :00 " +  element.end.dateTime.time.hour + " :00" + "</li>")
+    if (element.start.date.year == dateToday.getFullYear() &&
+       element.start.date.month == dateToday.getMonth() + 1 &&
+       element.start.date.day == dateToday.getDate()){
+    $('#open-shifts').append("<li id='shift-list" + element.eventID + "' class='list-group-item'>" + "Starts: "+ element.start.time.hour + ":00  " + "Ends: " + element.end.time.hour + ":00 " + "Description: " + element.description + "</li>")
     addInput($('#shift-list' + element.eventID), element.eventID);
+  }
   });
 
 }
@@ -160,7 +160,6 @@ async function assignShift(usrID, eventID){
 
 // Runes the create shift function when shift submit button is pressed
 $("#shift-submit").on("click", function(){
-  console.log("Test");
   createShift();
   showOpenShifts();
 });
@@ -213,6 +212,15 @@ function addInput(listElement, eventid){
   });
 }
 
+function addUnassignShift(listElement, shiftID, usrID){
+  listElement.on("click", function(){
+    confirm = prompt("Are you sure you want to ussasign this shift?");
+    if (confirm=="y"){
+      unassignShift(shiftID, usrID);
+    }
+  });
+}
+
 // TODO: Figure out how I want to delete shifts.
 function inputShift(timeElement, usrID){
   time.on("click", function(){
@@ -222,7 +230,7 @@ function inputShift(timeElement, usrID){
 }
 
 
-async function unassignShift(shitID, usrID){
+async function unassignShift(shiftID, usrID){
   /* First unassign */
   let url = "http://localhost:8080/api/shifts/open/" + shiftID + "/" + usrID;
   fetch(url, {method: 'PUT'});

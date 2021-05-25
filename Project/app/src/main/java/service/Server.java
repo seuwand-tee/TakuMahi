@@ -155,7 +155,7 @@ public class Server extends Jooby {
     public static void main(String[] args) throws IOException {
         Server server = new Server();
         
-        //new Server().start();
+        new Server().start();
     }
     
 
