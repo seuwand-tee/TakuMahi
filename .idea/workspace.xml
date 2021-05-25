@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1269ff74-6f6a-4ba6-a229-50ed891a1080" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Project/app/Web Resources/js/shift-manage.js" beforeDir="false" afterPath="$PROJECT_DIR$/Project/app/Web Resources/js/shift-manage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project/app/src/main/java/service/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project/app/src/main/java/service/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/app/Web Resources/shift-manage.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project/app/Web Resources/shift-manage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/app/src/main/java/dao/LocalStorageJdbcDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project/app/src/main/java/dao/LocalStorageJdbcDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

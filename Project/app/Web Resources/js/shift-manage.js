@@ -11,7 +11,11 @@ const end = 21
 updateDate(dateToday);
 
 /* render the fields */
-show_users();
+
+document.addEventListener("DOMContentLoaded", function() {
+  $('#calander-storage').empty()
+  show_users()
+});
 
 /* update Date. */
 function updateDate(date) {
@@ -41,34 +45,46 @@ async function show_users() {
 function populateEvents(usrdata, shiftdata, unavailabilitydata) {
 
   unavailabilitydata.forEach((element, index) => {
-    var usrnume;
-    if (unavailabilitydata[index][0].start.date.year == dateToday.getFullYear() &&
-      unavailabilitydata[index][0].start.date.month == dateToday.getMonth() + 1 &&
-      unavailabilitydata[index][0].start.date.day == dateToday.getDate()) {
-      usrnum = element.usrID;
-      let start = unavailabilitydata[index][0].start.time.hour;
-      let end = unavailabilitydata[index][0].end.time.hour;
-      for (i = start; i <= end; i++) {
-        $('#calendar-day' + usrnum).find('#' + i).text(unavailabilitydata[index][0].description)
-          .addClass("unavailability");
+    for (let step = 0; step < element.length; step++) {
+      var usrnume;
+      if (unavailabilitydata[index][step].start.date.year == dateToday.getFullYear() &&
+        unavailabilitydata[index][step].start.date.month == dateToday.getMonth() + 1 &&
+        unavailabilitydata[index][step].start.date.day == dateToday.getDate()) {
+        usrnum = element.usrID;
+        let start = unavailabilitydata[index][step].start.time.hour;
+        let end = unavailabilitydata[index][step].end.time.hour;
+        for (i = start; i <= end; i++) {
+          $('#calendar-day' + usrnum).find('#' + i).text(unavailabilitydata[index][step].description)
+            .addClass("unavailability");
+        }
       }
     }
   });
 
   //
+  console.log(shiftdata)
   shiftdata.forEach((element, index) => {
-    var usrnam;
-    if (shiftdata[index][0].start.date.year == dateToday.getFullYear() &&
-      shiftdata[index][0].start.date.month == (dateToday.getMonth() + 1) &&
-      shiftdata[index][0].start.date.day == dateToday.getDate()) {
-      usrnum = element.usrID;
+    for (let step = 0; step < element.length ; step++) {
+      console.log(element[step])
+      var usrnam;
+      console.log(shiftdata[index][step].start.date.year == dateToday.getFullYear())
+      console.log(shiftdata[index][step].start.date.month == (dateToday.getMonth() + 1))
+      console.log(shiftdata[index][step].start.date.day == dateToday.getDate())
+      if (shiftdata[index][step].start.date.year == dateToday.getFullYear() &&
+        shiftdata[index][step].start.date.month == (dateToday.getMonth() + 1) &&
+        shiftdata[index][step].start.date.day == dateToday.getDate()) {
+          console.log("I work")
+        usrnum = element.usrID;
 
-      let start = shiftdata[index][0].start.time.hour
-      let end = shiftdata[index][0].end.time.hour
-      for (i = start; i <= end; i++) {
-        $('#calendar-day' + usrnum).find('#' + i).text(shiftdata[index][0].description).removeClass("unavailability")
-          .addClass("shift");
-          addUnassignShift($('#calendar-day' + usrnum).find('#' + i), shiftdata[index][0].eventID, usrnum);
+        let start = shiftdata[index][step].start.time.hour
+        let end = shiftdata[index][step].end.time.hour
+        for (i = start; i <= end; i++) {
+          console.log(i)
+          $('#calendar-day' + usrnum).find('#' + i).text(shiftdata[index][step].description).removeClass("unavailability")
+            .addClass("shift");
+          $('#calendar-day' + usrnum).find('#' + i).text(shiftdata[index][step].description).addClass("shift");
+          addUnassignShift($('#calendar-day' + usrnum).find('#' + i), shiftdata[index][step].eventID, usrnum);
+        }
       }
     }
   });
@@ -112,38 +128,46 @@ async function getunavaliblitydata(usrdata) {
   return users;
 }
 
-function createShift(){
+function createShift() {
 
   //var start = 0;
   var start = new Date(dateToday.toDateString() + " " + $("#inputStart").val());
-  var end =  new Date(dateToday.toDateString() + " " + $("#inputEnd").val());
+  var end = new Date(dateToday.toDateString() + " " + $("#inputEnd").val());
   var name = $("#inputName").val();
   var description = $("#inputDescription").val();
   var notes = $("#inputNotes").val();
   var type = $("#inputType").val();
 
-  var shift = JSON.stringify({ "start": start, "end": end, "name": name, "description": description, "notes": notes, "type": type });
+  var shift = JSON.stringify({
+    "start": start,
+    "end": end,
+    "name": name,
+    "description": description,
+    "notes": notes,
+    "type": type
+  });
   let request = new XMLHttpRequest();
   request.open('POST', 'http://localhost:8080/api/shifts/open', false);
   request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   request.send(shift);
+  location.reload();
 }
 
-async function showOpenShifts(){
+async function showOpenShifts() {
   let openShifts = await getOpenShifts();
 
   openShifts.forEach((element, index) => {
     if (element.start.date.year == dateToday.getFullYear() &&
-       element.start.date.month == dateToday.getMonth() + 1 &&
-       element.start.date.day == dateToday.getDate()){
-    $('#open-shifts').append("<li id='shift-list" + element.eventID + "' class='list-group-item'>" + "Starts: "+ element.start.time.hour + ":00  " + "Ends: " + element.end.time.hour + ":00 " + "Description: " + element.description + "</li>")
-    addInput($('#shift-list' + element.eventID), element.eventID);
-  }
+      element.start.date.month == dateToday.getMonth() + 1 &&
+      element.start.date.day == dateToday.getDate()) {
+      $('#open-shifts').append("<li id='shift-list" + element.eventID + "' class='list-group-item'>" + "Starts: " + element.start.time.hour + ":00  " + "Ends: " + element.end.time.hour + ":00 " + "Description: " + element.description + "</li>")
+      addInput($('#shift-list' + element.eventID), element.eventID);
+    }
   });
 
 }
 
-async function getOpenShifts(){
+async function getOpenShifts() {
   let url = 'http://localhost:8080/api/shifts/open';
   try {
     let res = await fetch(url);
@@ -153,13 +177,15 @@ async function getOpenShifts(){
   }
 }
 
-async function assignShift(usrID, eventID){
+async function assignShift(usrID, eventID) {
   let url = "http://localhost:8080/api/shifts/open/" + eventID + "/" + usrID;
-  fetch(url, {method: 'POST'});
+  fetch(url, {
+    method: 'POST'
+  });
 }
 
 // Runes the create shift function when shift submit button is pressed
-$("#shift-submit").on("click", function(){
+$("#shift-submit").on("click", function() {
   createShift();
   showOpenShifts();
 });
@@ -187,11 +213,6 @@ $("#next-button").on("click", function() {
   show_users();
 });
 
-/* what happens when save button is clicked */
-$("#save-button").on("click", function() {
-  alert("Not supported yet!");
-});
-
 /* what happens when previous button is clicked */
 $("#previous-button").on("click", function() {
   /* remove previous day's data. */
@@ -205,39 +226,46 @@ $("#previous-button").on("click", function() {
   show_users();
 });
 
-function addInput(listElement, eventid){
-  listElement.on("click", function(){
+function addInput(listElement, eventid) {
+  listElement.on("click", function() {
     var usr = prompt("Please enter the user id for this shift");
     assignShift(Number(usr), eventid);
+    location.reload();
   });
 }
 
-function addUnassignShift(listElement, shiftID, usrID){
-  listElement.on("click", function(){
+function addUnassignShift(listElement, shiftID, usrID) {
+  listElement.on("click", function() {
     confirm = prompt("Are you sure you want to ussasign this shift?");
-    if (confirm=="y"){
+    if (confirm == "y") {
       unassignShift(shiftID, usrID);
     }
+    $('#calander-storage').empty();
+    location.reload();
   });
 }
 
 // TODO: Figure out how I want to delete shifts.
-function inputShift(timeElement, usrID){
-  time.on("click", function(){
+function inputShift(timeElement, usrID) {
+  time.on("click", function() {
     unassignShift(shiftID, usrID);
     timeElement.removeClass("shift");
   })
 }
 
 
-async function unassignShift(shiftID, usrID){
+async function unassignShift(shiftID, usrID) {
   /* First unassign */
   let url = "http://localhost:8080/api/shifts/open/" + shiftID + "/" + usrID;
-  fetch(url, {method: 'PUT'});
+  fetch(url, {
+    method: 'PUT'
+  });
 }
 
-async function deleteShift(shiftID){
+async function deleteShift(shiftID) {
   /* First unassign */
   let url = "http://localhost:8080/api/shifts/open/" + shiftID;
-  fetch(url, {method: 'delete'});
+  fetch(url, {
+    method: 'delete'
+  });
 }

@@ -294,9 +294,11 @@ public class LocalStorageJdbcDAO implements DAO {
                 String description = rs.getString("description");
                 String notes = rs.getString("notes");
                 String type = rs.getString("type");
-                
+
+
                 Shift s = new Shift(start, end, name, description, notes, type);
-                
+                s.setEventID(Integer.valueOf(rs.getString("shiftID")));
+
                 shift.add(s);
             }
             
