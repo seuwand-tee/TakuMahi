@@ -229,8 +229,12 @@ $("#previous-button").on("click", function() {
 function addInput(listElement, eventid) {
   listElement.on("click", function() {
     var usr = prompt("Please enter the user id for this shift");
-    assignShift(Number(usr), eventid);
-    location.reload();
+    if (Number.isInteger(usr)){
+      assignShift(Number(usr), eventid);
+      location.reload();
+  }else{
+    alert("value isn't valid")
+  }
   });
 }
 
@@ -239,9 +243,11 @@ function addUnassignShift(listElement, shiftID, usrID) {
     confirm = prompt("Are you sure you want to ussasign this shift?");
     if (confirm == "y") {
       unassignShift(shiftID, usrID);
+      $('#calander-storage').empty();
+      location.reload();
+    } else{
+      alert("value isn't valid")
     }
-    $('#calander-storage').empty();
-    location.reload();
   });
 }
 
