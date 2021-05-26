@@ -229,12 +229,8 @@ $("#previous-button").on("click", function() {
 function addInput(listElement, eventid) {
   listElement.on("click", function() {
     var usr = prompt("Please enter the user id for this shift");
-    if (Number.isInteger(usr)){
-      assignShift(Number(usr), eventid);
-      location.reload();
-  }else{
-    alert("value isn't valid")
-  }
+    assignShift(Number(usr), eventid);
+    location.reload();
   });
 }
 
