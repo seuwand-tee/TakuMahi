@@ -1,4 +1,4 @@
-<h2>Build Status: ![Build Status](https://isgb.otago.ac.nz/info310/ducle591/TakuMahi/build/master/badge.svg) </h2>
+<h2>Build Status: ![Build Status](https://github.com/seuwand-tee/TakuMahi/build/master/badge.svg) </h2>
 
 
 <h3>Notes to Selves:</h3>
